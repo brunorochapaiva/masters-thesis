@@ -1,0 +1,64 @@
+\documentclass[11pt % Font size
+              ]{article}
+\usepackage[ a4paper % Paper size and format
+           , onecolumn % Number of columns: onecolumn or twocolumn
+           , total={6in, 8in} % Text area: {width, height}
+           ]{geometry}
+
+\title{A Model Theoretic Study of Allen's Interval Algebra}
+\author{Bruno da Rocha Paiva - bmd18}
+\date{} % Date of writing: empty, today or 25.12.00
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{parskip}
+
+\usepackage{subfiles}
+
+% General Symbols
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+
+% Model Theoretic Symbols
+\newcommand{\lang}{\mathcal{L}}
+\newcommand{\theory}{\mathbb{T}}
+
+% Allen Interval Algebra Symbols
+\newcommand{\laia}{\lang_\text{AIA}}
+\newcommand{\taia}{\theory_\text{AIA}}
+\newcommand{\inter}[1]{#1_\text{Intervals}}
+
+% Allen Interval Algebra Relations
+\newcommand{\before}{\overset{<}{\longrightarrow}}
+\newcommand{\meets}{\overset{m}{\longrightarrow}}
+\newcommand{\overlaps}{\overset{o}{\longrightarrow}}
+\newcommand{\starts}{\overset{s}{\longrightarrow}}
+\newcommand{\finishes}{\overset{f}{\longrightarrow}}
+\newcommand{\contained}{\overset{c}{\longrightarrow}}
+\newcommand{\after}{\overset{<}{\longleftarrow}}
+\newcommand{\metby}{\overset{m}{\longleftarrow}}
+\newcommand{\overlappedby}{\overset{o}{\longleftarrow}}
+\newcommand{\startedby}{\overset{s}{\longleftarrow}}
+\newcommand{\finishedby}{\overset{f}{\longleftarrow}}
+\newcommand{\containedby}{\overset{c}{\longleftarrow}}
+
+% Environments
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[subsection]
+\newtheorem{lemma}[thm]{Lemma}
+\newtheorem{cor}[thm]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{defn}[thm]{Definition}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+
+\begin{document}
+
+\maketitle
+
+\subfile{01_intro/01_intro.tex}
+
+\end{document}
