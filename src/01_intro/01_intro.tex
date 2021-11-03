@@ -2,4 +2,82 @@
 
 \begin{document}
 
+\section{Introduction}%
+\label{sec:introduction}
+
+\subsection{Axioms}%
+\label{sub:axioms}
+
+The first step towards axiomatising the theory of Allen Interval Algebras is to define an
+appropriate language. Usually, the theory is presented as consisting of 13 basic binary relations,
+which are exhaustive and mutually exclusive, so for any two intervals, exactly one relation will
+hold between them. It is worth noting though, that one of the relations is simply equality of
+intervals and as such, we do not need it in our language.
+
+\begin{defn}
+  We define the language of Allen Interval Algebras as
+  \begin{equation*}
+    \laia = \left\{
+      \before, \meets, \overlaps,     \starts,    \finishes,   \contained,
+      \after,  \metby, \overlappedby, \startedby, \finishedby, \contains
+    \right\}
+  \end{equation*}
+  where all of the above are binary relations.
+\end{defn}
+
+For two intervals $I$ and $J$, the intended meaning for the relations is then
+\begin{itemize}
+  \item $I \before J$ if $I$ starts and finishes fully before $J$ starts;
+  \item $I \meets J$ if $I$ finishes exactly as $J$ starts;
+  \item $I \overlaps J$ if I starts before $J$ starts and finishes during $J$;
+  \item $I \starts J$ if $I$ is the initial segment of $J$;
+  \item $I \finishes J$ if $I$ is the last segment of $J$;
+  \item $I \contained J$ if $I$ happens entirely during $J$.
+\end{itemize}
+As for the relations with right-pointing arrows, we can think of them as duals to the left arrow
+relations, so we simply swap $I$ and $J$ in the above explanations.
+
+With this and our understanding of linear time in mind, we can derive some axioms for how the
+different relations should interact.
+
+\subsection{Models}%
+\label{sub:models}
+
+Now that we have our axioms, it's important to see whether or not they are consistent, which is done
+by finding a model of $\taia$. Well, we can actually do one better than this, as given any linear
+order, we can consider the set of non-zero intervals over said order and turn it into an Allen
+Interval Algebra.
+
+\begin{defn}
+  Given a linear order $(P,\leq)$ we define its set of non-zero intervals as
+  \begin{equation*}
+    \inter{P} = \left\{(x_1,x_2) \in P^2 \ |\ x_1 < x_2 \right\}
+  \end{equation*}
+  where $x_1<x_2$ is shorthand for $x_1 \leq x_2 \land x_1 \neq x_2$.
+\end{defn}
+
+\begin{prop}
+  Given a linear order $(P,\leq)$ and intervals $(x_1,x_2),(y_1,y_2) \in \inter{P}$ we define an
+  interpretations of $\laia$ by
+  \begin{itemize}
+  \item $(x_1,x_2) \before (y_1,y_2)$ if $x_1<x_2<y_1<y_2$;
+  \item $(x_1,x_2) \meets (y_1,y_2)$ if $x_1<x_2=y_1<y_2$;
+  \item $(x_1,x_2) \overlaps (y_1,y_2)$ if $x_1<y_1<x_2<y_2$;
+  \item $(x_1,x_2) \starts (y_1,y_2)$ if $x_1=y_1<x_2<y_2$;
+  \item $(x_1,x_2) \finishes (y_1,y_2)$ if $y_1<x_1<x_2=y_2$;
+  \item $(x_1,x_2) \contained (y_1,y_2)$ $y_1<x_1<x_2<y_2$;
+  \item $(x_1,x_2) \overset{i}{\longleftarrow} (y_1,y_2)$ if and only if
+    $(y_1,y_2) \overset{i}{\longrightarrow} (x_1,x_2)$ for $i \in \{<,m,o,s,f,d\}$.
+  \end{itemize}
+  This interpretations gives rise to a model of $\taia$.
+\end{prop}
+
+\begin{proof}
+  % TODO Add proof
+\end{proof}
+
+\begin{cor}
+  The theory $\taia$ of Allen Interval Algebras is satisfiable.
+\end{cor}
+
 \end{document}
