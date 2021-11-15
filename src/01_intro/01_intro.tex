@@ -80,4 +80,45 @@ Interval Algebra.
   The theory $\taia$ of Allen Interval Algebras is satisfiable.
 \end{cor}
 
+We can do more than just map linear orders to Allen Interval Algebras though, this interval
+construction actually turns out to be a functor from the category of linear orders and their
+embeddings into the category of Allen Interval Algebras and their embeddings.
+
+% TODO: Introduce relevant categories maybe?
+
+\begin{prop}
+  Given an embedding of linear orders $f : X \to Y$ we define an embedding of Allen Interval
+  Algebras $\inter{f} : \inter{X} \to \inter{Y}$ by sending
+  \begin{equation*}
+    (x_1, x_2) \mapsto (f(x_1), f(x_2))
+  \end{equation*}
+  This then constitutes a functor.
+\end{prop}
+\begin{proof}
+  First we must check that given $f$ as above, $\inter{f}$ really is an embedding of Allen Interval
+  Algebras. This is simple to see though, as $f$ is an injective monotonic map, given some ordering
+  of elements $x_1,x_2,y_1,y_2 \in X$, this same ordering will apply to $f(x_1),f(x_2),f(y_1)$ and
+  $f(y_2)$ in $\inter{X}$.
+  
+  Next, to see this is a functor, we have two things to check:
+  \begin{itemize}
+    \item $\int$ sends identity maps to identity maps -- Consider $1_X : X \to X$, then $\inter{1_X}$
+      will send $(x_1,x_2) \mapsto (1_X(x_1), 1_X(x_2)) = (x_1,x_2)$, which is the identity map
+      on $\inter{X}$.
+    \item $\int$ respects composition -- Fix some $f : X \to Y$ and $g : Y \to Z$ both embeddings of
+      linear orders, then we see that
+      \begin{align*}
+        \inter{g \circ f}(x_1, x_2) &= (g \circ f(x_1), g \circ f(x_2))
+                                = (g(f(x_1)), g(f(x_2))) \\
+                                &= \inter{g}(f(x_1), f(x_2)) = \inter{g}\circ\inter{f}(x_1,x_2)
+      \end{align*}
+  \end{itemize}
+\end{proof}
+
+% TODO: Define functor from AIA to lin orders
+
+% TODO: Show it's an adjunction -- just for fun
+
+% TODO: Start considering finite AIAs
+
 \end{document}
