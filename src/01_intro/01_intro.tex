@@ -5,120 +5,203 @@
 \section{Introduction}%
 \label{sec:introduction}
 
-\subsection{Axioms}%
-\label{sub:axioms}
 
-The first step towards axiomatising the theory of Allen Interval Algebras is to define an
-appropriate language. Usually, the theory is presented as consisting of 13 basic binary relations,
-which are exhaustive and mutually exclusive, so for any two intervals, exactly one relation will
-hold between them. It is worth noting though, that one of the relations is simply equality of
-intervals and as such, we do not need it in our language.
 
-\begin{defn}
-  We define the language of Allen Interval Algebras as
-  \begin{equation*}
-    \laia = \left\{
-      \before, \meets, \overlaps,     \starts,    \finishes,   \contained,
-      \after,  \metby, \overlappedby, \startedby, \finishedby, \contains
-    \right\}
-  \end{equation*}
-  where all of the above are binary relations.
-\end{defn}
-
-For two intervals $I$ and $J$, the intended meaning for the relations is then
-\begin{itemize}
-  \item $I \before J$ if $I$ starts and finishes fully before $J$ starts;
-  \item $I \meets J$ if $I$ finishes exactly as $J$ starts;
-  \item $I \overlaps J$ if I starts before $J$ starts and finishes during $J$;
-  \item $I \starts J$ if $I$ is the initial segment of $J$;
-  \item $I \finishes J$ if $I$ is the last segment of $J$;
-  \item $I \contained J$ if $I$ happens entirely during $J$.
-\end{itemize}
-As for the relations with right-pointing arrows, we can think of them as duals to the left arrow
-relations, so we simply swap $I$ and $J$ in the above explanations.
-
-With this and our understanding of linear time in mind, we can derive some axioms for how the
-different relations should interact.
-
-\subsection{Models}%
-\label{sub:models}
-
-Now that we have our axioms, it's important to see whether or not they are consistent, which is done
-by finding a model of $\taia$. Well, we can actually do one better than this, as given any linear
-order, we can consider the set of non-zero intervals over said order and turn it into an Allen
-Interval Algebra.
-
-\begin{defn}
-  Given a linear order $(P,\leq)$ we define its set of non-zero intervals as
-  \begin{equation*}
-    \inter{P} = \left\{(x_1,x_2) \in P^2 \ |\ x_1 < x_2 \right\}
-  \end{equation*}
-  where $x_1<x_2$ is shorthand for $x_1 \leq x_2 \land x_1 \neq x_2$.
-\end{defn}
-
-\begin{prop}
-  Given a linear order $(P,\leq)$ and intervals $(x_1,x_2),(y_1,y_2) \in \inter{P}$ we define an
-  interpretations of $\laia$ by
-  \begin{itemize}
-  \item $(x_1,x_2) \before (y_1,y_2)$ if $x_1<x_2<y_1<y_2$;
-  \item $(x_1,x_2) \meets (y_1,y_2)$ if $x_1<x_2=y_1<y_2$;
-  \item $(x_1,x_2) \overlaps (y_1,y_2)$ if $x_1<y_1<x_2<y_2$;
-  \item $(x_1,x_2) \starts (y_1,y_2)$ if $x_1=y_1<x_2<y_2$;
-  \item $(x_1,x_2) \finishes (y_1,y_2)$ if $y_1<x_1<x_2=y_2$;
-  \item $(x_1,x_2) \contained (y_1,y_2)$ $y_1<x_1<x_2<y_2$;
-  \item $(x_1,x_2) \overset{i}{\longleftarrow} (y_1,y_2)$ if and only if
-    $(y_1,y_2) \overset{i}{\longrightarrow} (x_1,x_2)$ for $i \in \{<,m,o,s,f,d\}$.
-  \end{itemize}
-  This interpretations gives rise to a model of $\taia$.
-\end{prop}
-
-\begin{proof}
-  % TODO Add proof
-\end{proof}
-
-\begin{cor}
-  The theory $\taia$ of Allen Interval Algebras is satisfiable.
-\end{cor}
-
-We can do more than just map linear orders to Allen Interval Algebras though, this interval
-construction actually turns out to be a functor from the category of linear orders and their
-embeddings into the category of Allen Interval Algebras and their embeddings.
-
-% TODO: Introduce relevant categories maybe?
-
-\begin{prop}
-  Given an embedding of linear orders $f : X \to Y$ we define an embedding of Allen Interval
-  Algebras $\inter{f} : \inter{X} \to \inter{Y}$ by sending
-  \begin{equation*}
-    (x_1, x_2) \mapsto (f(x_1), f(x_2))
-  \end{equation*}
-  This then constitutes a functor.
-\end{prop}
-\begin{proof}
-  First we must check that given $f$ as above, $\inter{f}$ really is an embedding of Allen Interval
-  Algebras. This is simple to see though, as $f$ is an injective monotonic map, given some ordering
-  of elements $x_1,x_2,y_1,y_2 \in X$, this same ordering will apply to $f(x_1),f(x_2),f(y_1)$ and
-  $f(y_2)$ in $\inter{X}$.
-  
-  Next, to see this is a functor, we have two things to check:
-  \begin{itemize}
-    \item $\int$ sends identity maps to identity maps -- Consider $1_X : X \to X$, then $\inter{1_X}$
-      will send $(x_1,x_2) \mapsto (1_X(x_1), 1_X(x_2)) = (x_1,x_2)$, which is the identity map
-      on $\inter{X}$.
-    \item $\int$ respects composition -- Fix some $f : X \to Y$ and $g : Y \to Z$ both embeddings of
-      linear orders, then we see that
-      \begin{align*}
-        \inter{g \circ f}(x_1, x_2) &= (g \circ f(x_1), g \circ f(x_2))
-                                = (g(f(x_1)), g(f(x_2))) \\
-                                &= \inter{g}(f(x_1), f(x_2)) = \inter{g}\circ\inter{f}(x_1,x_2)
-      \end{align*}
-  \end{itemize}
-\end{proof}
-
-% TODO: Define functor from AIA to lin orders
-
-% TODO: Show it's an adjunction -- just for fun
-
-% TODO: Start considering finite AIAs
+%\subsection{Axioms}%
+%\label{sub:axioms}
+%
+%The first step towards axiomatising the theory of Allen Interval Algebras is to define an
+%appropriate language. Usually, the theory is presented as consisting of 13 basic binary relations,aa
+%which are exhaustive and mutually exclusive, so for any two intervals, exactly one relation will
+%hold between them. It is worth noting though, that one of the relations is simply equality of
+%intervals and as such, we do not need it in our language.
+%
+%\begin{defn}
+%  We define the language of Allen Interval Algebras as
+%  \begin{equation*}
+%    \laia = \left\{
+%      \before, \meets, \overlaps,     \starts,    \finishes,   \contained,
+%      \after,  \metby, \overlappedby, \startedby, \finishedby, \contains
+%    \right\}
+%  \end{equation*}
+%  where all of the above are binary relations.
+%\end{defn}
+%
+%For two intervals $I$ and $J$, the intended meaning for the relations is then
+%\begin{itemize}
+%  \item $I \before J$ if $I$ starts and finishes fully before $J$ starts;
+%  \item $I \meets J$ if $I$ finishes exactly as $J$ starts;
+%  \item $I \overlaps J$ if I starts before $J$ starts and finishes during $J$;
+%  \item $I \starts J$ if $I$ is the initial segment of $J$;
+%  \item $I \finishes J$ if $I$ is the last segment of $J$;
+%  \item $I \contained J$ if $I$ happens entirely during $J$.
+%\end{itemize}
+%The relations with left-pointing arrows should be seen as the converse to their right-pointing
+%counterparts. Thei intended meaning of the left-pointing arrows can be understood by swapping the
+%roles of $I$ and $J$ in the above entries.
+%
+%When working with Allen interval algebras, we will often work with disjunctions of the above
+%relations, hence it will be useful to introduce some shorthand notation. Firstly, instead of using
+%the left arrow symbols, we will sometimes use right pointing arrows but with upper case letters (or
+%$>$ in place of $<$). We would then write $\aiaarrow{>}$ to mean $\after$ or $\aiaarrow{M}$ to mean
+%$\metby$. The second piece of notation, is to allow for multiple symbols atop of our arrows, meaning
+%the disjunction of all the individual symbols. Using this notation, $I \aiaarrow{mos} J$ would mean
+%$(I \meets J) \lor (I \overlaps J) \lor (I \starts J)$.
+%
+%With this, and our understanding of linear time in mind, we can derive some axioms for how the
+%different relations should interact.
+%
+%\begin{defn}
+%  The theory of Allen interval algebras $\taia$ consists of the following first-order axioms:
+%  \begin{itemize}
+%    \item Our list of relations is exhaustive.
+%      \begin{equation*}
+%        \forall I\ \forall J\ \left(I \xrightarrow{<\,m\,o\,s\,f\,d\,>\,M\,O\,S\,F\,D} J\right)
+%          \lor I = J
+%      \end{equation*}
+%    \item Our relations are all distinct.
+%      \begin{align*}
+%        \forall I\ \forall J\ \left( I \before J \right)
+%          & \to \lnot \left( I \xrightarrow{mosfd>MOSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \meets J \right)
+%          & \to \lnot \left( I \xrightarrow{<osfd>MOSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \overlaps J \right)
+%          & \to \lnot \left( I \xrightarrow{<msfd>MOSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \starts J \right)
+%          & \to \lnot \left( I \xrightarrow{<mofd>MOSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \finishes J \right)
+%          & \to \lnot \left( I \xrightarrow{<mosd>MOSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \contained J \right)
+%          & \to \lnot \left( I \xrightarrow{<mosf>MOSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \after J \right)
+%          & \to \lnot \left( I \xrightarrow{<mosfdMOSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \metby J \right)
+%          & \to \lnot \left( I \xrightarrow{<mosfd>OSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \overlappedby J \right)
+%          & \to \lnot \left( I \xrightarrow{<mosfd>MSFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \startedby J \right)
+%          & \to \lnot \left( I \xrightarrow{<mosfd>MOFD} J \right) \\
+%        \forall I\ \forall J\ \left( I \finishedby J \right)
+%          & \to \lnot \left( I \xrightarrow{<mosfd>MOSD} J \right) \\
+%        \forall I\ \forall J\ \left( I \contains J \right)
+%          & \to \lnot \left( I \xrightarrow{<mosfd>MOSF} J \right)
+%      \end{align*}
+%    \item The right arrow relations are converses of the left arrow relations
+%      \begin{align*}
+%        \forall I\ \forall J\ \left( I \before J \right)
+%          \leftrightarrow \left( J \after I \right) \\
+%        \forall I\ \forall J\ \left( I \meets J \right)
+%          \leftrightarrow \left( J \metby I \right) \\
+%        \forall I\ \forall J\ \left( I \overlaps J \right)
+%          \leftrightarrow \left( J \overlappedby I \right) \\
+%        \forall I\ \forall J\ \left( I \starts J \right)
+%          \leftrightarrow \left( J \startedby I \right) \\
+%        \forall I\ \forall J\ \left( I \finishes J \right)
+%          \leftrightarrow \left( J \finishedby I \right) \\
+%        \forall I\ \forall J\ \left( I \contained J \right)
+%          \leftrightarrow \left( J \contains I \right)
+%      \end{align*}
+%        
+%  \end{itemize}
+%\end{defn}
+%
+%\subsection{Models}%
+%\label{sub:models}
+%
+%Now that we have our axioms, it's important to see whether or not they are consistent, which is done
+%by finding a model of $\taia$. Well, we can actually do one better than this, as given any linear
+%order, we can consider the set of non-zero intervals over said order and turn it into an Allen
+%Interval Algebra.
+%
+%\begin{defn}
+%  Given a linear order $(P,\leq)$ we define its set of non-zero intervals as
+%  \begin{equation*}
+%    \inter{P} = \left\{(x_1,x_2) \in P^2 \ |\ x_1 < x_2 \right\}
+%  \end{equation*}
+%  where $x_1<x_2$ is shorthand for $x_1 \leq x_2 \land x_1 \neq x_2$.
+%\end{defn}
+%
+%\begin{prop}
+%  Given a linear order $(P,\leq)$ and intervals $(x_1,x_2),(y_1,y_2) \in \inter{P}$ we define an
+%  interpretations of $\laia$ by
+%  \begin{itemize}
+%  \item $(x_1,x_2) \before (y_1,y_2)$ if $x_1<x_2<y_1<y_2$;
+%  \item $(x_1,x_2) \meets (y_1,y_2)$ if $x_1<x_2=y_1<y_2$;
+%  \item $(x_1,x_2) \overlaps (y_1,y_2)$ if $x_1<y_1<x_2<y_2$;
+%  \item $(x_1,x_2) \starts (y_1,y_2)$ if $x_1=y_1<x_2<y_2$;
+%  \item $(x_1,x_2) \finishes (y_1,y_2)$ if $y_1<x_1<x_2=y_2$;
+%  \item $(x_1,x_2) \contained (y_1,y_2)$ $y_1<x_1<x_2<y_2$;
+%  \item $(x_1,x_2) \overset{i}{\longleftarrow} (y_1,y_2)$ if and only if
+%    $(y_1,y_2) \overset{i}{\longrightarrow} (x_1,x_2)$ for $i \in \{<,m,o,s,f,d\}$.
+%  \end{itemize}
+%  This interpretations gives rise to a model of $\taia$.
+%\end{prop}
+%
+%\begin{proof}
+%  % TODO Add proof
+%\end{proof}
+%
+%\begin{cor}
+%  The theory $\taia$ of Allen Interval Algebras is satisfiable.
+%\end{cor}
+%
+%We can do more than just map linear orders to Allen Interval Algebras though, this interval
+%construction actually turns out to be a functor from the category of linear orders and their
+%embeddings into the category of Allen Interval Algebras and their embeddings.
+%
+%% TODO: Introduce relevant categories maybe?
+%
+%\begin{prop}
+%  Given an embedding of linear orders $f : X \to Y$ we define an embedding of Allen Interval
+%  Algebras $\inter{f} : \inter{X} \to \inter{Y}$ by sending
+%  \begin{equation*}
+%    (x_1, x_2) \mapsto (f(x_1), f(x_2))
+%  \end{equation*}
+%  This then constitutes a functor.
+%\end{prop}
+%\begin{proof}
+%  First we must check that given $f$ as above, $\inter{f}$ really is an embedding of Allen Interval
+%  Algebras. This is simple to see though, as $f$ is an injective monotonic map, given some ordering
+%  of elements $x_1,x_2,y_1,y_2 \in X$, this same ordering will apply to $f(x_1),f(x_2),f(y_1)$ and
+%  $f(y_2)$ in $\inter{X}$.
+%  
+%  Next, to see this is a functor, we have two things to check:
+%  \begin{itemize}
+%    \item $\int$ sends identity maps to identity maps -- Consider $1_X : X \to X$, then
+%      $\inter{1_X}$ will send $(x_1,x_2) \mapsto (1_X(x_1), 1_X(x_2)) = (x_1,x_2)$, which is the
+%      identity map on $\inter{X}$.
+%    \item $\int$ respects composition -- Fix some $f : X \to Y$ and $g : Y \to Z$ both embeddings of
+%      linear orders, then we see that
+%      \begin{align*}
+%        \inter{g \circ f}(x_1, x_2) &= (g \circ f(x_1), g \circ f(x_2))
+%                                = (g(f(x_1)), g(f(x_2))) \\
+%                                &= \inter{g}(f(x_1), f(x_2)) = \inter{g}\circ\inter{f}(x_1,x_2)
+%      \end{align*}
+%  \end{itemize}
+%\end{proof}
+%
+%Seeing how we can create an Allen Interval Algebra from any linear order, we might wonder if the
+%reverse is possible too. Previously we considered intervals with endpoints in the given linear
+%order, so a natural idea for a reverse functor would be to take an Allen Interval Algebra and create
+%a linear order of its endpoints. If we did manage to find such a construction, then that would be
+%quite a good sign that our theory appropriately axiomatises reasoning about time intervals.
+%
+%\begin{prop}
+%  Given a model $M$ of $\taia$, we denote by $\pts{M} = M \sqcup M / \sim$ where we are quotiening
+%  by the equivalence relation defined by
+%  \begin{align*}
+%    (I,0) \sim (J,1) & \iff (J,1) \sim (I,0) \iff I \metby J \\
+%    (I,0) \sim (J,0) & \iff (I = J)\ \lor\ (I \starts J)\ \lor\ (I \startedby J) \\
+%    (I,1) \sim (J,1) & \iff (I = J)\ \lor\ (I \finishes J)\ \lor\ (I \finishedby J)
+%  \end{align*}
+%  For any $I \in M$ we let $\intstart{I} = [(I,0)]$ and $\intend{I} = [(I,1)]$. 
+%  We can then define an ordering on $\pts{M}$ by %TODO aaaaa
+%\end{prop}
+%
+%% TODO: Define functor from AIA to lin orders
+%
+%% TODO: Show it's an adjunction -- just for fun
+%
+%% TODO: Start considering finite AIAs
 
 \end{document}
