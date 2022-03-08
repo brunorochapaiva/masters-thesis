@@ -27,12 +27,15 @@
 % Allen Interval Algebra Symbols
 \newcommand{\laia}{\lang_\text{AIA}}
 \newcommand{\taia}{\theory_\text{AIA}}
-\renewcommand{\int}{\text{Int}}
-\newcommand{\inter}[1]{\text{Int}\left(#1\right)}
-\newcommand{\points}{\text{Points}}
-\newcommand{\pts}[1]{\points\left(#1\right)}
+%\renewcommand{\int}{\text{Inter}}
+\newcommand{\inter}[1]{\text{Inter}\left(#1\right)}
+%\newcommand{\points}{\text{Points}}
+\newcommand{\points}[1]{\text{Points}\left(#1\right)}
 \newcommand{\intstart}[1]{#1_{\text{start}}}
 \newcommand{\intend}[1]{#1_{\text{end}}}
+
+\newcommand{\lslo}{\lang_\text{SLO}}
+\newcommand{\tslo}{\theory_\text{SLO}}
 
 % Allen Interval Algebra Relations
 \newcommand{\aiaarrow}[1]{\overset{#1}{\longrightarrow}}
@@ -51,7 +54,7 @@
 
 % Environments
 \theoremstyle{plain}
-\newtheorem{thm}{Theorem}[subsection]
+\newtheorem{thm}{Theorem}%[subsection]
 \newtheorem{lemma}[thm]{Lemma}
 \newtheorem{prop}[thm]{Proposition}
 \newtheorem{cor}[thm]{Corollary}
@@ -66,6 +69,240 @@
 
 \maketitle
 
-\subfile{01_intro/01_intro.tex}
+\begin{defn}
+  We define the language of strict linear orders $\lslo$ as the single binary relation $\{ < \}$.
+
+  We define the theory of strict linear orders as
+  \begin{align*}
+    \tslo = \{ & \forall a, \lnot\ a < a, \\
+              & \forall a, \forall b, \forall c, a < b \land b < c \rightarrow a < c \\
+              & \forall a, \forall b, a < b \lor a = b \lor b < a \}
+  \end{align*}
+\end{defn}
+
+\begin{defn}
+  We define the language of Allen interval algebras $\laia$ as 
+  \begin{equation*}
+    \laia = \{ \before, \meets, \overlaps, \starts, \finishes, \contained,
+               \after, \metby, \overlappedby, \startedby, \finishedby, \contains \}
+  \end{equation*}
+
+  (Unsure on how to best write out the definition of $\taia$, especially with the "transitivity"
+  axioms).
+\end{defn}
+
+% ------ Justifying this axiomatisation of interval algebras
+
+\begin{defn}
+  Given a linear order $L$ we define its set of non-zero intervals $\inter{P}$ as the set
+  \begin{equation*}
+    \inter{L} = \left\{(x_1,x_2)\ |\ x_1 < x_2 \right\} \subseteq L^2
+  \end{equation*}
+  We can turn this into a $\laia$-structure under the interpretations:
+  \begin{itemize}
+    \item $(x_1,x_2) \before (y_1,y_2)$ if $x_1<x_2<y_1<y_2$;
+    \item $(x_1,x_2) \meets (y_1,y_2)$ if $x_1<x_2=y_1<y_2$;
+    \item $(x_1,x_2) \overlaps (y_1,y_2)$ if $x_1<y_1<x_2<y_2$;
+    \item $(x_1,x_2) \starts (y_1,y_2)$ if $x_1=y_1<x_2<y_2$;
+    \item $(x_1,x_2) \finishes (y_1,y_2)$ if $y_1<x_1<x_2=y_2$;
+    \item $(x_1,x_2) \contained (y_1,y_2)$ $y_1<x_1<x_2<y_2$;
+    \item $(x_1,x_2) \overset{i}{\longleftarrow} (y_1,y_2)$ if and only if
+      $(y_1,y_2) \overset{i}{\longrightarrow} (x_1,x_2)$ for $i \in \{<,m,o,s,f,d\}$.
+  \end{itemize}
+\end{defn}
+
+\begin{thm}
+  Given a strict linear order $L$, $\inter{L}$ is a model of $\taia$ under the above
+  interpretations.
+\end{thm}
+\begin{proof}
+  Tedious proof by cases goes here.
+\end{proof}
+
+\begin{cor}
+  Allen's interval algebras are satisfiable
+\end{cor}
+
+The theory is satisfiable in a reasonable way, inducing the expected models from linear orders.
+To further enforce this tight connection, we see interval algebras also induce a quite reasonable
+linear order
+
+\begin{defn}
+  Given an Allen interval algebra $A$, we define $\points{A} = \frac{A + A}{\sim}$ where
+  $\sim$ is an equivalence relation on the set $A + A$ given by:
+  \begin{align*}
+    (0,I) \sim (0,J) & \iff I \starts J \lor I \startedby J \lor I = J \\
+    (1,I) \sim (1,J) & \iff I \finishes J \lor I \finishedby J \lor I = J \\
+    (1,I) \sim (0,J) & \iff I \meets J \\
+    (0,I) \sim (1,J) & \iff I \metby J
+  \end{align*}
+\end{defn}
+
+\begin{thm}
+  Given an Allen interval algebra $A$, the interpretation of the symbol $<$ in $\points{A}$ given by
+  \begin{align*}
+    (0,I) < (0,J) & \iff I \before J \lor I \meets J \lor I \overlaps J 
+      \lor I \finishedby J \lor I \contains J \\
+    (1,I) < (1,J) & \iff I \before J \lor I \meets J \lor I \overlaps J
+      \lor I \starts J \lor I \contained J \\
+    (1,I) < (0,J) & \iff I \before J \\
+    (0,I) < (1,J) & \iff I \after J
+  \end{align*}
+  is well-defined and turns $A$ into a model of strict linear orders.
+\end{thm}
+\begin{proof}
+  Another proof by too many cases.
+\end{proof}
+
+Now that this axiomatisation is justified, show that we can't remove any axioms without making
+it into something we do not want.
+
+% ------ A slight detour into category theory
+
+\begin{defn}
+  Given a theory $\theory$ over language $\lang$, we denote by $\text{Mod}(\lang, \theory)$ the category
+  with objects the models of $\theory$ and arrows the $\lang$-embeddings.
+\end{defn}
+
+\begin{thm}
+  We can turn $\text{Inter}$ into a functor from $\text{Mod}(\lslo,\tslo)$ into
+  $\text{Mod}(\laia,\taia)$ by sending arrows $f : M \to N$ in $\text{Mod}(\lslo,\tslo)$ to the arrow
+  $\inter{f} : \inter{M} \to \inter{N}$ in $\text{Mod}(\laia,\taia)$ defined by
+  \begin{equation*}
+    \inter{f}(x_1, x_2) = (f(x_1), f(x_2))
+  \end{equation*}
+\end{thm}
+\begin{proof}
+  Check the map preserves interpretations.
+
+  Standard checking of functor axioms.
+\end{proof}
+
+\begin{thm}
+  We can turn $\text{Points}$ into a functor from $\text{Mod}(\laia,\taia)$ into
+  $\text{Mod}(\lslo,\tslo)$ by sending arrows $f : A \to B$ in $\text{Mod}(\laia,\taia)$ to the arrow
+  $\points{f} : \points{A} \to \points{B}$ in $\text{Mod}(\lslo,\tslo)$ defined by
+  \begin{equation*}
+    \points{f}(0, I) = (0, f(I)) \qquad\text{and}\qquad \points{f}(1,I) = (1, f(I))
+  \end{equation*}
+\end{thm}
+\begin{proof}
+  Check map is monotone.
+
+  Standard checking of functor axioms.
+\end{proof}
+
+\begin{thm}
+  $\text{Points}$ is left adjoint to $\text{Inter}$.
+\end{thm}
+\begin{proof}
+  For an interval algebra $A$ and a strict linear order $L$, we have
+  \begin{equation*}
+    \text{Hom}(\points{A}, L) \cong \text{Hom}(A, \inter{L})
+  \end{equation*}
+  A map of linear orders from the start/end points of A to L, enforces a mapping of interval
+  algebras from A to the intervals of L, by checking where the start/end points of the interval end.
+ 
+  The above map is "canonical" so it should be natural in A and L.
+
+  Notice also that
+  \begin{equation*}
+    \text{Hom}(\inter{L},A) \not\cong \text{Hom}(L, \points{A})
+  \end{equation*}
+  Since A does not necessarily have all the intervals given by $\points{A}$, so if we have a map on
+  the right, it isn't guaranteed that we have a corresponding map on the left.
+\end{proof}
+
+% ------ Homogeneous tings eh
+
+\begin{thm}
+  The class $\mathbf{FCh}$ of finite strict linear orders satisfies the hereditary property (HP),
+  the joint embedding property (JEP), the amalgamation property (AP) and is essentially countable
+  (EC). In other words, $\textbf{FCh}$ is a Fraïssé class.
+\end{thm}
+\begin{proof}
+  Something like
+  \begin{itemize}
+    \item HP: a suborder of a finite strict linear order must also be finite and strictly linear
+    \item JEP: Given two finite strict linear orders, embed them into their disjoint union with
+      the left order befored the right order
+    \item AP: Given two finite strict linear orders A and B, with C embedding into both,
+      embed A and B into their product ordered lexicographically
+    \item EC: For each natural n, there exists exactly one linear order of size n up to iso, so
+      up to iso the number of finite linear orders must be countable
+  \end{itemize}
+\end{proof}
+
+\begin{thm}
+  The Fraïssé limit of $\textbf{FCh}$ is $\mathbb{Q}$
+\end{thm}
+\begin{proof}
+  Show that $\mathbb{Q}$ is homogeneous and that its age is $\textbf{FCh}$.
+\end{proof}
+
+\begin{thm}
+  The class of finite interval algebras is a Fraïssé class.
+\end{thm}
+\begin{proof}
+  Notice $\text{Inter}$ and $\text{Points}$ must send finite models to finite models.
+
+  For HP, JEP and AP, we can reduce to the case of linear orders by using the unit of the
+  adjunction between interval algebras and linear orders.
+
+  For EC use a similar argument to linear orders.
+\end{proof}
+
+\begin{thm}
+  The Fraïssé limit of the finite interval algebras is $\inter{\mathbb{Q}}$
+\end{thm}
+\begin{proof}
+  Show that the age of $\inter{\mathbb{Q}}$ is the finite interval algebras.
+
+  Show that $\inter{\mathbb{Q}}$ is homogeneous by reducing to $\mathbb{Q}$ using our adjunction.
+
+  (Given an isomorphism between finite interval algebras f, get an isomorphism between finite linear
+  orders Points(f), this extends to an automorphism of Q as a linear order, which we bring over
+  to Inter(Q)).
+\end{proof}
+
+
+% ------ Stability theory
+
+\begin{thm}
+  An interval algebra $A$ is stable if and only if it is finite.
+\end{thm}
+\begin{proof}
+  Finite models are always stable since they cannot have infinitely many elements.
+
+  For an infinite model $A$, we can linearly order the intervals in $A$, showing $A$ is unstable.
+\end{proof}
+
+\begin{thm}
+  If a model M is interpretable in an NIP model, then M must also be NIP
+\end{thm}
+\begin{proof}
+  Prove the contrapositive (if M is IP, then anything M is interpretable in is IP)
+  If M is interpretable in $N^k$, and there is a formula $\phi$ which has the IP in M,
+  then viewing this formula as a formula over $N$ implies that $N$ is also IP.
+\end{proof}
+
+\begin{cor}
+  Given an NIP linear order $L$, the interval algebra $\inter{L}$ is also NIP.
+\end{cor}
+\begin{proof}
+  $\inter{L}$ is interpretable in $L$ by its construction.
+\end{proof}
+
+\begin{thm}
+  Given an linear order $L$ with no upper bound (or no lower bound), $L$ is an NIP model if and only
+  if $\inter{L}$ is an NIP model.
+\end{thm}
+\begin{proof}
+  The left to right implication holds by the previous corollary.
+  For the right to left implication, we notice that we can interpret the linear order $L$ in
+  $\inter{L}$ as it has no upper bound (use a construction similar to Points where we only consider
+  the end points of an interval -- the lower bound analogue follows from the start point
+  construction).
+\end{proof}
 
 \end{document}
