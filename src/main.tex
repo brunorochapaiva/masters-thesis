@@ -13,29 +13,39 @@
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{parskip}
+\usepackage{tikz}
+\usepackage{quiver}
 
 \usepackage{subfiles}
 
 % General Symbols
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\R}{\mathbb{R}}
 
-% Model Theoretic Symbols
+% Category Theory
+\newcommand{\id}[1]{\text{id}_{#1}}
+\newcommand{\unit}[1]{\eta_{#1}}
+\newcommand{\counit}[1]{\epsilon_{#1}}
+
+% Model Theory
 \newcommand{\lang}{\mathcal{L}}
 \newcommand{\theory}{\mathbb{T}}
+\newcommand{\age}[1]{\text{Age}\left(#1\right)}
+
+\newcommand{\finslo}{\textbf{FCh}}
+\newcommand{\finaia}{\textbf{FIA}}
+
+
+\newcommand{\lslo}{\lang_\text{SLO}}
+\newcommand{\tslo}{\theory_\text{SLO}}
 
 % Allen Interval Algebra Symbols
 \newcommand{\laia}{\lang_\text{AIA}}
 \newcommand{\taia}{\theory_\text{AIA}}
-%\renewcommand{\int}{\text{Inter}}
-\newcommand{\inter}[1]{\text{Inter}\left(#1\right)}
-%\newcommand{\points}{\text{Points}}
-\newcommand{\points}[1]{\text{Points}\left(#1\right)}
-\newcommand{\intstart}[1]{#1_{\text{start}}}
-\newcommand{\intend}[1]{#1_{\text{end}}}
-
-\newcommand{\lslo}{\lang_\text{SLO}}
-\newcommand{\tslo}{\theory_\text{SLO}}
+\newcommand{\istart}[1]{#1_{-}}
+\newcommand{\iend}[1]{#1_{+}}
 
 % Allen Interval Algebra Relations
 \newcommand{\aiaarrow}[1]{\overset{#1}{\longrightarrow}}
@@ -51,6 +61,20 @@
 \newcommand{\startedby}{\overset{s}{\longleftarrow}}
 \newcommand{\finishedby}{\overset{f}{\longleftarrow}}
 \newcommand{\contains}{\overset{d}{\longleftarrow}}
+
+% Categories of models
+\newcommand{\mods}[2]{\text{Mod}\left(#1,#2\right)}
+\newcommand{\aias}{\mods{\laia}{\taia}}
+\newcommand{\slos}{\mods{\lslo}{\tslo}}
+
+% Intervals construction
+\newcommand{\inter}[1][-]{\text{Int}\left(#1\right)}
+
+% Points construction
+\newcommand{\psim}{\sim}
+\newcommand{\peq}{\phi_\sim}
+\newcommand{\plt}{\phi_<}
+\newcommand{\points}[1][-]{\text{Pts}\left(#1\right)}
 
 % Environments
 \theoremstyle{plain}
@@ -94,9 +118,9 @@
 % ------ Justifying this axiomatisation of interval algebras
 
 \begin{defn}
-  Given a linear order $L$ we define its set of non-zero intervals $\inter{P}$ as the set
+  Given a linear order $L$ we define its set of non-zero intervals $\inter[P]$ as the set
   \begin{equation*}
-    \inter{L} = \left\{(x_1,x_2)\ |\ x_1 < x_2 \right\} \subseteq L^2
+    \inter[L] = \left\{(x_1,x_2)\ |\ x_1 < x_2 \right\} \subseteq L^2
   \end{equation*}
   We can turn this into a $\laia$-structure under the interpretations:
   \begin{itemize}
@@ -112,7 +136,7 @@
 \end{defn}
 
 \begin{thm}
-  Given a strict linear order $L$, $\inter{L}$ is a model of $\taia$ under the above
+  Given a strict linear order $L$, $\inter[L]$ is a model of $\taia$ under the above
   interpretations.
 \end{thm}
 \begin{proof}
@@ -128,31 +152,58 @@ To further enforce this tight connection, we see interval algebras also induce a
 linear order
 
 \begin{defn}
-  Given an Allen interval algebra $A$, we define $\points{A} = \frac{A + A}{\sim}$ where
-  $\sim$ is an equivalence relation on the set $A + A$ given by:
-  \begin{align*}
-    (0,I) \sim (0,J) & \iff I \starts J \lor I \startedby J \lor I = J \\
-    (1,I) \sim (1,J) & \iff I \finishes J \lor I \finishedby J \lor I = J \\
-    (1,I) \sim (0,J) & \iff I \meets J \\
-    (0,I) \sim (1,J) & \iff I \metby J
-  \end{align*}
+  Given an Allen interval algebra $A$, we define $\points[A] = \frac{A + A}{\psim}$ where
+  $\psim$ is an equivalence relation on the set $A + A$ defined by
+  \begin{equation*}
+    (n,I) \psim (m,J) \iff A \models \peq(n,m)(I,J)
+  \end{equation*}
+  Where $\peq$ assigns $\laia$-formulas with open variables $I,J$ to pairs $(n,m) \in \{0,1\}^2$
+  \begin{equation*}
+    \peq(n,m)(I,J) = \begin{cases}
+      I \starts J \lor I \startedby J \lor I = J \quad & \text{if } n = m = 0\\
+      I \finishes J \lor I \finishedby J \lor I = J    & \text{if } n = m = 1 \\
+      I \metby J                                       & \text{if } n = 0,\ m = 1 \\
+      I \meets J                                       & \text{if } n = 1,\ m = 0
+    \end{cases}
+  \end{equation*}
 \end{defn}
 
 \begin{thm}
-  Given an Allen interval algebra $A$, the interpretation of the symbol $<$ in $\points{A}$ given by
-  \begin{align*}
-    (0,I) < (0,J) & \iff I \before J \lor I \meets J \lor I \overlaps J 
-      \lor I \finishedby J \lor I \contains J \\
-    (1,I) < (1,J) & \iff I \before J \lor I \meets J \lor I \overlaps J
-      \lor I \starts J \lor I \contained J \\
-    (1,I) < (0,J) & \iff I \before J \\
-    (0,I) < (1,J) & \iff I \after J
-  \end{align*}
-  is well-defined and turns $A$ into a model of strict linear orders.
+  Given an Allen interval algebra $A$, the interpretation of the symbol $<$ in $\points[A]$ given by
+  $(n,I) < (m,J) \iff A \models \plt(n,m)(I,J)$ is well-defined and turns $A$ into a model of
+  $\tslo$.
+
+  Here, $\plt$ is a function assigning $\laia$-formulas with open variables $I,J$ to pairs
+  $(n,m) \in \{0,1\}^2$ defined as:
+  \begin{equation*}
+    \plt(n,m)(I,J) = \begin{cases}
+      I \before J \lor I \meets J \lor I \overlaps J  \lor I \finishedby J \lor I \contains J
+                                                & \text{if } n = m = 0\\
+        I \before J \lor I \meets J \lor I \overlaps J \lor I \starts J \lor I \contained J
+                                                & \text{if } n = m = 1 \\
+      \lnot\,(I \after J) \land \lnot\,(I \metby J) \land \lnot\,(I \startedby J)                      
+                                                & \text{if } n = 0,\ m = 1 \\
+      I \before J                               & \text{if } n = 1,\ m = 0
+    \end{cases}
+  \end{equation*}
 \end{thm}
 \begin{proof}
-  Another proof by too many cases.
+  %TODO Show that $<$ is well defined
+
+  Now we know that our definition of $<$ does not depend on a choice of representative, we need
+  to check whether it satisfies $\tslo$:
+  \begin{itemize}
+    \item \textbf{irreflexivity}: Fix some element $[(n,I)] \in \points[A]$. Since the interval
+      algebra relations (along with equality) are mutually exclusive and $I = I$, no other relation
+      can hold for the pair $(I,I)$. Regardless of the value of $n$, $\plt(n,n)(I,I)$ does not
+      include $I = I$ as a disjunct, so $A \not\models \plt(n,n)(I,I)$ and $<$ is irreflexive.
+    \item \textbf{transitivity}:
+    \item \textbf{trichotomy}:
+  \end{itemize}
 \end{proof}
+
+%TODO: Consider adding table justifying these definitions? Something like:
+%| I relation J | drawing of I and J | is I- < J- | is I+ < J+ | is I- < J + | is I+ < J - |
 
 Now that this axiomatisation is justified, show that we can't remove any axioms without making
 it into something we do not want.
@@ -160,16 +211,16 @@ it into something we do not want.
 % ------ A slight detour into category theory
 
 \begin{defn}
-  Given a theory $\theory$ over language $\lang$, we denote by $\text{Mod}(\lang, \theory)$ the category
+  Given a theory $\theory$ over language $\lang$, we denote by $\mod{\lang}{\theory}$ the category
   with objects the models of $\theory$ and arrows the $\lang$-embeddings.
 \end{defn}
 
 \begin{thm}
-  We can turn $\text{Inter}$ into a functor from $\text{Mod}(\lslo,\tslo)$ into
-  $\text{Mod}(\laia,\taia)$ by sending arrows $f : M \to N$ in $\text{Mod}(\lslo,\tslo)$ to the arrow
-  $\inter{f} : \inter{M} \to \inter{N}$ in $\text{Mod}(\laia,\taia)$ defined by
+  We can turn $\inter$ into a functor from $\mod{\lslo}{\tslo}$ into
+  $\mod{\laia}{\taia}$ by sending arrows $f : M \to N$ in $\mod{\lslo}{\tslo}$ to the arrow
+  $\inter[f] : \inter[M] \to \inter[N]$ in $\mod{\laia}{\taia}$ defined by
   \begin{equation*}
-    \inter{f}(x_1, x_2) = (f(x_1), f(x_2))
+    \inter[f](x_1, x_2) = (f(x_1), f(x_2))
   \end{equation*}
 \end{thm}
 \begin{proof}
@@ -179,26 +230,59 @@ it into something we do not want.
 \end{proof}
 
 \begin{thm}
-  We can turn $\text{Points}$ into a functor from $\text{Mod}(\laia,\taia)$ into
-  $\text{Mod}(\lslo,\tslo)$ by sending arrows $f : A \to B$ in $\text{Mod}(\laia,\taia)$ to the arrow
-  $\points{f} : \points{A} \to \points{B}$ in $\text{Mod}(\lslo,\tslo)$ defined by
+  We can turn $\points$ into a functor from $\mod{\laia}{\taia}$ into
+  $\mod{\lslo}{\tslo}$ by sending arrows $f : A \to B$ in $\mod{\laia}{\taia}$ to the arrow
+  $\points[f] : \points[A] \to \points[B]$ in $\mod{\lslo}{\tslo}$ defined by
   \begin{equation*}
-    \points{f}(0, I) = (0, f(I)) \qquad\text{and}\qquad \points{f}(1,I) = (1, f(I))
+    \points[f](0, I) = (0, f(I)) \qquad\text{and}\qquad \points[f](1,I) = (1, f(I))
   \end{equation*}
 \end{thm}
 \begin{proof}
-  Check map is monotone.
+  Given an arrow $f : A \to B$, we must check that $\points[f]$ is a well defined map, and that it
+  is an $\lslo$-embedding. These facts both follow by noticing that $f$ is an
+  $\laia$-embedding, so it preserves the truth of quantifier-free $\laia$-formulas, so
+  \begin{align*}
+    (n,I) \psim (m,J)
+      & \iff A \models \peq(n,m)(I,J) \\
+      & \iff A \models \peq(n,m)(f(I),f(J)) \\
+      & \iff (n,f(I)) \psim (m,f(J))
+  \end{align*}
+  and similarly
+  \begin{align*}
+    [(n,I)] < [(m,J)]
+      & \iff A \models \plt(n,m)(I,J) \\
+      & \iff A \models \plt(n,m)(f(I),f(J)) \\
+      & \iff \points[f]([(n,I)]) < \points[f]([(m,J)])
+  \end{align*}
+  for any two $(n,I),(m,J) \in A + A$, since $\peq(n,m)$ and $\plt(n,m)$ are always quantifier-free.
 
-  Standard checking of functor axioms.
+  Next, to see that $\points$ satisfies the functor axioms:
+  \begin{itemize}
+    \item \textbf{preserves identity arrows}: Fix some interval algebra $A$ and some element
+    $[(n, I)] \in \points[A]$. Then notice that
+      \begin{equation*}
+        \points[\id{A}]([(n,I)]) = [(n, \id{A}(I))] = [(n,I)] = \id{\points[A]}([(n,I)])
+      \end{equation*}
+      Hence $\points[\id{A}] = \id{\points[A]}$.
+    \item \textbf{respects arrow composition}: Fix interval algebras $A,B,C$ along with arrows
+      $f : A \to B$, $g : B \to C$. Then for all elements $[(n,I)] \in \points[A]$:
+      \begin{align*}
+        \points[g \circ f]([(n,I)])
+          & = [(n,g \circ f (I))] = [(n, g(f(I)))] \\
+          & = \points[g]\left( \points[f]([n,I]) \right) \\
+          & = \points[g] \circ \points[f] ([n,I])
+      \end{align*}
+      Hebce $\points[g \circ f] = \points[g] \circ \points[f]$ as expected.
+  \end{itemize}
 \end{proof}
 
 \begin{thm}
-  $\text{Points}$ is left adjoint to $\text{Inter}$.
+  $\points$ is left adjoint to $\inter$.
 \end{thm}
 \begin{proof}
   For an interval algebra $A$ and a strict linear order $L$, we have
   \begin{equation*}
-    \text{Hom}(\points{A}, L) \cong \text{Hom}(A, \inter{L})
+    \text{Hom}(\points[A], L) \cong \text{Hom}(A, \inter[L])
   \end{equation*}
   A map of linear orders from the start/end points of A to L, enforces a mapping of interval
   algebras from A to the intervals of L, by checking where the start/end points of the interval end.
@@ -207,62 +291,185 @@ it into something we do not want.
 
   Notice also that
   \begin{equation*}
-    \text{Hom}(\inter{L},A) \not\cong \text{Hom}(L, \points{A})
+    \text{Hom}(\inter[L],A) \not\cong \text{Hom}(L, \points[A])
   \end{equation*}
-  Since A does not necessarily have all the intervals given by $\points{A}$, so if we have a map on
+  Since A does not necessarily have all the intervals given by $\points[A]$, so if we have a map on
   the right, it isn't guaranteed that we have a corresponding map on the left.
 \end{proof}
 
 % ------ Homogeneous tings eh
 
 \begin{thm}
-  The class $\mathbf{FCh}$ of finite strict linear orders satisfies the hereditary property (HP),
+  The class $\finslo$ of finite strict linear orders satisfies the hereditary property (HP),
   the joint embedding property (JEP), the amalgamation property (AP) and is essentially countable
-  (EC). In other words, $\textbf{FCh}$ is a Fraïssé class.
+  (EC). In other words, $\finslo$ is a Fraïssé class.
 \end{thm}
 \begin{proof}
   Something like
   \begin{itemize}
-    \item HP: a suborder of a finite strict linear order must also be finite and strictly linear
+    \item HP: Show the result for all relational, universal theories, since this is referenced in
+      the later proof.
     \item JEP: Given two finite strict linear orders, embed them into their disjoint union with
       the left order befored the right order
     \item AP: Given two finite strict linear orders A and B, with C embedding into both,
       embed A and B into their product ordered lexicographically
-    \item EC: For each natural n, there exists exactly one linear order of size n up to iso, so
-      up to iso the number of finite linear orders must be countable
+    \item EC: Show the result for all finite languages, since this is referenced in the later proof.
   \end{itemize}
 \end{proof}
 
 \begin{thm}
-  The Fraïssé limit of $\textbf{FCh}$ is $\mathbb{Q}$
+  The Fraïssé limit of $\finslo$ is $\Q$
 \end{thm}
 \begin{proof}
-  Show that $\mathbb{Q}$ is homogeneous and that its age is $\textbf{FCh}$.
+  Show that $\Q$ is homogeneous and that its age is $\finslo$.
 \end{proof}
 
 \begin{thm}
-  The class of finite interval algebras is a Fraïssé class.
+  The class $\finaia$ of finite interval algebras is a Fraïssé class.
 \end{thm}
 \begin{proof}
-  Notice $\text{Inter}$ and $\text{Points}$ must send finite models to finite models.
+  First, notice that $\points$ must send finite interval algebras to finite strict linear orders.
+  In fact, given an interval algebra $A$, $|\points[A]| \leq 2|A|$ since 
+  $\points[A]$ is a quotient of $A + A$. Similarly, $\inter$ must also send finite strict linear
+  orders to finite interval algebras: given a strict linear order $L$, $|\inter[L]| = |L|^2$.
 
-  For HP, JEP and AP, we can reduce to the case of linear orders by using the unit of the
-  adjunction between interval algebras and linear orders.
-
-  For EC use a similar argument to linear orders.
+  Next, with this in mind, we check the Fraïssé class conditions:
+  \begin{itemize}
+    \item \textbf{HP}: This follows from the fact that $\laia$ is a relational language and
+      $\taia$ is a universal theory, same as the case for strict linear orders.
+    \item \textbf{JEP}: Given two finite interval algebras $A$ and $B$, we use the JEP of strict
+      linear orders to get the following diagram in $\slos$
+      \[\begin{tikzcd}
+        {\points[A]} \\
+        && \Omega \\
+        {\points[B]}
+        \arrow["f", from=1-1, to=2-3]
+        \arrow["g"', from=3-1, to=2-3]
+      \end{tikzcd}\]
+      Then, applying $\inter$ and using the adjunction unit $\eta$, we get
+      % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFsyLDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzQsMSwiXFxpbnRlcltcXE9tZWdhXSJdLFswLDAsIkEiXSxbMCwyLCJCIl0sWzAsMiwiXFxpbnRlcltmXSJdLFsxLDIsIlxcaW50ZXJbZ10iLDJdLFs0LDEsIlxcdW5pdHtCfSIsMl0sWzMsMCwiXFx1bml0e0F9Il1d
+      \[\begin{tikzcd}
+        A && {\inter[\points[A]]} \\
+        &&&& {\inter[\Omega]} \\
+        B && {\inter[\points[B]]}
+        \arrow["{\inter[f]}", from=1-3, to=2-5]
+        \arrow["{\inter[g]}"', from=3-3, to=2-5]
+        \arrow["{\unit{B}}"', from=3-1, to=3-3]
+        \arrow["{\unit{A}}", from=1-1, to=1-3]
+      \end{tikzcd}\]
+      And the composites $\inter[f] \circ \unit{A}$ and $\inter[g] \circ \unit{B}$ along with
+      the interval algebra $\Omega$ give us the joint embedding of $A$ and $B$.
+    \item \textbf{AP}: Suppose we have the following diagram in $\aias$
+      % https://q.uiver.app/?q=WzAsNCxbMiwwLCJBIl0sWzIsMiwiQiJdLFswLDEsIkMiXSxbNCwxXSxbMiwwLCJmIl0sWzIsMSwiZyIsMl1d
+      \[\begin{tikzcd}
+        && A \\
+        C &&&& {} \\
+        && B
+        \arrow["f", from=2-1, to=1-3]
+        \arrow["g"', from=2-1, to=3-3]
+      \end{tikzcd}\]
+      Applying $\points$ takes us to $\slos$, at which point we can use the AP of strict linear 
+      orders to get the commuting square
+      % https://q.uiver.app/?q=WzAsNCxbMiwwLCJcXHBvaW50c1tBXSJdLFsyLDIsIlxccG9pbnRzW0JdIl0sWzAsMSwiXFxwb2ludHNbQ10iXSxbNCwxLCJcXE9tZWdhIl0sWzIsMCwiXFxwb2ludHNbZl0iXSxbMiwxLCJcXHBvaW50c1tnXSIsMl0sWzAsMywiZiciXSxbMSwzLCJnJyIsMl1d
+      \[\begin{tikzcd}
+        && {\points[A]} \\
+        {\points[C]} &&&& \Omega \\
+        && {\points[B]}
+        \arrow["{\points[f]}", from=2-1, to=1-3]
+        \arrow["{\points[g]}"', from=2-1, to=3-3]
+        \arrow["{f'}", from=1-3, to=2-5]
+        \arrow["{g'}"', from=3-3, to=2-5]
+      \end{tikzcd}\]
+      Now going back to $\aias$ gives the commuting diagram
+      % https://q.uiver.app/?q=WzAsOSxbNCwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFs0LDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzIsMSwiXFxpbnRlcltcXHBvaW50c1tDXV0iXSxbNiwxLCJcXGludGVyW1xcT21lZ2FdIl0sWzAsMSwiQyJdLFswLDBdLFsxLDBdLFsyLDAsIkEiXSxbMiwyLCJCIl0sWzIsMCwiXFxpbnRlcltcXHBvaW50c1tmXV0iLDFdLFsyLDEsIlxcaW50ZXJbXFxwb2ludHNbZ11dIiwxXSxbMCwzLCJcXGludGVyW2YnXSJdLFsxLDMsIlxcaW50ZXJbZyddIiwyXSxbOCwxLCJcXHVuaXR7Qn0iLDJdLFs3LDAsIlxcdW5pdHtBfSJdLFs0LDIsIlxcdW5pdHtDfSIsMV0sWzQsNywiZiJdLFs0LDgsImciLDJdXQ==
+      \[\begin{tikzcd}
+        {} & {} & A && {\inter[\points[A]]} \\
+        C && {\inter[\points[C]]} &&&& {\inter[\Omega]} \\
+        && B && {\inter[\points[B]]}
+        \arrow["{\inter[\points[f]]}"{description}, from=2-3, to=1-5]
+        \arrow["{\inter[\points[g]]}"{description}, from=2-3, to=3-5]
+        \arrow["{\inter[f']}", from=1-5, to=2-7]
+        \arrow["{\inter[g']}"', from=3-5, to=2-7]
+        \arrow["{\unit{B}}"', from=3-3, to=3-5]
+        \arrow["{\unit{A}}", from=1-3, to=1-5]
+        \arrow["{\unit{C}}"{description}, from=2-1, to=2-3]
+        \arrow["f", from=2-1, to=1-3]
+        \arrow["g"', from=2-1, to=3-3]
+      \end{tikzcd}\]
+      For the AP of the finite interval algebras, we are only interested in the outer square. The
+      necessary maps are then $\inter[f'] \circ \unit{A}$ and $\inter[g'] \circ \unit{B}$, both
+      mapping into $\inter[\Omega]$.
+    \item \textbf{EC}: Follows from the fact that $\laia$ is finite, similarly to the strict linear
+      order case.
+\end{itemize}
 \end{proof}
 
 \begin{thm}
-  The Fraïssé limit of the finite interval algebras is $\inter{\mathbb{Q}}$
+  The Fraïssé limit of $\finaia$ is $\inter[\Q]$
 \end{thm}
 \begin{proof}
-  Show that the age of $\inter{\mathbb{Q}}$ is the finite interval algebras.
-
-  Show that $\inter{\mathbb{Q}}$ is homogeneous by reducing to $\mathbb{Q}$ using our adjunction.
-
-  (Given an isomorphism between finite interval algebras f, get an isomorphism between finite linear
-  orders Points(f), this extends to an automorphism of Q as a linear order, which we bring over
-  to Inter(Q)).
+  To show that the Fraïssé limit of the finite interval algebras is $\inter[\Q]$, it suffices to
+  show the following:
+  \begin{itemize}
+    \item $\age{\Q} = \finaia$:
+    %TODO Show that the age of $\inter[\Q]$ is the finite interval algebras.
+    \item $\inter[\Q]$ is homogeneous: fix two $\laia$-substructures $A,B \subseteq \inter[\Q]$,
+      along with some $\laia$-isomorphism $f : A \to B$. In essence we have the following
+      diagram in $\slos$:
+      % https://q.uiver.app/?q=WzAsNCxbMCwyLCJBIl0sWzIsMiwiQiJdLFswLDAsIlxcaW50ZXJbUV0iXSxbMiwwLCJcXGludGVyW1FdIl0sWzAsMSwiZiJdLFswLDIsImkiXSxbMSwzLCJqIiwyXV0=
+      \[\begin{tikzcd}
+        {\inter[Q]} && {\inter[Q]} \\
+        \\
+        A && B
+        \arrow["f", from=3-1, to=3-3]
+        \arrow["i", from=3-1, to=1-1]
+        \arrow["j"', from=3-3, to=1-3]
+      \end{tikzcd}\]
+      Applying $\inter$ to move to linear orders, we can postcompose $\points[i]$ and $\points[j]$ with
+      the counit at $\Q$ to realise $\points[A]$ and $\points[B]$ as $\lslo$-substructures of $\Q$.
+      Now, $\points[f]$ is still an isomorphism as these are preserved by functors, and using the
+      fact that $\Q$ is homogeneous, we can extend $\points[f]$ to an isomorphism $g$, giving the
+      commuting diagram
+      % https://q.uiver.app/?q=WzAsOCxbMCw0LCJcXHBvaW50c1tBXSJdLFsyLDQsIlxccG9pbnRzW0JdIl0sWzAsMiwiXFxwb2ludHNbXFxpbnRlcltcXFFdXSJdLFsyLDIsIlxccG9pbnRzW1xcaW50ZXJbXFxRXV0iXSxbMCwwLCJcXFEiXSxbMiwwLCJcXFEiXSxbMSw3XSxbMCwxXSxbMCwxLCJcXHBvaW50c1tmXSJdLFswLDIsIlxccG9pbnRzW2ldIl0sWzIsNCwiXFxjb3VuaXR7XFxRfSJdLFszLDUsIlxcY291bml0e1xcUX0iLDJdLFsxLDMsIlxccG9pbnRzW2pdIiwyXSxbNCw1LCJnIl1d
+      \[\begin{tikzcd}
+        \Q && \Q \\
+        {} \\
+        {\points[\inter[\Q]]} && {\points[\inter[\Q]]} \\
+        \\
+        {\points[A]} && {\points[B]} \\
+        \\
+        \\
+        & {}
+        \arrow["{\points[f]}", from=5-1, to=5-3]
+        \arrow["{\points[i]}", from=5-1, to=3-1]
+        \arrow["{\counit{\Q}}", from=3-1, to=1-1]
+        \arrow["{\counit{\Q}}"', from=3-3, to=1-3]
+        \arrow["{\points[j]}"', from=5-3, to=3-3]
+        \arrow["g", from=1-1, to=1-3]
+      \end{tikzcd}\]
+      Finally, we apply $\inter$ to bring us back to interval algebras, where we have the following
+      diagram:
+      % https://q.uiver.app/?q=WzAsNixbMCw0LCJBIl0sWzMsNCwiQiJdLFswLDIsIlxcaW50ZXJbXFxwb2ludHNbQV1dIl0sWzMsMiwiXFxpbnRlcltcXHBvaW50c1tCXV0iXSxbMCwwLCJcXGludGVyW1xcUV0iXSxbMywwLCJcXGludGVyW1xcUV0iXSxbMCwxLCJmIl0sWzAsMiwiXFx1bml0e0F9Il0sWzEsMywiXFx1bml0e0J9IiwyXSxbMiwzLCJcXGludGVyW1xccG9pbnRzW2ZdXSJdLFszLDUsIlxcaW50ZXJbXFxjb3VuaXR7UX1cXGNpcmNcXHBvaW50c1tqXV0iXSxbMiw0LCJcXGludGVyW1xcY291bml0e1F9XFxjaXJjXFxwb2ludHNbaV1dIiwyXSxbNCw1LCJcXGludGVyW2ddIl0sWzAsNCwiaSIsMCx7ImN1cnZlIjotNX1dLFsxLDUsImoiLDIseyJjdXJ2ZSI6NX1dXQ==
+      \[\begin{tikzcd}
+        {\inter[\Q]} &&& {\inter[\Q]} \\
+        \\
+        {\inter[\points[A]]} &&& {\inter[\points[B]]} \\
+        \\
+        A &&& B
+        \arrow["f", from=5-1, to=5-4]
+        \arrow["{\unit{A}}", from=5-1, to=3-1]
+        \arrow["{\unit{B}}"', from=5-4, to=3-4]
+        \arrow["{\inter[\points[f]]}", from=3-1, to=3-4]
+        \arrow["{\inter[\counit{Q}\circ\points[j]]}", from=3-4, to=1-4]
+        \arrow["{\inter[\counit{Q}\circ\points[i]]}"', from=3-1, to=1-1]
+        \arrow["{\inter[g]}", from=1-1, to=1-4]
+        \arrow["i", curve={height=-60pt}, from=5-1, to=1-1]
+        \arrow["j"', curve={height=60pt}, from=5-4, to=1-4]
+      \end{tikzcd}\]
+      The top square must commute, since it commuted for linear orders,
+      and the bottom square must commute since the unit is a natural transformation.
+      %TODO Check that i and j commute with the relevant things
+  \end{itemize}
 \end{proof}
 
 
@@ -287,20 +494,20 @@ it into something we do not want.
 \end{proof}
 
 \begin{cor}
-  Given an NIP linear order $L$, the interval algebra $\inter{L}$ is also NIP.
+  Given an NIP linear order $L$, the interval algebra $\inter[L]$ is also NIP.
 \end{cor}
 \begin{proof}
-  $\inter{L}$ is interpretable in $L$ by its construction.
+  $\inter[L]$ is interpretable in $L$ by its construction.
 \end{proof}
 
 \begin{thm}
   Given an linear order $L$ with no upper bound (or no lower bound), $L$ is an NIP model if and only
-  if $\inter{L}$ is an NIP model.
+  if $\inter[L]$ is an NIP model.
 \end{thm}
 \begin{proof}
   The left to right implication holds by the previous corollary.
   For the right to left implication, we notice that we can interpret the linear order $L$ in
-  $\inter{L}$ as it has no upper bound (use a construction similar to Points where we only consider
+  $\inter[L]$ as it has no upper bound (use a construction similar to Points where we only consider
   the end points of an interval -- the lower bound analogue follows from the start point
   construction).
 \end{proof}
