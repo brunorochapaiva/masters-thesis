@@ -140,6 +140,7 @@
   interpretations.
 \end{thm}
 \begin{proof}
+  %TODO: proof
   Tedious proof by cases goes here.
 \end{proof}
 
@@ -188,7 +189,7 @@ linear order
   \end{equation*}
 \end{thm}
 \begin{proof}
-  %TODO Show that $<$ is well defined
+  %TODO: Show that $<$ is well defined
 
   Now we know that our definition of $<$ does not depend on a choice of representative, we need
   to check whether it satisfies $\tslo$:
@@ -224,6 +225,7 @@ it into something we do not want.
   \end{equation*}
 \end{thm}
 \begin{proof}
+  %TODO: proof
   Check the map preserves interpretations.
 
   Standard checking of functor axioms.
@@ -280,6 +282,7 @@ it into something we do not want.
   $\points$ is left adjoint to $\inter$.
 \end{thm}
 \begin{proof}
+  %TODO: proof
   For an interval algebra $A$ and a strict linear order $L$, we have
   \begin{equation*}
     \text{Hom}(\points[A], L) \cong \text{Hom}(A, \inter[L])
@@ -288,14 +291,21 @@ it into something we do not want.
   algebras from A to the intervals of L, by checking where the start/end points of the interval end.
 
   The above map is "canonical" so it should be natural in A and L.
-
-  Notice also that
-  \begin{equation*}
-    \text{Hom}(\inter[L],A) \not\cong \text{Hom}(L, \points[A])
-  \end{equation*}
-  Since A does not necessarily have all the intervals given by $\points[A]$, so if we have a map on
-  the right, it isn't guaranteed that we have a corresponding map on the left.
 \end{proof}
+
+%TODO: add example where this fails
+Notice also that
+\begin{equation*}
+  \text{Hom}(\inter[L],A) \not\cong \text{Hom}(L, \points[A])
+\end{equation*}
+Since A does not necessarily have all the intervals given by $\points[A]$, so if we have a map on
+the right, it isn't guaranteed that we have a corresponding map on the left.
+
+%TODO: consider the unit and counit some more:
+% - counit is always an isomorphism
+% - show cases when unit is also an isomorphism?
+
+%TODO: consider what our functors do to elementary embeddings
 
 % ------ Homogeneous tings eh
 
@@ -305,6 +315,7 @@ it into something we do not want.
   (EC). In other words, $\finslo$ is a Fraïssé class.
 \end{thm}
 \begin{proof}
+  %TODO: proof
   Something like
   \begin{itemize}
     \item HP: Show the result for all relational, universal theories, since this is referenced in
@@ -321,6 +332,7 @@ it into something we do not want.
   The Fraïssé limit of $\finslo$ is $\Q$
 \end{thm}
 \begin{proof}
+  %TODO: proof
   Show that $\Q$ is homogeneous and that its age is $\finslo$.
 \end{proof}
 
@@ -476,6 +488,7 @@ it into something we do not want.
   An interval algebra $A$ is stable if and only if it is finite.
 \end{thm}
 \begin{proof}
+  %TODO: proof
   Finite models are always stable since they cannot have infinitely many elements.
 
   For an infinite model $A$, we can linearly order the intervals in $A$, showing $A$ is unstable.
@@ -485,6 +498,7 @@ it into something we do not want.
   If a model M is interpretable in an NIP model, then M must also be NIP
 \end{thm}
 \begin{proof}
+  %TODO: proof
   Prove the contrapositive (if M is IP, then anything M is interpretable in is IP)
   If M is interpretable in $N^k$, and there is a formula $\phi$ which has the IP in M,
   then viewing this formula as a formula over $N$ implies that $N$ is also IP.
@@ -494,6 +508,7 @@ it into something we do not want.
   Given an NIP linear order $L$, the interval algebra $\inter[L]$ is also NIP.
 \end{cor}
 \begin{proof}
+  %TODO: proof
   $\inter[L]$ is interpretable in $L$ by its construction.
 \end{proof}
 
@@ -502,6 +517,7 @@ it into something we do not want.
   if $\inter[L]$ is an NIP model.
 \end{thm}
 \begin{proof}
+  %TODO: proof
   The left to right implication holds by the previous corollary.
   For the right to left implication, we notice that we can interpret the linear order $L$ in
   $\inter[L]$ as it has no upper bound (use a construction similar to Points where we only consider
