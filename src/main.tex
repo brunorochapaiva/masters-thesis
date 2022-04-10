@@ -105,7 +105,7 @@
 \end{defn}
 
 \begin{defn}
-  We define the language of Allen interval algebras $\laia$ as 
+  We define the language of Allen interval algebras $\laia$ as
   \begin{equation*}
     \laia = \{ \before, \meets, \overlaps, \starts, \finishes, \contained,
                \after, \metby, \overlappedby, \startedby, \finishedby, \contains \}
@@ -181,7 +181,7 @@ linear order
                                                 & \text{if } n = m = 0\\
         I \before J \lor I \meets J \lor I \overlaps J \lor I \starts J \lor I \contained J
                                                 & \text{if } n = m = 1 \\
-      \lnot\,(I \after J) \land \lnot\,(I \metby J) \land \lnot\,(I \startedby J)                      
+      \lnot\,(I \after J) \land \lnot\,(I \metby J) \land \lnot\,(I \startedby J)
                                                 & \text{if } n = 0,\ m = 1 \\
       I \before J                               & \text{if } n = 1,\ m = 0
     \end{cases}
@@ -286,7 +286,7 @@ it into something we do not want.
   \end{equation*}
   A map of linear orders from the start/end points of A to L, enforces a mapping of interval
   algebras from A to the intervals of L, by checking where the start/end points of the interval end.
- 
+
   The above map is "canonical" so it should be natural in A and L.
 
   Notice also that
@@ -329,7 +329,7 @@ it into something we do not want.
 \end{thm}
 \begin{proof}
   First, notice that $\points$ must send finite interval algebras to finite strict linear orders.
-  In fact, given an interval algebra $A$, $|\points[A]| \leq 2|A|$ since 
+  In fact, given an interval algebra $A$, $|\points[A]| \leq 2|A|$ since
   $\points[A]$ is a quotient of $A + A$. Similarly, $\inter$ must also send finite strict linear
   orders to finite interval algebras: given a strict linear order $L$, $|\inter[L]| = |L|^2$.
 
@@ -368,7 +368,7 @@ it into something we do not want.
         \arrow["f", from=2-1, to=1-3]
         \arrow["g"', from=2-1, to=3-3]
       \end{tikzcd}\]
-      Applying $\points$ takes us to $\slos$, at which point we can use the AP of strict linear 
+      Applying $\points$ takes us to $\slos$, at which point we can use the AP of strict linear
       orders to get the commuting square
       % https://q.uiver.app/?q=WzAsNCxbMiwwLCJcXHBvaW50c1tBXSJdLFsyLDIsIlxccG9pbnRzW0JdIl0sWzAsMSwiXFxwb2ludHNbQ10iXSxbNCwxLCJcXE9tZWdhIl0sWzIsMCwiXFxwb2ludHNbZl0iXSxbMiwxLCJcXHBvaW50c1tnXSIsMl0sWzAsMywiZiciXSxbMSwzLCJnJyIsMl1d
       \[\begin{tikzcd}
@@ -430,16 +430,13 @@ it into something we do not want.
       Now, $\points[f]$ is still an isomorphism as these are preserved by functors, and using the
       fact that $\Q$ is homogeneous, we can extend $\points[f]$ to an isomorphism $g$, giving the
       commuting diagram
-      % https://q.uiver.app/?q=WzAsOCxbMCw0LCJcXHBvaW50c1tBXSJdLFsyLDQsIlxccG9pbnRzW0JdIl0sWzAsMiwiXFxwb2ludHNbXFxpbnRlcltcXFFdXSJdLFsyLDIsIlxccG9pbnRzW1xcaW50ZXJbXFxRXV0iXSxbMCwwLCJcXFEiXSxbMiwwLCJcXFEiXSxbMSw3XSxbMCwxXSxbMCwxLCJcXHBvaW50c1tmXSJdLFswLDIsIlxccG9pbnRzW2ldIl0sWzIsNCwiXFxjb3VuaXR7XFxRfSJdLFszLDUsIlxcY291bml0e1xcUX0iLDJdLFsxLDMsIlxccG9pbnRzW2pdIiwyXSxbNCw1LCJnIl1d
+      % https://q.uiver.app/?q=WzAsNyxbMCw0LCJcXHBvaW50c1tBXSJdLFsyLDQsIlxccG9pbnRzW0JdIl0sWzAsMiwiXFxwb2ludHNbXFxpbnRlcltcXFFdXSJdLFsyLDIsIlxccG9pbnRzW1xcaW50ZXJbXFxRXV0iXSxbMCwwLCJcXFEiXSxbMiwwLCJcXFEiXSxbMCwxXSxbMCwxLCJcXHBvaW50c1tmXSJdLFswLDIsIlxccG9pbnRzW2ldIl0sWzIsNCwiXFxjb3VuaXR7XFxRfSJdLFszLDUsIlxcY291bml0e1xcUX0iLDJdLFsxLDMsIlxccG9pbnRzW2pdIiwyXSxbNCw1LCJnIl1d
       \[\begin{tikzcd}
         \Q && \Q \\
         {} \\
         {\points[\inter[\Q]]} && {\points[\inter[\Q]]} \\
         \\
-        {\points[A]} && {\points[B]} \\
-        \\
-        \\
-        & {}
+        {\points[A]} && {\points[B]}
         \arrow["{\points[f]}", from=5-1, to=5-3]
         \arrow["{\points[i]}", from=5-1, to=3-1]
         \arrow["{\counit{\Q}}", from=3-1, to=1-1]
