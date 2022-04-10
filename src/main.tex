@@ -16,7 +16,12 @@
 \usepackage{tikz}
 \usepackage{quiver}
 
+
 \usepackage{subfiles}
+
+% Used to scale tikz-cd diagrams properly
+\tikzcdset{scale cd/.style={every label/.append style={scale=#1},
+    cells={nodes={scale=#1}}}}
 
 % General Symbols
 \newcommand{\N}{\mathbb{N}}
@@ -359,13 +364,13 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
         \arrow["g"', from=3-1, to=2-3]
       \end{tikzcd}\]
       Then, applying $\inter$ and using the adjunction unit $\eta$, we get
-      % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFsyLDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzQsMSwiXFxpbnRlcltcXE9tZWdhXSJdLFswLDAsIkEiXSxbMCwyLCJCIl0sWzAsMiwiXFxpbnRlcltmXSJdLFsxLDIsIlxcaW50ZXJbZ10iLDJdLFs0LDEsIlxcdW5pdHtCfSIsMl0sWzMsMCwiXFx1bml0e0F9Il1d
+      % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFsyLDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzQsMSwiXFxpbnRlcltcXE9tZWdhXSJdLFswLDAsIkEiXSxbMCwyLCJCIl0sWzAsMiwiXFxpbnRlcltmXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzEsMiwiXFxpbnRlcltnXSIsMix7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzQsMSwiXFx1bml0e0J9IiwyXSxbMywwLCJcXHVuaXR7QX0iXV0=
       \[\begin{tikzcd}
         A && {\inter[\points[A]]} \\
         &&&& {\inter[\Omega]} \\
         B && {\inter[\points[B]]}
-        \arrow["{\inter[f]}", from=1-3, to=2-5]
-        \arrow["{\inter[g]}"', from=3-3, to=2-5]
+        \arrow["{\inter[f]}", color={rgb,255:red,214;green,92;blue,92}, from=1-3, to=2-5]
+        \arrow["{\inter[g]}"', color={rgb,255:red,214;green,92;blue,92}, from=3-3, to=2-5]
         \arrow["{\unit{B}}"', from=3-1, to=3-3]
         \arrow["{\unit{A}}", from=1-1, to=1-3]
       \end{tikzcd}\]
@@ -382,26 +387,26 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
       \end{tikzcd}\]
       Applying $\points$ takes us to $\slos$, at which point we can use the AP of strict linear
       orders to get the commuting square
-      % https://q.uiver.app/?q=WzAsNCxbMiwwLCJcXHBvaW50c1tBXSJdLFsyLDIsIlxccG9pbnRzW0JdIl0sWzAsMSwiXFxwb2ludHNbQ10iXSxbNCwxLCJcXE9tZWdhIl0sWzIsMCwiXFxwb2ludHNbZl0iXSxbMiwxLCJcXHBvaW50c1tnXSIsMl0sWzAsMywiZiciXSxbMSwzLCJnJyIsMl1d
+      % https://q.uiver.app/?q=WzAsNCxbMiwwLCJcXHBvaW50c1tBXSJdLFsyLDIsIlxccG9pbnRzW0JdIl0sWzAsMSwiXFxwb2ludHNbQ10iXSxbNCwxLCJcXE9tZWdhIl0sWzIsMCwiXFxwb2ludHNbZl0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDEsIlxccG9pbnRzW2ddIiwyLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMCwzLCJmJyJdLFsxLDMsImcnIiwyXV0=
       \[\begin{tikzcd}
         && {\points[A]} \\
         {\points[C]} &&&& \Omega \\
         && {\points[B]}
-        \arrow["{\points[f]}", from=2-1, to=1-3]
-        \arrow["{\points[g]}"', from=2-1, to=3-3]
+        \arrow["{\points[f]}", color={rgb,255:red,214;green,92;blue,92}, from=2-1, to=1-3]
+        \arrow["{\points[g]}"', color={rgb,255:red,214;green,92;blue,92}, from=2-1, to=3-3]
         \arrow["{f'}", from=1-3, to=2-5]
         \arrow["{g'}"', from=3-3, to=2-5]
       \end{tikzcd}\]
       Now going back to $\aias$ gives the commuting diagram
-      % https://q.uiver.app/?q=WzAsOSxbNCwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFs0LDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzIsMSwiXFxpbnRlcltcXHBvaW50c1tDXV0iXSxbNiwxLCJcXGludGVyW1xcT21lZ2FdIl0sWzAsMSwiQyJdLFswLDBdLFsxLDBdLFsyLDAsIkEiXSxbMiwyLCJCIl0sWzIsMCwiXFxpbnRlcltcXHBvaW50c1tmXV0iLDFdLFsyLDEsIlxcaW50ZXJbXFxwb2ludHNbZ11dIiwxXSxbMCwzLCJcXGludGVyW2YnXSJdLFsxLDMsIlxcaW50ZXJbZyddIiwyXSxbOCwxLCJcXHVuaXR7Qn0iLDJdLFs3LDAsIlxcdW5pdHtBfSJdLFs0LDIsIlxcdW5pdHtDfSIsMV0sWzQsNywiZiJdLFs0LDgsImciLDJdXQ==
+      % https://q.uiver.app/?q=WzAsOSxbNCwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFs0LDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzIsMSwiXFxpbnRlcltcXHBvaW50c1tDXV0iXSxbNiwxLCJcXGludGVyW1xcT21lZ2FdIl0sWzAsMSwiQyJdLFswLDBdLFsxLDBdLFsyLDAsIkEiXSxbMiwyLCJCIl0sWzIsMCwiXFxpbnRlcltcXHBvaW50c1tmXV0iLDEseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDEsIlxcaW50ZXJbXFxwb2ludHNbZ11dIiwxLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMCwzLCJcXGludGVyW2YnXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzEsMywiXFxpbnRlcltnJ10iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs4LDEsIlxcdW5pdHtCfSIsMl0sWzcsMCwiXFx1bml0e0F9Il0sWzQsMiwiXFx1bml0e0N9IiwxXSxbNCw3LCJmIl0sWzQsOCwiZyIsMl1d
       \[\begin{tikzcd}
         {} & {} & A && {\inter[\points[A]]} \\
         C && {\inter[\points[C]]} &&&& {\inter[\Omega]} \\
         && B && {\inter[\points[B]]}
-        \arrow["{\inter[\points[f]]}"{description}, from=2-3, to=1-5]
-        \arrow["{\inter[\points[g]]}"{description}, from=2-3, to=3-5]
-        \arrow["{\inter[f']}", from=1-5, to=2-7]
-        \arrow["{\inter[g']}"', from=3-5, to=2-7]
+        \arrow["{\inter[\points[f]]}"{description}, color={rgb,255:red,214;green,92;blue,92}, from=2-3, to=1-5]
+        \arrow["{\inter[\points[g]]}"{description}, color={rgb,255:red,214;green,92;blue,92}, from=2-3, to=3-5]
+        \arrow["{\inter[f']}", color={rgb,255:red,214;green,92;blue,92}, from=1-5, to=2-7]
+        \arrow["{\inter[g']}"', color={rgb,255:red,214;green,92;blue,92}, from=3-5, to=2-7]
         \arrow["{\unit{B}}"', from=3-3, to=3-5]
         \arrow["{\unit{A}}", from=1-3, to=1-5]
         \arrow["{\unit{C}}"{description}, from=2-1, to=2-3]
@@ -442,42 +447,69 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
       Now, $\points[f]$ is still an isomorphism as these are preserved by functors, and using the
       fact that $\Q$ is homogeneous, we can extend $\points[f]$ to an isomorphism $g$, giving the
       commuting diagram
-      % https://q.uiver.app/?q=WzAsNyxbMCw0LCJcXHBvaW50c1tBXSJdLFsyLDQsIlxccG9pbnRzW0JdIl0sWzAsMiwiXFxwb2ludHNbXFxpbnRlcltcXFFdXSJdLFsyLDIsIlxccG9pbnRzW1xcaW50ZXJbXFxRXV0iXSxbMCwwLCJcXFEiXSxbMiwwLCJcXFEiXSxbMCwxXSxbMCwxLCJcXHBvaW50c1tmXSJdLFswLDIsIlxccG9pbnRzW2ldIl0sWzIsNCwiXFxjb3VuaXR7XFxRfSJdLFszLDUsIlxcY291bml0e1xcUX0iLDJdLFsxLDMsIlxccG9pbnRzW2pdIiwyXSxbNCw1LCJnIl1d
+      % https://q.uiver.app/?q=WzAsNyxbMCw0LCJcXHBvaW50c1tBXSJdLFsyLDQsIlxccG9pbnRzW0JdIl0sWzAsMiwiXFxwb2ludHNbXFxpbnRlcltcXFFdXSJdLFsyLDIsIlxccG9pbnRzW1xcaW50ZXJbXFxRXV0iXSxbMCwwLCJcXFEiXSxbMiwwLCJcXFEiXSxbMCwxXSxbMCwxLCJcXHBvaW50c1tmXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzAsMiwiXFxwb2ludHNbaV0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDQsIlxcY291bml0e1xcUX0iXSxbMyw1LCJcXGNvdW5pdHtcXFF9IiwyXSxbMSwzLCJcXHBvaW50c1tqXSIsMix7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzQsNSwiZyJdXQ==
       \[\begin{tikzcd}
         \Q && \Q \\
         {} \\
         {\points[\inter[\Q]]} && {\points[\inter[\Q]]} \\
         \\
         {\points[A]} && {\points[B]}
-        \arrow["{\points[f]}", from=5-1, to=5-3]
-        \arrow["{\points[i]}", from=5-1, to=3-1]
+        \arrow["{\points[f]}", color={rgb,255:red,214;green,92;blue,92}, from=5-1, to=5-3]
+        \arrow["{\points[i]}", color={rgb,255:red,214;green,92;blue,92}, from=5-1, to=3-1]
         \arrow["{\counit{\Q}}", from=3-1, to=1-1]
         \arrow["{\counit{\Q}}"', from=3-3, to=1-3]
-        \arrow["{\points[j]}"', from=5-3, to=3-3]
+        \arrow["{\points[j]}"', color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=3-3]
         \arrow["g", from=1-1, to=1-3]
       \end{tikzcd}\]
       Finally, we apply $\inter$ to bring us back to interval algebras, where we have the following
       diagram:
-      % https://q.uiver.app/?q=WzAsNixbMCw0LCJBIl0sWzMsNCwiQiJdLFswLDIsIlxcaW50ZXJbXFxwb2ludHNbQV1dIl0sWzMsMiwiXFxpbnRlcltcXHBvaW50c1tCXV0iXSxbMCwwLCJcXGludGVyW1xcUV0iXSxbMywwLCJcXGludGVyW1xcUV0iXSxbMCwxLCJmIl0sWzAsMiwiXFx1bml0e0F9Il0sWzEsMywiXFx1bml0e0J9IiwyXSxbMiwzLCJcXGludGVyW1xccG9pbnRzW2ZdXSJdLFszLDUsIlxcaW50ZXJbXFxjb3VuaXR7UX1cXGNpcmNcXHBvaW50c1tqXV0iXSxbMiw0LCJcXGludGVyW1xcY291bml0e1F9XFxjaXJjXFxwb2ludHNbaV1dIiwyXSxbNCw1LCJcXGludGVyW2ddIl0sWzAsNCwiaSIsMCx7ImN1cnZlIjotNX1dLFsxLDUsImoiLDIseyJjdXJ2ZSI6NX1dXQ==
-      \[\begin{tikzcd}
-        {\inter[\Q]} &&& {\inter[\Q]} \\
+      % If modifying diagram, don't forget to add [scale cd=0.91]
+      % https://q.uiver.app/?q=WzAsMTIsWzIsNCwiXFxpbnRlcltcXHBvaW50c1tBXV0iXSxbNCw0LCJcXGludGVyW1xccG9pbnRzW0JdXSJdLFsyLDIsIlxcaW50ZXJbXFxwb2ludHNbXFxpbnRlcltcXFFdXV0iXSxbNCwyLCJcXGludGVyW1xccG9pbnRzW1xcaW50ZXJbXFxRXV1dIl0sWzIsMCwiXFxpbnRlcltcXFFdIl0sWzQsMCwiXFxpbnRlcltcXFFdIl0sWzQsNiwiQiJdLFsyLDYsIkEiXSxbNiwyLCJcXGludGVyW1xcUV0iXSxbMCwyLCJcXGludGVyW1xcUV0iXSxbMCw0LCJBIl0sWzYsNCwiQiJdLFswLDEsIlxcaW50ZXJbXFxwb2ludHNbZl1dIiwwLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMSwzLCJcXGludGVyW1xccG9pbnRzW2ldXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzAsMiwiXFxpbnRlcltcXHBvaW50c1tpXV0iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDQsIlxcaW50ZXJbXFxjb3VuaXR7XFxRfV0iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFszLDUsIlxcaW50ZXJbXFxjb3VuaXR7XFxRfV0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs0LDUsIlxcaW50ZXJbZ10iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs3LDAsIlxcdW5pdHtBfSIsMl0sWzYsMSwiXFx1bml0e0J9Il0sWzgsMywiXFx1bml0e1xcaW50ZXJbXFxRXX0iXSxbOSwyLCJcXHVuaXR7XFxpbnRlcltcXFFdfSIsMl0sWzgsNSwiXFxpZHtcXGludGVyW1xcUV19IiwyLHsiY3VydmUiOjN9XSxbOSw0LCJcXGlke1xcaW50ZXJbXFxRXX0iLDAseyJjdXJ2ZSI6LTN9XSxbNyw2LCJmIiwyXSxbMTAsOSwiaSJdLFsxMCwwLCJcXHVuaXR7QX0iLDJdLFs3LDEwLCJcXGlke0F9IiwwLHsiY3VydmUiOi0zfV0sWzExLDgsImoiLDJdLFsxMSwxLCJcXHVuaXR7Qn0iXSxbNiwxMSwiXFxpZHtCfSIsMix7ImN1cnZlIjozfV1d
+      \[\begin{tikzcd}[scale cd=0.91]
+        && {\inter[\Q]} && {\inter[\Q]} \\
         \\
-        {\inter[\points[A]]} &&& {\inter[\points[B]]} \\
+        {\inter[\Q]} && {\inter[\points[\inter[\Q]]]} && {\inter[\points[\inter[\Q]]]} && {\inter[\Q]} \\
         \\
-        A &&& B
-        \arrow["f", from=5-1, to=5-4]
-        \arrow["{\unit{A}}", from=5-1, to=3-1]
-        \arrow["{\unit{B}}"', from=5-4, to=3-4]
-        \arrow["{\inter[\points[f]]}", from=3-1, to=3-4]
-        \arrow["{\inter[\counit{Q}\circ\points[j]]}", from=3-4, to=1-4]
-        \arrow["{\inter[\counit{Q}\circ\points[i]]}"', from=3-1, to=1-1]
-        \arrow["{\inter[g]}", from=1-1, to=1-4]
-        \arrow["i", curve={height=-60pt}, from=5-1, to=1-1]
-        \arrow["j"', curve={height=60pt}, from=5-4, to=1-4]
+        A && {\inter[\points[A]]} && {\inter[\points[B]]} && B \\
+        \\
+        && A && B
+        \arrow["{\inter[\points[f]]}", color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=5-5]
+        \arrow["{\inter[\points[i]]}", color={rgb,255:red,214;green,92;blue,92}, from=5-5, to=3-5]
+        \arrow["{\inter[\points[i]]}"', color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=3-3]
+        \arrow["{\inter[\counit{\Q}]}"', color={rgb,255:red,214;green,92;blue,92}, from=3-3, to=1-3]
+        \arrow["{\inter[\counit{\Q}]}", color={rgb,255:red,214;green,92;blue,92}, from=3-5, to=1-5]
+        \arrow["{\inter[g]}", color={rgb,255:red,214;green,92;blue,92}, from=1-3, to=1-5]
+        \arrow["{\unit{A}}"', from=7-3, to=5-3]
+        \arrow["{\unit{B}}", from=7-5, to=5-5]
+        \arrow["{\unit{\inter[\Q]}}", from=3-7, to=3-5]
+        \arrow["{\unit{\inter[\Q]}}"', from=3-1, to=3-3]
+        \arrow["{\id{\inter[\Q]}}"', curve={height=18pt}, from=3-7, to=1-5]
+        \arrow["{\id{\inter[\Q]}}", curve={height=-18pt}, from=3-1, to=1-3]
+        \arrow["f"', from=7-3, to=7-5]
+        \arrow["i", from=5-1, to=3-1]
+        \arrow["{\unit{A}}"', from=5-1, to=5-3]
+        \arrow["{\id{A}}", curve={height=-18pt}, from=7-3, to=5-1]
+        \arrow["j"', from=5-7, to=3-7]
+        \arrow["{\unit{B}}", from=5-7, to=5-5]
+        \arrow["{\id{B}}"', curve={height=18pt}, from=7-5, to=5-7]
       \end{tikzcd}\]
-      The top square must commute, since it commuted for linear orders,
-      and the bottom square must commute since the unit is a natural transformation.
-      %TODO Check that i and j commute with the relevant things
+      Although not obvious at first, the above diagram commutes, to check this we look at all the
+      "irreducible components" individually:
+      \begin{itemize}
+        \item The middle rectangle in red commutes since it already commuted for linear orders.
+        \item The top triangles commute by triangle identities of our adjunction.
+        \item The squares to the left, right and bottom of the red rectangle commute by naturality
+          of the unit.
+        \item The bottom triangles commute due to the use of the identity.
+      \end{itemize}
+      Chasing around the outside of the diagram, we see that
+      \begin{equation*}
+        \inter[g] \circ \id{\inter[\Q]} \circ i \circ \id{A} =
+          \id{\inter[\Q]} \circ j \circ \id{B} \circ f
+      \end{equation*}
+      Simplifying by removing identities shows that $\inter[g] \circ i = j \circ f$. Now, since $g$
+      was an isomorphism, so is $\inter[g]$, so we have successfully extended $i$ and $j$ to an
+      automorphism of $\inter[\Q]$.
   \end{itemize}
 \end{proof}
 
