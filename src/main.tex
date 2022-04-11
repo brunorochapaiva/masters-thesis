@@ -51,21 +51,23 @@
 \newcommand{\taia}{\theory_\text{AIA}}
 \newcommand{\istart}[1]{#1_{-}}
 \newcommand{\iend}[1]{#1_{+}}
+\newcommand{\aiaindex}{\{<,m,o,s,f,d\}}
 
 % Allen Interval Algebra Relations
 \newcommand{\aiaarrow}[1]{\overset{#1}{\longrightarrow}}
-\newcommand{\before}{\overset{<}{\longrightarrow}}
-\newcommand{\meets}{\overset{m}{\longrightarrow}}
-\newcommand{\overlaps}{\overset{o}{\longrightarrow}}
-\newcommand{\starts}{\overset{s}{\longrightarrow}}
-\newcommand{\finishes}{\overset{f}{\longrightarrow}}
-\newcommand{\contained}{\overset{d}{\longrightarrow}}
-\newcommand{\after}{\overset{<}{\longleftarrow}}
-\newcommand{\metby}{\overset{m}{\longleftarrow}}
-\newcommand{\overlappedby}{\overset{o}{\longleftarrow}}
-\newcommand{\startedby}{\overset{s}{\longleftarrow}}
-\newcommand{\finishedby}{\overset{f}{\longleftarrow}}
-\newcommand{\contains}{\overset{d}{\longleftarrow}}
+\newcommand{\raiaarrow}[1]{\overset{#1}{\longleftarrow}}
+\newcommand{\before}{\aiaarrow{<}}
+\newcommand{\meets}{\aiaarrow{m}}
+\newcommand{\overlaps}{\aiaarrow{o}}
+\newcommand{\starts}{\aiaarrow{s}}
+\newcommand{\finishes}{\aiaarrow{f}}
+\newcommand{\contained}{\aiaarrow{d}}
+\newcommand{\after}{\raiaarrow{<}}
+\newcommand{\metby}{\raiaarrow{m}}
+\newcommand{\overlappedby}{\raiaarrow{o}}
+\newcommand{\startedby}{\raiaarrow{s}}
+\newcommand{\finishedby}{\raiaarrow{f}}
+\newcommand{\contains}{\raiaarrow{d}}
 
 % Categories of models
 \newcommand{\mods}[2]{\text{Mod}\left(#1,#2\right)}
@@ -74,6 +76,13 @@
 
 % Intervals construction
 \newcommand{\inter}[1][-]{\text{Int}\left(#1\right)}
+\newcommand{\defformula}[1]{\phi_{#1}}
+\newcommand{\beforef}{\defformula{\before}}
+\newcommand{\meetsf}{\defformula{\meets}}
+\newcommand{\overlapsf}{\defformula{\overlaps}}
+\newcommand{\startsf}{\defformula{\starts}}
+\newcommand{\finishesf}{\defformula{\finishes}}
+\newcommand{\containedf}{\defformula{\contained}}
 
 % Points construction
 \newcommand{\psim}{\sim}
@@ -129,15 +138,27 @@
   \end{equation*}
   We can turn this into a $\laia$-structure under the interpretations:
   \begin{itemize}
-    \item $(x_1,x_2) \before (y_1,y_2)$ if $x_1<x_2<y_1<y_2$;
-    \item $(x_1,x_2) \meets (y_1,y_2)$ if $x_1<x_2=y_1<y_2$;
-    \item $(x_1,x_2) \overlaps (y_1,y_2)$ if $x_1<y_1<x_2<y_2$;
-    \item $(x_1,x_2) \starts (y_1,y_2)$ if $x_1=y_1<x_2<y_2$;
-    \item $(x_1,x_2) \finishes (y_1,y_2)$ if $y_1<x_1<x_2=y_2$;
-    \item $(x_1,x_2) \contained (y_1,y_2)$ $y_1<x_1<x_2<y_2$;
-    \item $(x_1,x_2) \overset{i}{\longleftarrow} (y_1,y_2)$ if and only if
-      $(y_1,y_2) \overset{i}{\longrightarrow} (x_1,x_2)$ for $i \in \{<,m,o,s,f,d\}$.
+    \item $(x_1,x_2) \aiaarrow{i} (y_1,y_2)$ if and only if
+      $L \models \defformula{\aiaarrow{i}}(x_1,x_2,y_1,y_2)$.
+    \item $(x_1,x_2) \raiaarrow{i} (y_1,y_2)$ if and only if
+      $L \models \defformula{\aiaarrow{i}}(y_1,y_2,x_1,x_2)$.
   \end{itemize}
+  where we range $i$ over the indexing set $\aiaindex$ and define the first order
+  $\lslo$-formulas by
+  \begin{align*}
+    \beforef(x_1,x_2,y_1,y_2)    & = \left(x_1 < x_2\right) \land \left(x_2 < y_1\right) \land
+      \left(y_1 < y_2\right) \\
+    \meetsf(x_1,x_2,y_1,y_2)     & = \left(x_1 < x_2\right) \land \left(x_2 = y_1\right) \land
+      \left(y_1 < y_2\right) \\
+    \overlapsf(x_1,x_2,y_1,y_2)  & = \left(x_1 < y_1\right) \land \left(y_1 < x_2\right) \land
+      \left(x_2 < y_2\right) \\
+    \startsf(x_1,x_2,y_1,y_2)    & = \left(x_1 = y_1\right) \land \left(y_1 < x_2\right) \land
+      \left(x_2 < y_2\right) \\
+    \finishesf(x_1,x_2,y_1,y_2)  & = \left(y_1 < x_1\right) \land \left(x_1 < x_2\right) \land
+      \left(x_2 = y_2\right) \\
+    \containedf(x_1,x_2,y_1,y_2) & = \left(y_1 < x_1\right) \land \left(x_1 < x_2\right) \land
+      \left(x_2 < y_2\right) \\
+  \end{align*}
 \end{defn}
 
 \begin{thm}
@@ -153,9 +174,9 @@
   Allen's interval algebras are satisfiable
 \end{cor}
 
-The theory is satisfiable in a reasonable way, inducing the expected models from linear orders.
-To further enforce this tight connection, we see interval algebras also induce a quite reasonable
-linear order
+The theory is satisfiable in a reasonable way, including the expected models induced from linear
+orders. To further support this tight connection, we see interval algebras also induce a quite
+reasonable linear order
 
 \begin{defn}
   Given an Allen interval algebra $A$, we define $\points[A] = \frac{A + A}{\psim}$ where
@@ -203,8 +224,8 @@ linear order
       algebra relations (along with equality) are mutually exclusive and $I = I$, no other relation
       can hold for the pair $(I,I)$. Regardless of the value of $n$, $\plt(n,n)(I,I)$ does not
       include $I = I$ as a disjunct, so $A \not\models \plt(n,n)(I,I)$ and $<$ is irreflexive.
-    \item \textbf{transitivity}:
-    \item \textbf{trichotomy}:
+    \item \textbf{transitivity}: %TODO: Show transitivity
+    \item \textbf{trichotomy}: %TODO: Show trichotomy
   \end{itemize}
 \end{proof}
 
@@ -217,29 +238,54 @@ it into something we do not want.
 % ------ A slight detour into category theory
 
 \begin{defn}
-  Given a theory $\theory$ over language $\lang$, we denote by $\mod{\lang}{\theory}$ the category
+  Given a theory $\theory$ over language $\lang$, we denote by $\mods{\lang}{\theory}$ the category
   with objects the models of $\theory$ and arrows the $\lang$-embeddings.
 \end{defn}
 
 \begin{thm}
-  We can turn $\inter$ into a functor from $\mod{\lslo}{\tslo}$ into
-  $\mod{\laia}{\taia}$ by sending arrows $f : M \to N$ in $\mod{\lslo}{\tslo}$ to the arrow
-  $\inter[f] : \inter[M] \to \inter[N]$ in $\mod{\laia}{\taia}$ defined by
+  We can turn $\inter$ into a functor
+  \begin{equation*}
+    \inter : \slos \to \aias
+  \end{equation*}
+  by sending arrows $f : M \to N$ in $\slos$ to  $\inter[f] : \inter[M] \to \inter[N]$ defined by
   \begin{equation*}
     \inter[f](x_1, x_2) = (f(x_1), f(x_2))
   \end{equation*}
 \end{thm}
 \begin{proof}
-  %TODO: proof
-  Check the map preserves interpretations.
+  First we show that for a $\lslo$-embedding $f : L \to M$ between strict linear orders
+  $L,M$, the mapping $\inter[f]$ gives a an $\laia$-embedding. Consider the relations in $\laia$,
+  and their interpretations in $\inter[L]$: all of the relations are defined by quantifier-free
+  $\lslo$-formulas, whose truth value must be preserved under $\lslo$ embeddings like $f$. Since
+  $\inter[f]$ simply applies $f$ pointwise, $\inter[f]$ must preserve the truth value of the
+  relation symbols in $\laia$, in other words, it is an $\laia$-embedding.
 
-  Standard checking of functor axioms.
+  Now we just need to check that $\inter$ satisfies the two functor axioms:
+  \begin{itemize}
+    \item \textbf{preserves identity arrows}: Fix some strict linear order $L$ and some interval
+      $(x,y) \in \inter[L]$, then
+      \begin{equation*}
+        \inter[\id{L}](x,y) = (\id{L}(x), \id{L}(y)) = (x,y)
+      \end{equation*}
+    \item \textbf{respects arrow composition}: Fix three strict linear orders $L,M,N$ along with
+      arrows $f : L \to M$, $g : M \to N$ and some interval $(x,y) \in \inter[L]$, then
+      \begin{align*}
+        \inter[g \circ f](x,y)
+          & = (g \circ f(x), g \circ f(y)) \\
+          & = (g(f(x)), g(f(y))) \\
+          & = \inter[g](\inter[f](x,y)) \\
+          & = \inter[g]\circ\inter[f](x,y)
+      \end{align*}
+  \end{itemize}
 \end{proof}
 
 \begin{thm}
-  We can turn $\points$ into a functor from $\mod{\laia}{\taia}$ into
-  $\mod{\lslo}{\tslo}$ by sending arrows $f : A \to B$ in $\mod{\laia}{\taia}$ to the arrow
-  $\points[f] : \points[A] \to \points[B]$ in $\mod{\lslo}{\tslo}$ defined by
+  We can turn $\points$ into a functor
+  \begin{equation*}
+    \points : \aias \to \slos
+  \end{equation*}
+  by sending arrows $f : A \to B$ in $\aias$ to $\points[f] : \points[A] \to \points[B]$
+  defined by
   \begin{equation*}
     \points[f](0, I) = (0, f(I)) \qquad\text{and}\qquad \points[f](1,I) = (1, f(I))
   \end{equation*}
@@ -275,7 +321,8 @@ it into something we do not want.
       $f : A \to B$, $g : B \to C$. Then for all elements $[(n,I)] \in \points[A]$:
       \begin{align*}
         \points[g \circ f]([(n,I)])
-          & = [(n,g \circ f (I))] = [(n, g(f(I)))] \\
+          & = [(n,g \circ f (I))] \\
+          & = [(n, g(f(I)))] \\
           & = \points[g]\left( \points[f]([n,I]) \right) \\
           & = \points[g] \circ \points[f] ([n,I])
       \end{align*}
@@ -428,11 +475,17 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
   To show that the Fraïssé limit of the finite interval algebras is $\inter[\Q]$, it suffices to
   show the following:
   \begin{itemize}
-    \item $\age{\Q} = \finaia$:
-    %TODO Show that the age of $\inter[\Q]$ is the finite interval algebras.
+    \item $\age{\inter[\Q]} = \finaia$: We show that both sides include into the other. First,
+      suppose we have some finitely generated $\laia$-substructure $A \subset \inter[\Q]$. Since
+      $\taia$ is universal, $A$ must also be an interval algebra. Furthermore, since $\laia$ is
+      relational, $A$ must also be finite, so $A \in \finaia$. For the converse inclusion, consider
+      some finite interval algebra $A$, it must embed into $\inter[\points[A]]$, which in turn
+      embeds into $\inter[\Q]$ (since $\points[A]$ is finite, hence embeddable into $\Q$).
+      Restricting these composition of these embeddings onto their image in $\inter[\Q]$ then gives
+      the needed isomorphism.
     \item $\inter[\Q]$ is homogeneous: fix two $\laia$-substructures $A,B \subseteq \inter[\Q]$,
       along with some $\laia$-isomorphism $f : A \to B$. In essence we have the following
-      diagram in $\slos$:
+      diagram of interval algebras, where $i$ and $j$ are the inclusions into $\inter[\Q]$:
       % https://q.uiver.app/?q=WzAsNCxbMCwyLCJBIl0sWzIsMiwiQiJdLFswLDAsIlxcaW50ZXJbUV0iXSxbMiwwLCJcXGludGVyW1FdIl0sWzAsMSwiZiJdLFswLDIsImkiXSxbMSwzLCJqIiwyXV0=
       \[\begin{tikzcd}
         {\inter[Q]} && {\inter[Q]} \\
@@ -508,11 +561,21 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
           \id{\inter[\Q]} \circ j \circ \id{B} \circ f
       \end{equation*}
       Simplifying by removing identities shows that $\inter[g] \circ i = j \circ f$. Now, since $g$
-      was an isomorphism, so is $\inter[g]$, so we have successfully extended $i$ and $j$ to an
+      was an isomorphism, so is $\inter[g]$, so we have successfully extended $f$ to an
       automorphism of $\inter[\Q]$.
   \end{itemize}
 \end{proof}
 
+% TODO: Fraisse Limits can be seen as a type of colimit, look into this?
+% It's interesting that this colimit is preserved by a right adjoint, namely Int(-)
+% WARNING: Not sure if the following makes any sense, I am quite tired -- I suspect my reasoning is
+% somewhat flawed though?
+% I guess it happens since Pts(Int(-)) is naturally isomorphic to Id(-),
+% So suppose the colimit of some diagram D(-) exists for linear orders,
+% then if the colimit of Pts(D(-)) exists, it must be isomorphic to the Pts(colimit of D(-))
+% This is because left adjoints preserve colimits, so Int(colimit of Pts(D(-))) is the colimit of
+% Int(Pts(D(-))), and since Ints(Pts(D(-))) is naturally isomorphic to D(-), the colimit of
+% Int(Pts(D(-))) must also be isomorphic to the colimit of D(-)
 
 % ------ Stability theory
 
