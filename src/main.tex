@@ -15,6 +15,7 @@
 \usepackage{parskip}
 \usepackage{tikz}
 \usepackage{quiver}
+\usepackage{xcolor}
 
 
 \usepackage{subfiles}
@@ -28,6 +29,8 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\congto}{\xrightarrow{\sim}}
+\newcommand{\letin}[2]{\text{let }{#1}\text{ in }{#2}}
 
 % Category Theory
 \newcommand{\id}[1]{\text{id}_{#1}}
@@ -71,8 +74,8 @@
 
 % Categories of models
 \newcommand{\mods}[2]{\text{Mod}\left(#1,#2\right)}
-\newcommand{\aias}{\mods{\laia}{\taia}}
-\newcommand{\slos}{\mods{\lslo}{\tslo}}
+\newcommand{\aias}{\textbf{AIA}}
+\newcommand{\slos}{\textbf{SLO}}
 
 % Intervals construction
 \newcommand{\inter}[1][-]{\text{Int}\left(#1\right)}
@@ -107,6 +110,8 @@
 
 \maketitle
 
+\section{Axiomatisation of Interval Algebras}
+
 \begin{defn}
   We define the language of strict linear orders $\lslo$ as the single binary relation $\{ < \}$.
 
@@ -125,9 +130,15 @@
                \after, \metby, \overlappedby, \startedby, \finishedby, \contains \}
   \end{equation*}
 
-  (Unsure on how to best write out the definition of $\taia$, especially with the "transitivity"
-  axioms).
+  {\color{orange} TODO write out the axioms of interval algebras}
 \end{defn}
+
+{\color{orange} TODO show it suffices to consider relations of the form -> when showing a function is
+an embedding}
+% mention how we only need to prove the forward implication to show something is a
+% $\laia$-embedding. This is enough since the relations are mutually-exclusive and exhaustive.
+% Also it is enough to check that the relations of the form -> are preserved -- if that is the case
+% then the relations of the form <- are automatically also preserved by "duality"?/"symmetry"?
 
 % ------ Justifying this axiomatisation of interval algebras
 
@@ -166,8 +177,7 @@
   interpretations.
 \end{thm}
 \begin{proof}
-  %TODO: proof
-  Tedious proof by cases goes here.
+  {\color{orange} TODO Tedious proof by cases goes here}
 \end{proof}
 
 \begin{cor}
@@ -215,7 +225,7 @@ reasonable linear order
   \end{equation*}
 \end{thm}
 \begin{proof}
-  %TODO: Show that $<$ is well defined
+  {\color{orange} TODO Show that $<$ is well defined}
 
   Now we know that our definition of $<$ does not depend on a choice of representative, we need
   to check whether it satisfies $\tslo$:
@@ -224,23 +234,32 @@ reasonable linear order
       algebra relations (along with equality) are mutually exclusive and $I = I$, no other relation
       can hold for the pair $(I,I)$. Regardless of the value of $n$, $\plt(n,n)(I,I)$ does not
       include $I = I$ as a disjunct, so $A \not\models \plt(n,n)(I,I)$ and $<$ is irreflexive.
-    \item \textbf{transitivity}: %TODO: Show transitivity
-    \item \textbf{trichotomy}: %TODO: Show trichotomy
+    \item \textbf{transitivity}: {\color{orange} TODO Show transitivity}
+    \item \textbf{trichotomy}: {\color{orange} TODO Show trichotomy}
   \end{itemize}
 \end{proof}
 
-%TODO: Consider adding table justifying these definitions? Something like:
-%| I relation J | drawing of I and J | is I- < J- | is I+ < J+ | is I- < J + | is I+ < J - |
+{\color{blue} TODO Consider adding table justifying these definitions? Something like:
+
+| I relation J | drawing of I and J | is I- less than J- | is I+ lt J+ | is I- lt J + | is I+ lt J - |}
 
 Now that this axiomatisation is justified, show that we can't remove any axioms without making
 it into something we do not want.
 
-% ------ A slight detour into category theory
+\newpage
+\section{A Detour Into Category Theory}
 
 \begin{defn}
   Given a theory $\theory$ over language $\lang$, we denote by $\mods{\lang}{\theory}$ the category
   with objects the models of $\theory$ and arrows the $\lang$-embeddings.
 \end{defn}
+
+\begin{rem}
+  For brevity, we introduce the notation:
+  \begin{equation*}
+    \slos := \mods{\lslo}{\tslo} \text{ and } \aias := \mods{\laia}{\taia}
+  \end{equation*}
+\end{rem}
 
 \begin{thm}
   We can turn $\inter$ into a functor
@@ -326,40 +345,166 @@ it into something we do not want.
           & = \points[g]\left( \points[f]([n,I]) \right) \\
           & = \points[g] \circ \points[f] ([n,I])
       \end{align*}
-      Hebce $\points[g \circ f] = \points[g] \circ \points[f]$ as expected.
+      Hence $\points[g \circ f] = \points[g] \circ \points[f]$ as expected.
   \end{itemize}
 \end{proof}
+
+\begin{rem}
+  From now on, given an interval algebra $A$ and interval $I \in A$, we will use
+  $\istart{I} := [(0,I)]$ and $\iend{I} := [(1,I)]$ to refer to the respective elements of
+  $\points[A]$.
+\end{rem}
 
 \begin{thm}
   $\points$ is left adjoint to $\inter$.
 \end{thm}
 \begin{proof}
-  %TODO: proof
-  For an interval algebra $A$ and a strict linear order $L$, we have
-  \begin{equation*}
-    \text{Hom}(\points[A], L) \cong \text{Hom}(A, \inter[L])
-  \end{equation*}
-  A map of linear orders from the start/end points of A to L, enforces a mapping of interval
-  algebras from A to the intervals of L, by checking where the start/end points of the interval end.
+  We prove this through the Hom-Set definition of an adjunction, so we wish to find an isomorphism
+  $\slos(\points[A],L) \cong \aias(A,\inter[L])$ which is natural in both $A$ and $L$.
 
-  The above map is "canonical" so it should be natural in A and L.
+  We start by defining the forward map
+  \begin{equation*}
+    \phi_{A,L} : \slos(\points[A],L) \to \aias(A,\inter[L])
+  \end{equation*}
+  which sends an $\lslo$-embedding $f : \points[A] \to L$ to the $\laia$-embedding
+  \begin{equation*}
+    \phi_{A,L}(f) : A \to \inter[L] \quad\text{sending}\quad
+      I \mapsto (f(\istart{I}), f(\iend{I}))
+  \end{equation*}
+  To see this is a $\laia$-embedding, recall that it suffices to consider the $\aiaarrow{i}$
+  relations for $i \in \aiaindex$, so we fix two intervals $I,J \in A$ and then:
+  \begin{equation*}
+    \begin{split}
+      I \before J
+        & \iff   \iend{I}  <   \istart{J} \\
+        & \iff f(\iend{I}) < f(\istart{J}) \\
+        & \iff \phi_{A,L}(f)(I) \before \phi_{A,L}(f)(J) \\
+      I \meets J
+        & \iff   \iend{I}  =   \istart{J} \\
+        & \iff f(\iend{I}) = f(\istart{J}) \\
+        & \iff \phi_{A,L}(f)(I) \meets \phi_{A,L}(f)(J) \\
+      I \overlaps J
+        & \iff   \istart{I}  <   \istart{J}  <   \iend{I}  <   \iend{J} \\
+        & \iff f(\istart{I}) < f(\istart{J}) < f(\iend{I}) < f(\iend{J}) \\
+        & \iff \phi_{A,L}(f)(I) \overlaps \phi_{A,L}(f)(J)
+      \end{split}
+      \begin{split}
+      I \starts J
+        & \iff   \istart{I}  =   \istart{J}  <   \iend{I}  <   \iend{J} \\
+        & \iff f(\istart{I}) = f(\istart{J}) < f(\iend{I}) < f(\iend{J}) \\
+        & \iff \phi_{A,L}(f)(I) \starts \phi_{A,L}(f)(J) \\
+      I \finishes J
+        & \iff   \istart{J}  <   \istart{I}  <   \iend{I}  =   \iend{J} \\
+        & \iff f(\istart{J}) < f(\istart{I}) < f(\iend{I}) = f(\iend{J}) \\
+        & \iff \phi_{A,L}(f)(I) \finishes \phi_{A,L}(f)(J) \\
+      I \contained J
+        & \iff   \istart{J}  <   \istart{I}  <   \iend{I}  <   \iend{J} \\
+        & \iff f(\istart{J}) < f(\istart{I}) < f(\iend{I}) < f(\iend{J}) \\
+        & \iff \phi_{A,L}(f)(I) \contained \phi_{A,L}(f)(J)
+    \end{split}
+  \end{equation*}
+
+  Next, we define the inverse map
+  \begin{equation*}
+    \psi_{A,L} : \aias(A,\inter[L]) \to \slos(\points[A],L)
+  \end{equation*}
+  which sends an $\laia$-embedding $g : A \to \inter[L]$ to the $\lslo$-embedding given by
+  \begin{equation*}
+    \psi_{A,L}(f) : \points[A] \to L \quad\text{sending}\quad (n, I) \mapsto
+      \left(\letin{(x_0,x_1) := g(I)}{x_n}\right)
+  \end{equation*}
+  Now, we need to ensure these maps are well defined and that they are indeed $\lslo$-embeddings:
+  {\color{orange}TODO Show this is well-defined and monotonic}
+
+  We expect $\phi_{A,L}$ and $\psi_{A,L}$ to be inverses, which is confirmed by some quick
+  computations:
+  \begin{itemize}
+    \item Pick  any $f : \points[A] \to L$ and $[(n,I)] \in \points[A]$, then
+      \begin{align*}
+        \psi_{A,L}\left(\phi_{A,L}(f)\right)([(n,I)])
+          & = \left( \letin{(x_0,x_1) := \phi_{A,L}(f)(I)}{x_n} \right) \\
+          & = \left( \letin{(x_0,x_1) := (f(\istart{I}), f(\iend{I}))}{x_n} \right) \\
+          & = f([n, I])
+      \end{align*}
+    \item Pick any $g : A \to \inter[L]$ and $I \in A$, then
+      \begin{equation*}
+        \phi_{A,L}\left(\psi_{A,L}(g)\right)(I)
+          = \left( \psi_{A,L}(g)(\istart{I}), \psi_{A,L}(g)(\iend{I}) \right)
+          = g(I)
+      \end{equation*}
+  \end{itemize}
+
+  Finally, we just have to check naturality of our isomorphism $\phi_{A,L}$. So pick a
+  $\laia$-embedding $f : A \to B$ and a $\lslo$-embeddings $g : L \to M$, we need to show the
+  following diagram commutes
+  % If modifying diagram, don't forget to add [scale cd=0.99]
+  % https://q.uiver.app/?q=WzAsNixbMywwLCJcXHNsb3MoXFxwb2ludHNbQV0sTCkiXSxbMywyLCJcXGFpYXMoQSxcXGludGVyW0xdKSJdLFswLDAsIlxcc2xvcyhcXHBvaW50c1tCXSxMKSJdLFswLDIsIlxcYWlhcyhCLFxcaW50ZXJbTF0pIl0sWzYsMiwiXFxhaWFzKEEsXFxpbnRlcltNXSkiXSxbNiwwLCJcXHNsb3MoXFxwb2ludHNbQV0sTSkiXSxbMiwwLCJcXHNsb3MoXFxwb2ludHNbZl0sTCkiXSxbMywxLCJcXGFpYXMoZixcXGludGVyW0xdKSIsMl0sWzIsMywiXFxwaGlfe0IsTH0iLDJdLFsxLDQsIlxcYWlhcyhBLFxcaW50ZXJbZ10pIiwyXSxbMCw1LCJcXHNsb3MoXFxwb2ludHNbQV0sZykiXSxbNSw0LCJcXHBoaV97QSxNfSJdLFswLDEsIlxccGhpX3tBLEx9IiwyXV0=
+  \[\begin{tikzcd}[scale cd=0.99]
+    {\slos(\points[B],L)} &&& {\slos(\points[A],L)} &&& {\slos(\points[A],M)} \\
+    \\
+    {\aias(B,\inter[L])} &&& {\aias(A,\inter[L])} &&& {\aias(A,\inter[M])}
+    \arrow["{\slos(\points[f],L)}", from=1-1, to=1-4]
+    \arrow["{\aias(f,\inter[L])}"', from=3-1, to=3-4]
+    \arrow["{\phi_{B,L}}"', from=1-1, to=3-1]
+    \arrow["{\aias(A,\inter[g])}"', from=3-4, to=3-7]
+    \arrow["{\slos(\points[A],g)}", from=1-4, to=1-7]
+    \arrow["{\phi_{A,M}}", from=1-7, to=3-7]
+    \arrow["{\phi_{A,L}}"', from=1-4, to=3-4]
+  \end{tikzcd}\]
+  We do this by checking both squares individually:
+  \begin{itemize}
+    \item \textbf{left square}: Pick some $h : \slos(\points[B],L)$ and $I \in A$, then
+      \begin{align*}
+        \phi_{A,L}(\slos(\points[f],L)(h))(I)
+          & = \phi_{A,L}(h \circ \points[f])(I) \\
+          & = (h(\points[f](\istart{I})), h(\points[f](\iend{I}))) \\
+          & = (h(\istart{f(I)}), h(\iend{f(I)})) \\
+          & = \phi_{B,L}(h)(f(I)) \\
+          & = \phi_{B,L}(h) \circ f(I) \\
+          & = \aias(f,\inter[L])(\phi_{B,L}(h))(I)
+      \end{align*}
+    \item \textbf{right square}: Pick some $h : \slos(\points[A],L)$ and $I \in A$, then
+      \begin{align*}
+        \phi_{A,M}(\slos(\points[A],g)(h))(I)
+          & = \phi_{A,M}(g \circ h)(I) \\
+          & = (g(h(\istart{I})), g(h(\iend{I}))) \\
+          & = (g(h(\istart{I})), g(h(\iend{I}))) \\
+          & = \inter[g](h(\istart{I}), h(\iend{I})) \\
+          & = \inter[g](\phi_{A,L}(h)(I)) \\
+          & = \aias(A,\inter[g])(\phi{A,L}(h))(I)
+      \end{align*}
+  \end{itemize}
+
+  % For an interval algebra $A$ and a strict linear order $L$, we have
+  % \begin{equation*}
+  %   \text{Hom}(\points[A], L) \cong \text{Hom}(A, \inter[L])
+  % \end{equation*}
+  % A map of linear orders from the start/end points of A to L, enforces a mapping of interval
+  % algebras from A to the intervals of L, by checking where the start/end points of the interval end.
+
+  % The above map is "canonical" so it should be natural in A and L.
 \end{proof}
 
-%TODO: add example where this fails
-Notice also that
+{\color{blue} TODO add example of this:
+
+Notice that
 \begin{equation*}
   \text{Hom}(\inter[L],A) \not\cong \text{Hom}(L, \points[A])
 \end{equation*}
 Since A does not necessarily have all the intervals given by $\points[A]$, so if we have a map on
-the right, it isn't guaranteed that we have a corresponding map on the left.
+the right, it isn't guaranteed that we have a corresponding map on the left.}
 
-%TODO: consider the unit and counit some more:
-% - counit is always an isomorphism
-% - show cases when unit is also an isomorphism?
+{\color{blue} TODO consider the unit and counit some more
+\begin{itemize}
+  \item counit should always be an isomorphism
+  \item show cases when unit is not an isomorphism
+\end{itemize}}
 
-%TODO: consider what our functors do to elementary embeddings
 
-% ------ Homogeneous tings eh
+{\color{blue} TODO: consider what our functors do to elementary embeddings?}
+
+\newpage
+\section{The Model Theory of Interval Algebras}
 
 \begin{thm}
   The class $\finslo$ of finite strict linear orders satisfies the hereditary property (HP),
@@ -367,8 +512,7 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
   (EC). In other words, $\finslo$ is a Fraïssé class.
 \end{thm}
 \begin{proof}
-  %TODO: proof
-  Something like
+  {\color{orange} TODO prove this theorem. Something like
   \begin{itemize}
     \item HP: Show the result for all relational, universal theories, since this is referenced in
       the later proof.
@@ -377,15 +521,14 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
     \item AP: Given two finite strict linear orders A and B, with C embedding into both,
       embed A and B into their product ordered lexicographically
     \item EC: Show the result for all finite languages, since this is referenced in the later proof.
-  \end{itemize}
+  \end{itemize}}
 \end{proof}
 
 \begin{thm}
   The Fraïssé limit of $\finslo$ is $\Q$
 \end{thm}
 \begin{proof}
-  %TODO: proof
-  Show that $\Q$ is homogeneous and that its age is $\finslo$.
+  {\color{orange} TODO Show that $\Q$ is homogeneous and that its age is $\finslo$}
 \end{proof}
 
 \begin{thm}
@@ -486,9 +629,9 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
     \item $\inter[\Q]$ is homogeneous: fix two $\laia$-substructures $A,B \subseteq \inter[\Q]$,
       along with some $\laia$-isomorphism $f : A \to B$. In essence we have the following
       diagram of interval algebras, where $i$ and $j$ are the inclusions into $\inter[\Q]$:
-      % https://q.uiver.app/?q=WzAsNCxbMCwyLCJBIl0sWzIsMiwiQiJdLFswLDAsIlxcaW50ZXJbUV0iXSxbMiwwLCJcXGludGVyW1FdIl0sWzAsMSwiZiJdLFswLDIsImkiXSxbMSwzLCJqIiwyXV0=
+      % https://q.uiver.app/?q=WzAsNCxbMCwyLCJBIl0sWzIsMiwiQiJdLFswLDAsIlxcaW50ZXJbXFxRXSJdLFsyLDAsIlxcaW50ZXJbXFxRXSJdLFswLDEsImYiXSxbMCwyLCJpIl0sWzEsMywiaiIsMl1d
       \[\begin{tikzcd}
-        {\inter[Q]} && {\inter[Q]} \\
+        {\inter[\Q]} && {\inter[\Q]} \\
         \\
         A && B
         \arrow["f", from=3-1, to=3-3]
@@ -566,7 +709,10 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
   \end{itemize}
 \end{proof}
 
-% TODO: Fraisse Limits can be seen as a type of colimit, look into this?
+{\color{blue} TODO Fraisse Limits can be seen as a type of colimit, check if there is anything
+interesting/noteworthy to say here -- left adjoints only preserve limits generally, but here we
+have a colimit being preserved by a left adjoint (Int(-))}
+% Fraisse Limits can be seen as a type of colimit, look into this?
 % It's interesting that this colimit is preserved by a right adjoint, namely Int(-)
 % WARNING: Not sure if the following makes any sense, I am quite tired -- I suspect my reasoning is
 % somewhat flawed though?
@@ -583,28 +729,29 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
   An interval algebra $A$ is stable if and only if it is finite.
 \end{thm}
 \begin{proof}
-  %TODO: proof
+  {\color{orange} TODO Prove this.
+
   Finite models are always stable since they cannot have infinitely many elements.
 
-  For an infinite model $A$, we can linearly order the intervals in $A$, showing $A$ is unstable.
+  For an infinite model $A$, we can linearly order the intervals in $A$, showing $A$ is unstable.}
 \end{proof}
 
 \begin{thm}
   If a model M is interpretable in an NIP model, then M must also be NIP
 \end{thm}
 \begin{proof}
-  %TODO: proof
-  Prove the contrapositive (if M is IP, then anything M is interpretable in is IP)
+  {\color{orange} Prove the contrapositive (if M is IP, then anything M is interpretable in is IP)
   If M is interpretable in $N^k$, and there is a formula $\phi$ which has the IP in M,
-  then viewing this formula as a formula over $N$ implies that $N$ is also IP.
+  then viewing this formula as a formula over $N$ implies that $N$ is also IP.}
 \end{proof}
 
 \begin{cor}
   Given an NIP linear order $L$, the interval algebra $\inter[L]$ is also NIP.
 \end{cor}
 \begin{proof}
-  %TODO: proof
-  $\inter[L]$ is interpretable in $L$ by its construction.
+  {\color{orange} TODO Prove this.
+
+  $\inter[L]$ is interpretable in $L$ by its construction.}
 \end{proof}
 
 \begin{thm}
@@ -612,12 +759,13 @@ the right, it isn't guaranteed that we have a corresponding map on the left.
   if $\inter[L]$ is an NIP model.
 \end{thm}
 \begin{proof}
-  %TODO: proof
+  {\color{orange} TODO Prove this.
+
   The left to right implication holds by the previous corollary.
   For the right to left implication, we notice that we can interpret the linear order $L$ in
   $\inter[L]$ as it has no upper bound (use a construction similar to Points where we only consider
   the end points of an interval -- the lower bound analogue follows from the start point
-  construction).
+  construction).}
 \end{proof}
 
 \end{document}
