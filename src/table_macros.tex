@@ -1,0 +1,171 @@
+\newcommand{\transreltable}[3]{
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{| c | c | c || c | c | c |}
+      \hline
+      $I \longrightarrow J$ & $J \longrightarrow K$ & $I \longrightarrow K$ &
+        $I \longrightarrow J$ & $J \longrightarrow K$ & $I \longrightarrow K$ \\
+      \hline\hline
+      #3
+      \hline
+    \end{tabular}
+    \caption{#2}
+    \label{tab:#1}
+  \end{table}
+}
+
+\newcommand{\llrow}{$<$ & $<$ & $<$}
+\newcommand{\lmrow}{$<$ & $m$ & $<$}
+\newcommand{\lorow}{$<$ & $o$ & $<$}
+\newcommand{\lsrow}{$<$ & $s$ & $<$}
+\newcommand{\lfrow}{$<$ & $f$ & $<omds$}
+\newcommand{\ldrow}{$<$ & $d$ & $<omds$}
+\newcommand{\lLrow}{$<$ & $>$ & full}
+\newcommand{\lMrow}{$<$ & $M$ & $<omds$}
+\newcommand{\lOrow}{$<$ & $O$ & $<omds$}
+\newcommand{\lSrow}{$<$ & $S$ & $<$}
+\newcommand{\lFrow}{$<$ & $F$ & $<$}
+\newcommand{\lDrow}{$<$ & $D$ & $<$}
+
+\newcommand{\mlrow}{$m$ & $<$ & $<$}
+\newcommand{\mmrow}{$m$ & $m$ & $<$}
+\newcommand{\morow}{$m$ & $o$ & $<$}
+\newcommand{\msrow}{$m$ & $s$ & $m$}
+\newcommand{\mfrow}{$m$ & $f$ & $osd$}
+\newcommand{\mdrow}{$m$ & $d$ & $osd$}
+\newcommand{\mLrow}{$m$ & $>$ & $>MOSD$}
+\newcommand{\mMrow}{$m$ & $M$ & $f=F$}
+\newcommand{\mOrow}{$m$ & $O$ & $osd$}
+\newcommand{\mSrow}{$m$ & $S$ & $m$}
+\newcommand{\mFrow}{$m$ & $F$ & $<$}
+\newcommand{\mDrow}{$m$ & $D$ & $<$}
+
+\newcommand{\olrow}{$o$ & $<$ & $<$}
+\newcommand{\omrow}{$o$ & $m$ & $<$}
+\newcommand{\oorow}{$o$ & $o$ & $<mo$}
+\newcommand{\osrow}{$o$ & $s$ & $o$}
+\newcommand{\ofrow}{$o$ & $f$ & $osd$}
+\newcommand{\odrow}{$o$ & $d$ & $osd$}
+\newcommand{\oLrow}{$o$ & $>$ & $>MOSD$}
+\newcommand{\oMrow}{$o$ & $M$ & $OSD$}
+\newcommand{\oOrow}{$o$ & $O$ & concur}
+\newcommand{\oSrow}{$o$ & $S$ & $oFD$}
+\newcommand{\oFrow}{$o$ & $F$ & $<mo$}
+\newcommand{\oDrow}{$o$ & $D$ & $<moFD$}
+
+\newcommand{\slrow}{$s$ & $<$ & $<$}
+\newcommand{\smrow}{$s$ & $m$ & $<$}
+\newcommand{\sorow}{$s$ & $o$ & $<mo$}
+\newcommand{\ssrow}{$s$ & $s$ & $s$}
+\newcommand{\sfrow}{$s$ & $f$ & $d$}
+\newcommand{\sdrow}{$s$ & $d$ & $d$}
+\newcommand{\sLrow}{$s$ & $>$ & $>$}
+\newcommand{\sMrow}{$s$ & $M$ & $M$}
+\newcommand{\sOrow}{$s$ & $O$ & $fdO$}
+\newcommand{\sSrow}{$s$ & $S$ & $s=S$}
+\newcommand{\sFrow}{$s$ & $F$ & $<mo$}
+\newcommand{\sDrow}{$s$ & $D$ & $<moFD$}
+
+\newcommand{\flrow}{$f$ & $<$ & $<$}
+\newcommand{\fmrow}{$f$ & $m$ & $m$}
+\newcommand{\forow}{$f$ & $o$ & $osd$}
+\newcommand{\fsrow}{$f$ & $s$ & $d$}
+\newcommand{\ffrow}{$f$ & $f$ & $f$}
+\newcommand{\fdrow}{$f$ & $d$ & $d$}
+\newcommand{\fLrow}{$f$ & $>$ & $>$}
+\newcommand{\fMrow}{$f$ & $M$ & $>$}
+\newcommand{\fOrow}{$f$ & $O$ & $>MO$}
+\newcommand{\fSrow}{$f$ & $S$ & $>MO$}
+\newcommand{\fFrow}{$f$ & $F$ & $f=F$}
+\newcommand{\fDrow}{$f$ & $D$ & $>MOSD$}
+
+\newcommand{\dlrow}{$d$ & $<$ & $<$}
+\newcommand{\dmrow}{$d$ & $m$ & $<$}
+\newcommand{\dorow}{$d$ & $o$ & $<mosd$}
+\newcommand{\dsrow}{$d$ & $s$ & $d$}
+\newcommand{\dfrow}{$d$ & $f$ & $d$}
+\newcommand{\ddrow}{$d$ & $d$ & $d$}
+\newcommand{\dLrow}{$d$ & $>$ & $>$}
+\newcommand{\dMrow}{$d$ & $M$ & $>$}
+\newcommand{\dOrow}{$d$ & $O$ & $df>OM$}
+\newcommand{\dSrow}{$d$ & $S$ & $df>OM$}
+\newcommand{\dFrow}{$d$ & $F$ & $<mosd$}
+\newcommand{\dDrow}{$d$ & $D$ & full}
+
+\newcommand{\Llrow}{$>$ & $<$ & full}
+\newcommand{\Lmrow}{$>$ & $m$ & $df>OM$}
+\newcommand{\Lorow}{$>$ & $o$ & $df>OM$}
+\newcommand{\Lsrow}{$>$ & $s$ & $df>OM$}
+\newcommand{\Lfrow}{$>$ & $f$ & $>$}
+\newcommand{\Ldrow}{$>$ & $d$ & $df>OM$}
+\newcommand{\LLrow}{$>$ & $>$ & $>$}
+\newcommand{\LMrow}{$>$ & $M$ & $>$}
+\newcommand{\LOrow}{$>$ & $O$ & $>$}
+\newcommand{\LSrow}{$>$ & $S$ & $>$}
+\newcommand{\LFrow}{$>$ & $F$ & $>$}
+\newcommand{\LDrow}{$>$ & $D$ & $>$}
+
+\newcommand{\Mlrow}{$M$ & $<$ & $<moFD$}
+\newcommand{\Mmrow}{$M$ & $m$ & $s=S$}
+\newcommand{\Morow}{$M$ & $o$ & $fdO$}
+\newcommand{\Msrow}{$M$ & $s$ & $fdO$}
+\newcommand{\Mfrow}{$M$ & $f$ & $M$}
+\newcommand{\Mdrow}{$M$ & $d$ & $fdO$}
+\newcommand{\MLrow}{$M$ & $>$ & $>$}
+\newcommand{\MMrow}{$M$ & $M$ & $>$}
+\newcommand{\MOrow}{$M$ & $O$ & $>$}
+\newcommand{\MSrow}{$M$ & $S$ & $>$}
+\newcommand{\MFrow}{$M$ & $F$ & $M$}
+\newcommand{\MDrow}{$M$ & $D$ & $>$}
+
+\newcommand{\Olrow}{$O$ & $<$ & $<moFD$}
+\newcommand{\Omrow}{$O$ & $m$ & $oFD$}
+\newcommand{\Oorow}{$O$ & $o$ & concur}
+\newcommand{\Osrow}{$O$ & $s$ & $fdO$}
+\newcommand{\Ofrow}{$O$ & $f$ & $O$}
+\newcommand{\Odrow}{$O$ & $d$ & $fdO$}
+\newcommand{\OLrow}{$O$ & $>$ & $>$}
+\newcommand{\OMrow}{$O$ & $M$ & $>$}
+\newcommand{\OOrow}{$O$ & $O$ & $>MO$}
+\newcommand{\OSrow}{$O$ & $S$ & $>MO$}
+\newcommand{\OFrow}{$O$ & $F$ & $OSD$}
+\newcommand{\ODrow}{$O$ & $D$ & $>MOSD$}
+
+\newcommand{\Slrow}{$S$ & $<$ & $<moFD$}
+\newcommand{\Smrow}{$S$ & $m$ & $oFD$}
+\newcommand{\Sorow}{$S$ & $o$ & $oFD$}
+\newcommand{\Ssrow}{$S$ & $s$ & $s=S$}
+\newcommand{\Sfrow}{$S$ & $f$ & $O$}
+\newcommand{\Sdrow}{$S$ & $d$ & $fdO$}
+\newcommand{\SLrow}{$S$ & $>$ & $>$}
+\newcommand{\SMrow}{$S$ & $M$ & $M$}
+\newcommand{\SOrow}{$S$ & $O$ & $O$}
+\newcommand{\SSrow}{$S$ & $S$ & $S$}
+\newcommand{\SFrow}{$S$ & $F$ & $D$}
+\newcommand{\SDrow}{$S$ & $D$ & $D$}
+
+\newcommand{\Flrow}{$F$ & $<$ & $<$}
+\newcommand{\Fmrow}{$F$ & $m$ & $m$}
+\newcommand{\Forow}{$F$ & $o$ & $o$}
+\newcommand{\Fsrow}{$F$ & $s$ & $o$}
+\newcommand{\Ffrow}{$F$ & $f$ & $f=F$}
+\newcommand{\Fdrow}{$F$ & $d$ & $osd$}
+\newcommand{\FLrow}{$F$ & $>$ & $>MOSD$}
+\newcommand{\FMrow}{$F$ & $M$ & $OSD$}
+\newcommand{\FOrow}{$F$ & $O$ & $OSD$}
+\newcommand{\FSrow}{$F$ & $S$ & $D$}
+\newcommand{\FFrow}{$F$ & $F$ & $F$}
+\newcommand{\FDrow}{$F$ & $D$ & $D$}
+
+\newcommand{\Dlrow}{$D$ & $<$ & $<moFD$}
+\newcommand{\Dmrow}{$D$ & $m$ & $oFD$}
+\newcommand{\Dorow}{$D$ & $o$ & $oFD$}
+\newcommand{\Dsrow}{$D$ & $s$ & $oFD$}
+\newcommand{\Dfrow}{$D$ & $f$ & $OSD$}
+\newcommand{\Ddrow}{$D$ & $d$ & concur}
+\newcommand{\DLrow}{$D$ & $>$ & $>MOSD$}
+\newcommand{\DMrow}{$D$ & $M$ & $OSD$}
+\newcommand{\DOrow}{$D$ & $O$ & $OSD$}
+\newcommand{\DSrow}{$D$ & $S$ & $D$}
+\newcommand{\DFrow}{$D$ & $F$ & $D$}
+\newcommand{\DDrow}{$D$ & $D$ & $D$}
