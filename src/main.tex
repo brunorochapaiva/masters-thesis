@@ -516,6 +516,93 @@ the right, it isn't guaranteed that we have a corresponding map on the left.}
   (EC). In other words, $\finslo$ is a Fraïssé class.
 \end{thm}
 \begin{proof}
+  First we show that the class of finite models of a relational universal theory $\theory$ always
+  has the hereditary property. Fix some finite model $M \models \theory$ and a substructure
+  $N \subseteq M$. Since $M$ was finite, $N$ must also be finite. Now, suppose we have a universal
+  sentence $\phi = \forall x_1, \dots, \forall x_n, \psi(x_1,\dots,x_n)$ where $\psi$ is a
+  quantifier free formula such that $M \models \phi$. Fixing some tuple $(a_1,\dots,a_n) \in N^n$ we
+  know that $M \models \psi(a_1,\dots,a_n)$, but $N$ is a substructure of $M$ and the truth value
+  of quantifier free formulas is preserved by embeddings, so $N \models \psi(a_1,\dots,a_n)$ too.
+  As we fixed an arbitrary tuple of elements in $N$, this means that $N \models \phi$.
+  The theory $\theory$ is taken to be universal, hence all of its sentences must be preserved
+  under taking substructures, so $N \models \theory$.
+
+  Given two strict linear orders $L,P$, we can turn their disjoint union $L \sqcup P$ into a
+  strict linear order by carrying over the orderings from $L$ and $P$ and setting
+  $x < y$ for all $x \in L$ and $y \in P$. Then, the usual injections into the disjoint union
+  $f : L \to L \sqcup P$ and $g : P \to L \sqcup P$ become order preserving maps. In the case
+  that $L,P$ are both finite, so will $L \sqcup P$ be, hence the class of finite strict
+  linear orders has the joint embedding property.
+
+  Given linear orders $A,L,P$ and order embeddings $f : A \to L$, $g : A \to P$, we wish to
+  find a linear order $\Omega$ and order embeddings $f' : L \to \Omega$, $g' : P \to \Omega$ such
+  that $f' \circ f = g' \circ g$. If any of $A,L,P$ is empty, we devolve to the previous proof,
+  so we may assume that all of $A,L,P$ are non-empty. We take the product $L \times P$ and
+  order it lexicographically, such that for all $(x,y), (x',y') \in L \times P$
+  \begin{equation*}
+    (x,y) < (x',y') \iff (x < y') \lor ((x = x') \land (y < y'))
+  \end{equation*}
+  Fixing some $y \in P$ we define $f' : L \to L \times P$ by
+  \begin{equation*}
+    f'(x) = \begin{cases}
+      (x, g(a)) & \text{ if} f^{-1}(x) = \{a\} \\
+      (x, y)    & \text{ if } f^{-1}(x) = \empty
+    \end{cases}
+  \end{equation*}
+  This preserves the ordering of $L$ as it coincides with the identity map on the first coordinate
+  and we are ordering $L \times P$ lexicographically.
+  Defining $g' : P \to L \times P$ is slightly trickier. First, we must pick some $y_{L,U} \in L$
+  such that $L \leq y_{L,U} \leq U$ for all subsets $L,U \subseteq L$ such that $L < U$. Once
+  we have fixed our choices, for any $x \in P$ we denote
+  $y_x =  y_{\left{f(a)\ |\ g(a) < x\right}, \left{f(a)\ |\ x < g(a)\right}}$.
+  Finally, we define
+  \begin{equation*}
+    g'(x) = \begin{cases}
+      (f(a), x) & \text{ if} g^{-1}(x) = \{a\} \\
+      (y_x, x)  & \text{ if } f^{-1}(x) = \empty
+    \end{cases}
+  \end{equation*}
+  To check this preserves the ordering of $P$, we fix two elements $x < x'$ of $P$, then:
+  \begin{itemize}
+    \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \{b\}$, then $a < b$, which implies that
+      $f(a) < f(b)$, so $g'(x) = (f(a),x) < (f(b),x') = g'(x')$.
+    \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \empty$, then we have picked $y_x$ such that
+      $f(a) < y_x$ so $g'(x) = (f(a),x) < (y_x, x) = g'(x')$.
+    \item If $g^{-1}(x) = \empty$ and $g^{-1}(x') = \{a\}$, then we have picked $y_x$ such that
+      $y_x < f(a)$ so $g'(x) = (y_x, x) < (f(a),x) = g'(x')$.
+    \item If $g^{-1}(x) = g^{-1}(x') = \empty$ then notice that $y_x \leq y_{x'}$ since
+      either there exists some $a \in A$ such that $x < g(a) < x'$, so then
+      $y_x \leq g(a) \leq y_{x'}$ or no such $a$ exists and $y_x = y_{x'}$. Thus,
+      $g'(x) = (y_x,x) < (y_{x'}, x') = g'(x')$.
+  \end{itemize}
+  Now that we have the required order embeddings into $\Omega = L \times P$, we just check the
+  necessary commutativity condition:
+  \begin{equation*}
+    f' \circ f(a) = f'(f(a)) = (f(a),g(a)) = g'(g(a)) = g' \circ g(a)
+  \end{equation*}
+  In the case that $A,L,P$ are finite, then $L \times P$ will also be finite, so this
+  shows that the class of finite strict linear orders has the amalgamation property.
+
+  Finally, fix some finite language
+  \begin{equation*}
+    \lang = \{c_1, \dots, c_m, f_1, \dots, f_n, R_1, \dots, R_l \}
+  \end{equation*}
+  where the $c_i$ are constant symbols, the $f_i$ are function symbols and the $R_i$ are relation
+  symbols. We will show that the class of finite $\lang$-structures must be essentially countable.
+  First, consider the set $M = \{1,\dots,r\} \subset \N$. If we wish to turn $M$ into a
+  $\lang$-structure then we must pick interpretations for all the symbols in $\lang$. For a constant
+  symbol this consists of picking a single element, so there are $r$ possible options. For a
+  function symbol with $a$-arity, we need to pick an element of $M$ for every input tuple of $a$
+  elements of $M$, so there are $r^{r^a}$ possibilities. Similarly, for a relation symbol $R$ with
+  $b$-arity, we need to pick a truth value for all tuples of size $b$ in $M$, so there are $2^{r^b}$
+  options. Hence, if we denote by $a_i$ the arity of the symbol $f_i$ and $b_i$ the arity of the
+  symbol $R_i$, then the total number of possible $\lang$-structures on $M$ is finite, more
+  specifically it is $r^{m + \Sum_{i=1}^{n} r^{a_i}} 2^{\Sum_{i=1}^{l} r^{b_i}}$. Hence the set of
+  possible $\lang$-structures on initial segments $\{1,\dots,r\}$ of $\N$ is countable. As every
+  finite $\lang$-structure must be isomorphic to at least one of these, the class of finite
+  $\lang$-structures must be essentially countable.
+
+
   {\color{orange} TODO prove this theorem. Something like
   \begin{itemize}
     \item HP: Show the result for all relational, universal theories, since this is referenced in
