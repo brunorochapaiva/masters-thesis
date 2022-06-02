@@ -87,6 +87,8 @@
 \newcommand{\finishesf}{\defformula{\finishes}}
 \newcommand{\containedf}{\defformula{\contained}}
 
+\newcommand{\lexord}{\defformula{\text{lex}}}
+
 % Points construction
 \newcommand{\psim}{\sim}
 \newcommand{\peq}{\phi_\sim}
@@ -106,6 +108,8 @@
 \theoremstyle{remark}
 \newtheorem*{rem}{Remark}
 
+\input{table_macros.tex}
+
 \begin{document}
 
 \maketitle
@@ -117,9 +121,9 @@
 
   We define the theory of strict linear orders as
   \begin{align*}
-    \tslo = \{ & \forall a, \lnot\ a < a, \\
-              & \forall a, \forall b, \forall c, a < b \land b < c \rightarrow a < c \\
-              & \forall a, \forall b, a < b \lor a = b \lor b < a \}
+    \tslo = \{ & \forall a, \lnot\ (a < a), \\
+              & \forall a, \forall b, \forall c, (a < b) \land (b < c) \rightarrow (a < c) \\
+              & \forall a, \forall b, (a < b) \lor (a = b) \lor (b < a) \}
   \end{align*}
 \end{defn}
 
@@ -214,10 +218,10 @@ reasonable linear order
   $(n,m) \in \{0,1\}^2$ defined as:
   \begin{equation*}
     \plt(n,m)(I,J) = \begin{cases}
-      I \before J \lor I \meets J \lor I \overlaps J  \lor I \finishedby J \lor I \contains J
-                                                & \text{if } n = m = 0\\
-        I \before J \lor I \meets J \lor I \overlaps J \lor I \starts J \lor I \contained J
-                                                & \text{if } n = m = 1 \\
+      (I \before J) \lor (I \meets J) \lor (I \overlaps J)  \lor (I \finishedby J)
+                    \lor (I \contains J)        & \text{if } n = m = 0\\
+      (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
+                  \lor (I \contained J)         & \text{if } n = m = 1 \\
       \lnot\,(I \after J) \land \lnot\,(I \metby J) \land \lnot\,(I \startedby J)
                                                 & \text{if } n = 0,\ m = 1 \\
       I \before J                               & \text{if } n = 1,\ m = 0
@@ -525,10 +529,90 @@ the right, it isn't guaranteed that we have a corresponding map on the left.}
 \end{proof}
 
 \begin{thm}
-  The Fraïssé limit of $\finslo$ is $\Q$
+  The Fraïssé limit of $\finslo$ is $\Q$ with its usual order.
 \end{thm}
 \begin{proof}
-  {\color{orange} TODO Show that $\Q$ is homogeneous and that its age is $\finslo$}
+  To show this, it suffices to show that $\Q$ is homogeneous and that its age is $\finslo$.
+
+  First we show that $\Q$ is in fact homogeneous. For this, it is helpful to see how to expand the
+  domain of an order isomorphism $f : L \to P$ with $L, P \subseteq \Q$ both finite. Suppose that we
+  wish to extend the domain of $f$ to include some $a \in \Q \setminus L$. There are three cases to
+  worry about here:
+  \begin{itemize}
+    \item If $a$ is an upper bound for $L$, we find some upper bound $b$ of $P$ which is
+      not in $P$, such a $b$ must exist as $\Q$ is unbounded and $P$ is finite. Then we extend
+      $f : L \to P$ to $g : L \cup \{a\} \to P \cup \{b\}$ by sending $g(a) = b$. This remains an
+      order isomorphism since for any $x \in P$, we know that $x < a$ and $g(x) < b = g(a)$ since
+      $a$ and $b$ are both upper bounds of $L$ and $P$ respectively.
+    \item If $a$ is a lower bound for $L$, then we find a lower bound $b$ of $P$ not already in
+      $P$ and extend $f$ to $g : L \cup \{a\} \to P \cup \{b\}$ by sending $a$ to $b$ again.
+      Similarly to the upper bound case, since $a$ and $b$ are both lower bounds of the domain and
+      codomain, this remains an order isomorphism.
+    \item If $a$ is neither, then we notice that $L,P$ are finite linear orders and hence discrete.
+      This means that we may find $a_1,a_2 \in L$ such that $a_1 < a < a_2$ and for no $x \in L$ do
+      we have $a_1 < x < a_2$. Now we can find some $b \in \Q \setminus P$ such that
+      $g(a_1) < b < g(a_2)$ since $\Q$ is dense and $P$ finite. We now extend $f$ to
+      $g : L \cup \{a\} \to P \cup \{b\}$ by sending g(a) = b. This remains an order isomorphism
+      since for any $x \in L$ we have either $x \leq a_1 < a$, so
+      \begin{equation*}
+        g(x) = f(x) \leq f(a_1) = g(a_1) < b = g(a)
+      \end{equation*}
+      or we have $a < a_2 \leq x$, in which case
+      \begin{equation*}
+        g(a) = b < g(a_2) = f(a_2) \leq f(x) = g(x)
+      \end{equation*}
+  \end{itemize}
+  If we wanted to expand the codomain of $f$ in a similar way, we could just regard $f^{-1}$ as
+  an order isomorphism between finite subsets of $\Q$, extend its domain to include whichever
+  element we needed giving us a function $g$, then $g^{-1}$ would be the required extension of $f$.
+
+  Now, fix two finite suborders $L,P \subseteq \Q$
+  and suppose we have some order isomorphism $f : L \to P$. To extend $f$ to an automorphism of $\Q$
+  we start by fixing an enumeration $(a_1, a_2, \dots)$ of the elements of $\Q$ and we define
+  three sequences: $(L_1, L_2, \dots)$ and $(P_1, P_2, \dots)$ of increasing subsets of $\Q$ and
+  $(g_1, g_2, \dots)$ of bijections $g_i : L_i \to P_i$ where each $g_i$ extends its predecessors.
+  We define this sequences by induction:
+  \begin{itemize}
+    \item $k = 1$: let $L_1 = L,\ P_1 = P$ and $g_1 = f$.
+    \item $k = 2l$ for $l \in \{1, 2, \dots\}$: at even indices we focus on increasing the domain of
+      $g_i$ to all of $\Q$. If $a_l \in L_{k-1}$ then we let
+      \begin{align*}
+        L_k & = L_{k-1} \\
+        P_k & = P_{k-1} \\
+        g_k & = g_{k-1}
+      \end{align*}
+      Otherwise we extend $g_{k-1}$ to an order isomorphism
+      $h : L_{k-1} \cup \{a_l\} \to P_{k-1} \cup \{b\}$ for some $b$ chosen appropriately and let
+      \begin{align*}
+        L_k & = L_{k-1} \cup \{a_l\} \\
+        P_k & = P_{k-1} \cup \{b\} \\
+        g_k & = h
+      \end{align*}
+    \item $k = 2l + 1$ for $l \in \{1, 2, \dots\}$: at odd indices we focus on increasing the
+      codomain of $g_i$ to all of $\Q$. If $a_l \in P_{k-1}$ then we let
+      \begin{align*}
+        L_k & = L_{k-1} \\
+        P_k & = P_{k-1} \\
+        g_k & = g_{k-1}
+      \end{align*}
+      Otherwise we extend $g_{k-1}$ to an order isomorphism
+      $h : L_{k-1} \cup \{b\} \to P_{k-1} \cup \{a_l\}$ for some $b$ chosen appropriately and let
+      \begin{align*}
+        L_k & = L_{k-1} \cup \{b\} \\
+        P_k & = P_{k-1} \cup \{a_l\} \\
+        g_k & = h
+      \end{align*}
+  \end{itemize}
+  Finally, it is the case that $\Cup L_k = \Cup P_k = \Q$ since each $x \in \Q$ must appear as $a_l$
+  in our enumeration for some $l \in \{1, 2, \dots\}$. Then $x \in L_{2l}$ and $x \in P_{2l+1}$ so
+  definitely $x \in \Cup L_k$ and $x \in \Cup P_k$, so these unions must equal $\Q$. This means that
+  we now have the function $g = \Cup g_k$ which extends $f$ by construction.
+
+  To finish the proof we show that $\age{\Q} = \finslo$. Clearly $\age{\Q} \subseteq \finslo$ since
+  a suborder of a linear order must still be linear. To see that $\finslo \subseteq \age{\Q}$ we fix
+  some finite linear order $L$, then there is an order preserving isomorphism from $L$ to an initial
+  segment of $\N$. The inclusion $\N \in \Q$ means this isomorphism realises $L$ as a finite
+  suborder of $\Q$.
 \end{proof}
 
 \begin{thm}
@@ -729,11 +813,67 @@ have a colimit being preserved by a left adjoint (Int(-))}
   An interval algebra $A$ is stable if and only if it is finite.
 \end{thm}
 \begin{proof}
-  {\color{orange} TODO Prove this.
+  % TODO look at exercise 5.5.6 of marker for the order property.
+  Suppose that $A$ is an interval algebra and consider the formula
+  \begin{equation*}
+    \lexord(I, J) = (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
+                                  \lor (I \finishedby J) \lor (I \contains J)
+  \end{equation*}
+  The above formula takes the elements of $A$ and lexicographically orders them, by first comparing
+  the start times of each interval, followed by the end times in case the start times align. As a
+  result, the formula $\lexord$ induces the structure of a strict linear order on the elements
+  of $A$:
+  \begin{itemize}
+    \item \textbf{irreflexivity}: Fix some interval $I \in A$, then $I = I$. Since the relational
+      symbols of interval algebras along with equality are all mutually exclusive,
+      neither $I \aiaarrow{i} I$ nor $I \raiaarrow{i} I$ can hold for any $i \in \aiaindex$. This
+      means $A \models \lnot \lexord(I, I)$ so $\lexord$ is irreflexive.
+    \item \textbf{transitivity}: Fix three intervals $I,J,K \in A$ and suppose that
+      $A \models \lexord(I,J)$ and $A \models \lexord(J,K)$. Since $\lexord$ consists of the disjunction of 6
+      relational symbols, there are 36 cases which would lead to this situation. Considering each of
+      these cases individually and looking up our transitivity axioms for interval algebras, we can
+      find all possible relations between $I$ and $K$, which is detailed in table
+      \ref{tab:lexord_trans}. In all of these cases, we must still have $A \models \lexord(I,K)$, so
+      $\lexord$ is transitive.
+      \transreltable{lexord_trans}{Cases for transitivy of $\lexord$.}{
+        \llrow & \slrow \\
+        \lmrow & \smrow \\
+        \lorow & \sorow \\
+        \lsrow & \ssrow \\
+        \lFrow & \sFrow \\
+        \lDrow & \sDrow \\
+        \hline
+        \mlrow & \Flrow \\
+        \mmrow & \Fmrow \\
+        \morow & \Forow \\
+        \msrow & \Fsrow \\
+        \mFrow & \FFrow \\
+        \mDrow & \FDrow \\
+        \hline
+        \olrow & \Dlrow \\
+        \omrow & \Dmrow \\
+        \oorow & \Dorow \\
+        \osrow & \Dsrow \\
+        \oFrow & \DFrow \\
+        \oDrow & \DDrow \\
+      }
+    \item \textbf{trichotomy}: Fix two intervals $I, J \in A$. First notice that
+      \begin{equation*}
+        A \models \lexord(J,I) \iff
+        (I \after J) \lor (I \metby J) \lor (I \overlappedby J) \lor (I \startedby J)
+                      \lor (I \finishes J) \lor (I \contained J)
+      \end{equation*}
+      Hence $A \models \lexord(I,J) \lor (I = J) \lor \lexord(J,I)$ is equivalent to saying that
+      the interval algebra relations are exhaustive, which is one of our axioms. Hence the strict
+      ordering given by $\lexord$ is linear.
+  \end{itemize}
 
-  Finite models are always stable since they cannot have infinitely many elements.
+  Now for any finite interval algebra $A$, all strict linear orders interpretable in $A$ will be
+  bounded in size by $|A^k|$ for some $k \in \N$. In particular, all such linear orders must be
+  finite, so $A$ is stable.
 
-  For an infinite model $A$, we can linearly order the intervals in $A$, showing $A$ is unstable.}
+  For the converse, suppose $A$ is stable. Using $\lexord$ we can linearly order all the elements
+  of $A$, but as $A$ is stable this linear order must be finite, hence $A$ must be finite.
 \end{proof}
 
 \begin{thm}
