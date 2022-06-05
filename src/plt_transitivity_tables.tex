@@ -1,0 +1,242 @@
+% 0 0 0 case
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c || c | c | c || c | c | c |}
+    \hline
+    $I \to J$ & $J \to K$ & $I \to K$ &
+      $I \to J$ & $J \to K$ & $I \to K$ &
+      $I \to J$ & $J \to K$ & $I \to K$ \\
+    \hline\hline
+    \llrow & \olrow & \Dlrow \\
+    \lmrow & \omrow & \Dmrow \\
+    \lorow & \oorow & \Dorow \\
+    \lFrow & \oFrow & \DFrow \\
+    \lDrow & \oDrow & \DDrow \\
+    \hline
+    \mlrow & \Flrow &&&\\
+    \mmrow & \Fmrow &&&\\
+    \morow & \Forow &&&\\
+    \mFrow & \FFrow &&&\\
+    \mDrow & \FDrow &&&\\
+    \hline
+  \end{tabular}
+  \caption{
+    The transitivity table for the $\istart{I} < \istart{J}$ and $\istart{J} < \istart{K}$ case.
+    For this to imply $\istart{I} < \istart{K}$ we need the $I \to K$ columns to all contain a
+    subset of the string $<moFD$.
+  }
+  \label{tab:plt_trans_000}
+\end{table}
+
+% 0 0 1 case
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c || c | c | c || c | c | c |}
+    \hline
+    $I \to J$ & $J \to K$ & $I \to K$ &
+      $I \to J$ & $J \to K$ & $I \to K$ &
+      $I \to J$ & $J \to K$ & $I \to K$ \\
+    \hline\hline
+    \llrow & \olrow & \Dlrow \\
+    \lmrow & \omrow & \Dmrow \\
+    \lorow & \oorow & \Dorow \\
+    \lsrow & \osrow & \Dsrow \\
+    \lfrow & \ofrow & \Dfrow \\
+    \ldrow & \odrow & \Ddrow \\
+    \lerow & \oerow & \Derow \\
+    \lOrow & \oOrow & \DOrow \\
+    \lSrow & \oSrow & \DSrow \\
+    \lFrow & \oFrow & \DFrow \\
+    \lDrow & \oDrow & \DDrow \\
+    \hline
+    \mlrow & \Flrow &&&\\
+    \mmrow & \Fmrow &&&\\
+    \morow & \Forow &&&\\
+    \msrow & \Fsrow &&&\\
+    \mfrow & \Ffrow &&&\\
+    \mdrow & \Fdrow &&&\\
+    \merow & \Ferow &&&\\
+    \mOrow & \FOrow &&&\\
+    \mSrow & \FSrow &&&\\
+    \mFrow & \FFrow &&&\\
+    \mDrow & \FDrow &&&\\
+    \hline
+  \end{tabular}
+  \caption{
+    The transitivity table for the $\istart{I} < \istart{J}$ and $\istart{J} < \iend{K}$ case.
+    For this to imply $\istart{I} < \iend{K}$ we need the $I \to K$ columns to all contain a
+    subset of the string $<mosfd=OSFD$. Recall that concur is shorthand for $osfd=OSFD$
+  }
+  \label{tab:plt_trans_001}
+\end{table}
+
+
+% 0 1 0 case
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c |}
+    \hline
+    $I \to J$ & $J \to K$ & $I \to K$ \\
+    \hline\hline
+    \llrow \\
+    \mlrow \\
+    \olrow \\
+    \slrow \\
+    \flrow \\
+    \dlrow \\
+    \elrow \\
+    \Olrow \\
+    \Slrow \\
+    \Flrow \\
+    \Dlrow \\
+    \hline
+  \end{tabular}
+  \caption{
+    The transitivity table for the $\istart{I} < \iend{J}$ and $\iend{J} < \istart{K}$ case.
+    For this to imply $\istart{I} < \istart{K}$ we need the $I \to K$ columns to all contain a
+    subset of the string $<mofD$.
+  }
+  \label{tab:plt_trans_010}
+\end{table}
+
+% 0 1 1 case
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c || c | c | c || c | c | c |}
+    \hline
+    $I \to J$ & $J \to K$ & $I \to K$ &
+      $I \to J$ & $J \to K$ & $I \to K$ &
+      $I \to J$ & $J \to K$ & $I \to K$ \\
+    \hline\hline
+    \llrow & \flrow & \Slrow \\
+    \lmrow & \fmrow & \Smrow \\
+    \lorow & \forow & \Sorow \\
+    \lsrow & \fsrow & \Ssrow \\
+    \ldrow & \fdrow & \Sdrow \\
+    \hline
+    \mlrow & \dlrow & \Flrow \\
+    \mmrow & \dmrow & \Fmrow \\
+    \morow & \dorow & \Forow \\
+    \msrow & \dsrow & \Fsrow \\
+    \mdrow & \ddrow & \Fdrow \\
+    \hline
+    \olrow & \elrow & \Dlrow \\
+    \omrow & \emrow & \Dmrow \\
+    \oorow & \eorow & \Dorow \\
+    \osrow & \esrow & \Dsrow \\
+    \odrow & \edrow & \Ddrow \\
+    \hline
+    \slrow & \Olrow &&&\\
+    \smrow & \Omrow &&&\\
+    \sorow & \Oorow &&&\\
+    \ssrow & \Osrow &&&\\
+    \sdrow & \Odrow &&&\\
+    \hline
+  \end{tabular}
+  \caption{
+    The transitivity table for the $\istart{I} < \iend{J}$ and $\iend{J} < \iend{K}$ case.
+    For this to imply $\istart{I} < \iend{K}$ we need the $I \to K$ columns to all contain a
+    subset of the string $<mosfd=OSFD$. Recall that concur is shorthand for $osfd=OSFD$.
+  }
+  \label{tab:plt_trans_011}
+\end{table}
+
+% 1 0 0 case
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c |}
+    \hline
+    $I \to J$ & $J \to K$ & $I \to K$ \\
+    \hline\hline
+    \llrow \\
+    \lmrow \\
+    \lorow \\
+    \lFrow \\
+    \lDrow \\
+    \hline
+  \end{tabular}
+  \caption{
+    The transitivity table for the $\iend{I} < \istart{J}$ and $\istart{J} < \istart{K}$ case.
+    For this to imply $\iend{I} < \istart{K}$ we need the $I \to K$ columns to all contain $<$.
+  }
+  \label{tab:plt_trans_100}
+\end{table}
+
+% 1 0 1 case
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c |}
+    \hline
+    $I \to J$ & $J \to K$ & $I \to K$ \\
+    \hline\hline
+    \llrow \\
+    \lmrow \\
+    \lorow \\
+    \lsrow \\
+    \lfrow \\
+    \ldrow \\
+    \lerow \\
+    \lOrow \\
+    \lSrow \\
+    \lFrow \\
+    \lDrow \\
+    \hline
+  \end{tabular}
+  \caption{
+    The transitivity table for the $\iend{I} < \istart{J}$ and $\istart{J} < \iend{K}$ case.
+    For this to imply $\iend{I} < \iend{K}$ we need the $I \to K$ columns to all contain a
+    subset of the string $<mosd$.
+  }
+  \label{tab:plt_trans_101}
+\end{table}
+
+% 1 1 0 case
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c |}
+    \hline
+    $I \to J$ & $J \to K$ & $I \to K$ \\
+    \hline\hline
+    \llrow \\
+    \mlrow \\
+    \olrow \\
+    \slrow \\
+    \dlrow \\
+    \hline
+  \end{tabular}
+  \caption{
+    The transitivity table for the $\iend{I} < \iend{J}$ and $\iend{J} < \istart{K}$ case.
+    For this to imply $\iend{I} < \istart{K}$ we need the $I \to K$ columns to all contain $<$.
+  }
+  \label{tab:plt_trans_110}
+\end{table}
+
+% 1 1 1 case
+\begin{table}[ht]
+  \centering
+  \begin{tabular}{| c | c | c || c | c | c || c | c | c |}
+    \hline
+    $I \to J$ & $J \to K$ & $I \to K$ &
+      $I \to J$ & $J \to K$ & $I \to K$ &
+      $I \to J$ & $J \to K$ & $I \to K$ \\
+    \hline\hline
+    \llrow & \olrow & \dlrow \\
+    \lmrow & \omrow & \dmrow \\
+    \lorow & \oorow & \dorow \\
+    \lsrow & \osrow & \dsrow \\
+    \ldrow & \odrow & \ddrow \\
+    \hline
+    \mlrow & \slrow &&&\\
+    \mmrow & \smrow &&&\\
+    \morow & \sorow &&&\\
+    \msrow & \ssrow &&&\\
+    \mdrow & \sdrow &&&\\
+    \hline
+  \end{tabular}
+  \caption{
+    The transitivity table for the $\iend{I} < \iend{J}$ and $\iend{J} < \iend{K}$ case.
+    For this to imply $\iend{I} < \iend{K}$ we need the $I \to K$ columns to all contain a
+    subset of the string $<mosd$.
+  }
+  \label{tab:plt_trans_111}
+\end{table}

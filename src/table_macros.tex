@@ -14,15 +14,18 @@
   \end{table}
 }
 
+%TODO either change concur to the actual symbols or explain its meaning in the table captions.
+
 \newcommand{\llrow}{$<$ & $<$ & $<$}
 \newcommand{\lmrow}{$<$ & $m$ & $<$}
 \newcommand{\lorow}{$<$ & $o$ & $<$}
 \newcommand{\lsrow}{$<$ & $s$ & $<$}
-\newcommand{\lfrow}{$<$ & $f$ & $<omds$}
-\newcommand{\ldrow}{$<$ & $d$ & $<omds$}
+\newcommand{\lfrow}{$<$ & $f$ & $<mosd$}
+\newcommand{\ldrow}{$<$ & $d$ & $<mosd$}
+\newcommand{\lerow}{$<$ & $=$ & $<$}
 \newcommand{\lLrow}{$<$ & $>$ & full}
-\newcommand{\lMrow}{$<$ & $M$ & $<omds$}
-\newcommand{\lOrow}{$<$ & $O$ & $<omds$}
+\newcommand{\lMrow}{$<$ & $M$ & $<mosd$}
+\newcommand{\lOrow}{$<$ & $O$ & $<mosd$}
 \newcommand{\lSrow}{$<$ & $S$ & $<$}
 \newcommand{\lFrow}{$<$ & $F$ & $<$}
 \newcommand{\lDrow}{$<$ & $D$ & $<$}
@@ -33,6 +36,7 @@
 \newcommand{\msrow}{$m$ & $s$ & $m$}
 \newcommand{\mfrow}{$m$ & $f$ & $osd$}
 \newcommand{\mdrow}{$m$ & $d$ & $osd$}
+\newcommand{\merow}{$m$ & $=$ & $m$}
 \newcommand{\mLrow}{$m$ & $>$ & $>MOSD$}
 \newcommand{\mMrow}{$m$ & $M$ & $f=F$}
 \newcommand{\mOrow}{$m$ & $O$ & $osd$}
@@ -46,6 +50,7 @@
 \newcommand{\osrow}{$o$ & $s$ & $o$}
 \newcommand{\ofrow}{$o$ & $f$ & $osd$}
 \newcommand{\odrow}{$o$ & $d$ & $osd$}
+\newcommand{\oerow}{$o$ & $=$ & $o$}
 \newcommand{\oLrow}{$o$ & $>$ & $>MOSD$}
 \newcommand{\oMrow}{$o$ & $M$ & $OSD$}
 \newcommand{\oOrow}{$o$ & $O$ & concur}
@@ -59,6 +64,7 @@
 \newcommand{\ssrow}{$s$ & $s$ & $s$}
 \newcommand{\sfrow}{$s$ & $f$ & $d$}
 \newcommand{\sdrow}{$s$ & $d$ & $d$}
+\newcommand{\serow}{$s$ & $=$ & $s$}
 \newcommand{\sLrow}{$s$ & $>$ & $>$}
 \newcommand{\sMrow}{$s$ & $M$ & $M$}
 \newcommand{\sOrow}{$s$ & $O$ & $fdO$}
@@ -72,6 +78,7 @@
 \newcommand{\fsrow}{$f$ & $s$ & $d$}
 \newcommand{\ffrow}{$f$ & $f$ & $f$}
 \newcommand{\fdrow}{$f$ & $d$ & $d$}
+\newcommand{\ferow}{$f$ & $=$ & $f$}
 \newcommand{\fLrow}{$f$ & $>$ & $>$}
 \newcommand{\fMrow}{$f$ & $M$ & $>$}
 \newcommand{\fOrow}{$f$ & $O$ & $>MO$}
@@ -85,6 +92,7 @@
 \newcommand{\dsrow}{$d$ & $s$ & $d$}
 \newcommand{\dfrow}{$d$ & $f$ & $d$}
 \newcommand{\ddrow}{$d$ & $d$ & $d$}
+\newcommand{\derow}{$d$ & $=$ & $d$}
 \newcommand{\dLrow}{$d$ & $>$ & $>$}
 \newcommand{\dMrow}{$d$ & $M$ & $>$}
 \newcommand{\dOrow}{$d$ & $O$ & $df>OM$}
@@ -92,12 +100,27 @@
 \newcommand{\dFrow}{$d$ & $F$ & $<mosd$}
 \newcommand{\dDrow}{$d$ & $D$ & full}
 
+\newcommand{\elrow}{$=$ & $<$ & $<$}
+\newcommand{\emrow}{$=$ & $m$ & $m$}
+\newcommand{\eorow}{$=$ & $o$ & $o$}
+\newcommand{\esrow}{$=$ & $s$ & $s$}
+\newcommand{\efrow}{$=$ & $f$ & $f$}
+\newcommand{\edrow}{$=$ & $d$ & $d$}
+\newcommand{\eerow}{$=$ & $=$ & $=$}
+\newcommand{\eLrow}{$=$ & $>$ & $>$}
+\newcommand{\eMrow}{$=$ & $M$ & $M$}
+\newcommand{\eOrow}{$=$ & $O$ & $O$}
+\newcommand{\eSrow}{$=$ & $S$ & $S$}
+\newcommand{\eFrow}{$=$ & $F$ & $F$}
+\newcommand{\eDrow}{$=$ & $D$ & $D$}
+
 \newcommand{\Llrow}{$>$ & $<$ & full}
 \newcommand{\Lmrow}{$>$ & $m$ & $df>OM$}
 \newcommand{\Lorow}{$>$ & $o$ & $df>OM$}
 \newcommand{\Lsrow}{$>$ & $s$ & $df>OM$}
 \newcommand{\Lfrow}{$>$ & $f$ & $>$}
 \newcommand{\Ldrow}{$>$ & $d$ & $df>OM$}
+\newcommand{\Lerow}{$>$ & $=$ & $>$}
 \newcommand{\LLrow}{$>$ & $>$ & $>$}
 \newcommand{\LMrow}{$>$ & $M$ & $>$}
 \newcommand{\LOrow}{$>$ & $O$ & $>$}
@@ -111,6 +134,7 @@
 \newcommand{\Msrow}{$M$ & $s$ & $fdO$}
 \newcommand{\Mfrow}{$M$ & $f$ & $M$}
 \newcommand{\Mdrow}{$M$ & $d$ & $fdO$}
+\newcommand{\Merow}{$M$ & $=$ & $M$}
 \newcommand{\MLrow}{$M$ & $>$ & $>$}
 \newcommand{\MMrow}{$M$ & $M$ & $>$}
 \newcommand{\MOrow}{$M$ & $O$ & $>$}
@@ -124,6 +148,7 @@
 \newcommand{\Osrow}{$O$ & $s$ & $fdO$}
 \newcommand{\Ofrow}{$O$ & $f$ & $O$}
 \newcommand{\Odrow}{$O$ & $d$ & $fdO$}
+\newcommand{\Oerow}{$O$ & $=$ & $O$}
 \newcommand{\OLrow}{$O$ & $>$ & $>$}
 \newcommand{\OMrow}{$O$ & $M$ & $>$}
 \newcommand{\OOrow}{$O$ & $O$ & $>MO$}
@@ -137,6 +162,7 @@
 \newcommand{\Ssrow}{$S$ & $s$ & $s=S$}
 \newcommand{\Sfrow}{$S$ & $f$ & $O$}
 \newcommand{\Sdrow}{$S$ & $d$ & $fdO$}
+\newcommand{\Serow}{$S$ & $=$ & $S$}
 \newcommand{\SLrow}{$S$ & $>$ & $>$}
 \newcommand{\SMrow}{$S$ & $M$ & $M$}
 \newcommand{\SOrow}{$S$ & $O$ & $O$}
@@ -150,6 +176,7 @@
 \newcommand{\Fsrow}{$F$ & $s$ & $o$}
 \newcommand{\Ffrow}{$F$ & $f$ & $f=F$}
 \newcommand{\Fdrow}{$F$ & $d$ & $osd$}
+\newcommand{\Ferow}{$F$ & $=$ & $F$}
 \newcommand{\FLrow}{$F$ & $>$ & $>MOSD$}
 \newcommand{\FMrow}{$F$ & $M$ & $OSD$}
 \newcommand{\FOrow}{$F$ & $O$ & $OSD$}
@@ -163,6 +190,7 @@
 \newcommand{\Dsrow}{$D$ & $s$ & $oFD$}
 \newcommand{\Dfrow}{$D$ & $f$ & $OSD$}
 \newcommand{\Ddrow}{$D$ & $d$ & concur}
+\newcommand{\Derow}{$D$ & $=$ & $D$}
 \newcommand{\DLrow}{$D$ & $>$ & $>MOSD$}
 \newcommand{\DMrow}{$D$ & $M$ & $OSD$}
 \newcommand{\DOrow}{$D$ & $O$ & $OSD$}

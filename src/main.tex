@@ -14,8 +14,10 @@
 \usepackage{amssymb}
 \usepackage{parskip}
 \usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing,calligraphy}
 \usepackage{quiver}
 \usepackage{xcolor}
+\usepackage{cleveref}
 
 
 \usepackage{subfiles}
@@ -209,6 +211,8 @@ reasonable linear order
   \end{equation*}
 \end{defn}
 
+{\color{orange} TODO at least add a remark why this is an equivalence relation}
+
 \begin{thm}
   Given an Allen interval algebra $A$, the interpretation of the symbol $<$ in $\points[A]$ given by
   $(n,I) < (m,J) \iff A \models \plt(n,m)(I,J)$ is well-defined and turns $A$ into a model of
@@ -222,7 +226,7 @@ reasonable linear order
                     \lor (I \contains J)        & \text{if } n = m = 0\\
       (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
                   \lor (I \contained J)         & \text{if } n = m = 1 \\
-      \lnot\,(I \after J) \land \lnot\,(I \metby J) \land \lnot\,(I \startedby J)
+      \lnot\,(I \after J) \land \lnot\,(I \metby J)
                                                 & \text{if } n = 0,\ m = 1 \\
       I \before J                               & \text{if } n = 1,\ m = 0
     \end{cases}
@@ -238,8 +242,34 @@ reasonable linear order
       algebra relations (along with equality) are mutually exclusive and $I = I$, no other relation
       can hold for the pair $(I,I)$. Regardless of the value of $n$, $\plt(n,n)(I,I)$ does not
       include $I = I$ as a disjunct, so $A \not\models \plt(n,n)(I,I)$ and $<$ is irreflexive.
-    \item \textbf{transitivity}: {\color{orange} TODO Show transitivity}
-    \item \textbf{trichotomy}: {\color{orange} TODO Show trichotomy}
+    \item \textbf{transitivity}: Aaaaa
+    {\color{orange} TODO Show transitivity}
+    \item \textbf{trichotomy}: Fix two $I,J \in A$. To check the trichotomy condition holds, we need
+      to show that for all $n,m \in \{0,1\}$ we have
+      \begin{equation*}
+        A \models \plt(n,m)(I,J) \lor \peq(n,m)(I,J) \lor \plt(m,n)(J,I)
+      \end{equation*}
+      There are 3 cases that we must deal with separately to show this:
+      \begin{itemize}
+        \item First we consider $[(0,I)]$ and $[(0,J)]$. The formula $\plt(0,0)(I,J)$ is a
+          disjunction 5 of our basic relations and $\plt(0,0)(J,I)$ the disjunction of its duals.
+          Then $\peq(0,0)(I,J)$ is a disjunction of the 2 missing relations and equality. Hence by
+          exhaustiveness of the interval algebra relations and equality, it must be the case that
+          $A \models \plt(0,0)(I,J) \lor \peq(0,0)(I,J) \lor \plt(0,0)(J,I)$
+        \item Next, we consider $[(0,I)]$ and $[(1,J)]$. The formula $\plt(0,1)(I,J)$ is a
+          conjunction of 2 negated relational symbols, which is equivalent to the disjunction of
+          equality and the 10 absent relations. Then $\peq(0,1)(I,J) \lor \plt(1,0)(J,I)$ is the
+          disjunction of the two missing relations.
+        \item Finally we consider $[(1,I)]$ and $[(1,J)]$. The situation here is similar to the
+          $n = m = 0$ case, since $\plt(1,1)(I,J)$ is a disjunction of 5 basic relations, then
+          $\plt(1,1)(J,I)$ is the disjunction of its duals and $peq(1,1)(I,J)$ is the disjunction
+          of the 2 missing relations and equality.
+      \end{itemize}
+      When $(n,m)=(1,0)$, since $\psim$ is symmetric, we know that
+      \begin{equation*}
+        A \models \peq(1,0)(I,J) \iff A \models \peq(0,1)(J,I)
+      \end{equation*}
+      which allows us to reduce to the second case above.
   \end{itemize}
 \end{proof}
 
@@ -249,6 +279,9 @@ reasonable linear order
 
 Now that this axiomatisation is justified, show that we can't remove any axioms without making
 it into something we do not want.
+
+\include{plt_transitivity_tables.tex} %TODO change this from include to subfile
+
 
 \newpage
 \section{A Detour Into Category Theory}
@@ -417,11 +450,106 @@ it into something we do not want.
     \psi_{A,L}(f) : \points[A] \to L \quad\text{sending}\quad (n, I) \mapsto
       \left(\letin{(x_0,x_1) := g(I)}{x_n}\right)
   \end{equation*}
-  Now, we need to ensure these maps are well defined and that they are indeed $\lslo$-embeddings:
-  {\color{orange}TODO Show this is well-defined and monotonic}
+  Now, we need to ensure these maps are well defined and that they are indeed $\lslo$-embeddings. To
+  check that $\psi_{A,L}(f)$ is well defined, we fix intervals $I,J \in A$ and get three cases to
+  consider. In all of these cases we suppose $f(I) = (a,b)$ and $f(J) = (c,d)$:
+  \begin{itemize}
+    \item If $(0,I) \psim (0,J)$ then we must have
+      \begin{equation*}
+        A \models (I \starts J) \lor (I \startedby J) \lor (I = J)
+      \end{equation*}
+      Since $f$ is an $\laia$-embedding, this means that
+      \begin{equation*}
+        \inter[L] \models (f(I) \starts f(J)) \lor (f(I) \startedby f(J)) \lor (f(I) = f(J))
+      \end{equation*}
+      Equivalently, the above says that $a = c$, so
+      $\psi_{A,L}(f)(\istart{I}) = a = c = \psi_{A,L}(f)(\istart{J})$.
+    \item If $(0,I) \psim (1,J)$ then the following is true
+      \begin{equation*}
+        A \models I \metby J
+      \end{equation*}
+      Which implies that
+      \begin{equation*}
+        \inter[L] \models f(I) \metby f(J)
+      \end{equation*}
+      And this happens exactly when $a = d$, meaning
+      $\psi_{A,L}(f)(\istart{I}) = a = d = \psi_{A,L}(f)(\iend{J})$. By symmetry of our equivalence
+      relation this also deals with the $(1,I) \psim (0,J)$ case.
+    \item If $(1,I) \psim (1,J)$ then
+      \begin{equation*}
+        A \models (I \finishes J) \lor (I \finishedby J) \lor (I = J)
+      \end{equation*}
+      And so
+      \begin{equation*}
+        \points[L] \models (f(I) \finishes f(J)) \lor (f(I) \finishedby f(J)) \lor (f(I) = f(J))
+      \end{equation*}
+      This implies that $b = d$ so $\psi_{A,L}(f)(\iend{I}) = b = d = \psi_{A,L}(f)(\iend{J})$ as
+      needed.
+  \end{itemize}
 
-  We expect $\phi_{A,L}$ and $\psi_{A,L}$ to be inverses, which is confirmed by some quick
-  computations:
+  To show monotonicity of $\psi_{A,L}(f)$ we get 4 distinct cases. Assuming again that
+  $f(I) = (a,b)$ and $f(J) = (c,d)$:
+  \begin{itemize}
+    \item If $\istart{I} < \istart{J}$ then we must have
+      \begin{equation*}
+        A \models (I \before J) \lor (I \meets J) \lor (I \overlaps J)  \lor (I \finishedby J)
+                                \lor (I \contains J)
+      \end{equation*}
+      Since $f$ is an $\laia$-embedding, this means that
+      \begin{equation*}
+        \inter[L] \models (f(I) \before f(J)) \lor (f(I) \meets f(J)) \lor (f(I) \overlaps f(J))
+                                        \lor (f(I) \finishedby f(J)) \lor (f(I) \contains f(J))
+      \end{equation*}
+      This means the ordering of the elements $a,b,c,d$ must be one of:
+      \begin{gather*}
+        a < b < c < d \qquad a < b = c = d  \qquad a < c < b < d \\
+        a < c < d = b \qquad a < c < d < b
+      \end{gather*}
+      And in all cases $\psi_{A,L}(f)(\istart{I}) = a < c = \psi_{A,L}(f)(\istart{J})$.
+    \item If $\istart{I} < \iend{J}$ then we must have
+      \begin{equation*}
+        A \models \lnot\,(I \after J) \land \lnot\,(I \metby J)
+      \end{equation*}
+      Since $f$ is an $\laia$-embedding, this means that
+      \begin{equation*}
+        \inter[L] \models \lnot\,(f(I) \after f(J)) \land \lnot\,(f(I) \metby f(J))
+      \end{equation*}
+      This is the case with the most orderings of $a,b,c,d$, having one of:
+      \begin{gather*}
+        a < b < c < d \qquad a < b = c < d \qquad a < c < b < d \qquad a = c < b < d \\
+        c < a < b = d \qquad c < a < b < d \qquad a = c < b = d \qquad c < a < d < b \\
+        a = c < d < b \qquad a < c < d = b \qquad a < c < d < b
+      \end{gather*}
+      In all cases though, $\psi_{A,L}(f)(\istart{I}) = a < d = \psi_{A,L}(f)(\iend{J})$.
+    \item If $\iend{I} < \istart{J}$ then we must have
+      \begin{equation*}
+        A \models I \before J
+      \end{equation*}
+      Since $f$ is an $\laia$-embedding, this means that
+      \begin{equation*}
+        \inter[L] \models f(I) \before f(J)
+      \end{equation*}
+      So in $L$ we must have $a < b < c < d$, which means that
+      $\psi_{A,L}(f)(\iend{I}) = b < c = \psi_{A,L}(f)(\istart{J})$.
+    \item If $\iend{I} < \iend{J}$ then we must have
+      \begin{equation*}
+        A \models (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
+                                \lor (I \contained J)
+      \end{equation*}
+      Since $f$ is an $\laia$-embedding, this means that
+      \begin{equation*}
+        \inter[L] \models (f(I) \before f(J)) \lor (f(I) \meets f(J)) \lor (f(I) \overlaps f(J))
+                                              \lor (f(I) \starts f(J)) \lor (f(I) \contained f(J))
+      \end{equation*}
+      This gives 5 possible orderings of $a,b,c,d$ in $L$:
+      \begin{gather*}
+        a < b < c < d \qquad a < b = c = d  \qquad a < c < b < d \\
+        a = c < b < d \qquad c < a < b < d
+      \end{gather*}
+      As $b < d$ in all of these, the ordering is preserved by $\psi_{A,L}(f)$.
+  \end{itemize}
+
+  We expect $\phi_{A,L}$ and $\psi_{A,L}$ to be inverses, which is confirmed by the following:
   \begin{itemize}
     \item Pick  any $f : \points[A] \to L$ and $[(n,I)] \in \points[A]$, then
       \begin{align*}
@@ -489,21 +617,166 @@ it into something we do not want.
   % The above map is "canonical" so it should be natural in A and L.
 \end{proof}
 
-{\color{blue} TODO add example of this:
-
-Notice that
+In order to get a bit more familiar with these constructions, it can be beneficial to see why
+$\points$ is not right  adjoint to $\inter$, that is, in general
+we do not have that
 \begin{equation*}
-  \text{Hom}(\inter[L],A) \not\cong \text{Hom}(L, \points[A])
+  \aias(\inter[L],A) \cong \slos(L,\points[A])
 \end{equation*}
-Since A does not necessarily have all the intervals given by $\points[A]$, so if we have a map on
-the right, it isn't guaranteed that we have a corresponding map on the left.}
+for all strict linear orders $L$
+and interval algebras $A$. For example, consider the interval algebra $A$ given by the set
+$A = \{I, J, K\}$ with the relations between intervals $I \overlaps J, J \meets K, I \before K$.
+Applying the $\points$ construction to $A$ gives a linear order with 5 elements, as can be seen in
+\cref{fig:points_example}. We will also need the linear order $L = \{1 < 2 < 3\}$, which
+has 3 intervals, as seen in \cref{fig:inter_example}. Now, an order preserving embedding
+$f : L \to \points[A]$ simply needs to pick 3 distinct points in $\points[A]$. There are
+$\binom{5}{3} = 10$ possible ways of picking 3 distinct points out of $\points[A]$, so we see
+that $|\slos(L,\points[A])| = 10$. On the other hand, an embedding of interval algebras
+$f : \inter[L] \to A$ must pick out two intervals in $A$ which meet (the images of $(1,2)$ and
+$(2,3)$) with the constraint that the "union" of these two intervals exists in $A$. In this specific
+case, our only option is that $f((1,2)) = J$ and $f((2,3)) = K$, but there is no interval which
+is started by $J$ and finished by $K$, so there is nowhere to map $(1,3)$ to. This means that
+$\aias(\inter[L],A) = \emptyset$, so there can be no isomorphism between this and
+$\slos(L,\points[A])$.
 
-{\color{blue} TODO consider the unit and counit some more
-\begin{itemize}
-  \item counit should always be an isomorphism
-  \item show cases when unit is not an isomorphism
-\end{itemize}}
 
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}
+    \draw[dashed, color=gray, -] (0,0)     -- (0, -3);
+    \draw[dashed, color=gray, -] (3,0)     -- (3, -3);
+    \draw[dashed, color=gray, -] (2,-0.75) -- (2, -3);
+    \draw[dashed, color=gray, -] (6,-0.75) -- (6, -3);
+    \draw[dashed, color=gray, -] (10,-1.5) -- (10, -3);
+
+    \draw[thick, -] (0,0)     -- (3,0)     node[above, midway] {$I$};
+    \draw[thick, -] (2,-0.75) -- (6,-0.75) node[above, midway] {$J$};
+    \draw[thick, -] (6,-1.5)  -- (10,-1.5) node[above, midway] {$K$};
+
+    \draw[thin, -] (0,-3) -- (10,-3);
+    \node[circle,fill,inner sep=1.25pt,label=below:$\istart{I}$]            (1) at (0, -3) {};
+    \node[circle,fill,inner sep=1.25pt,label=below:$\istart{J}$]            (2) at (2, -3) {};
+    \node[circle,fill,inner sep=1.25pt,label=below:$\iend{I}$]              (3) at (3, -3) {};
+    \node[circle,fill,inner sep=1.25pt,label=below:{$\iend{J}=\istart{K}$}] (4) at (6, -3) {};
+    \node[circle,fill,inner sep=1.25pt,label=below:$\iend{K}$]              (5) at (10, -3) {};
+
+    \node (A)       at (-2, -0.75) {$A$};
+    \node (pointsA) at (-2, -3)    {$\points[A]$};
+    \draw [very thick,decorate,decoration = {brace}] (-1,-1.6) -- (-1,0.1);
+    \draw [very thick,decorate,decoration = {brace}] (-1,-3.3) -- (-1,-2.7);
+  \end{tikzpicture}
+  \caption{An example of the $\points$ construction.}
+  \label{fig:points_example}
+\end{figure}
+
+\begin{figure}[ht]
+  \centering
+  \begin{tikzpicture}
+    \draw[dashed, color=gray, -] (0,0)     -- (0, -2.5);
+    \draw[dashed, color=gray, -] (5,0)     -- (5, -2.5);
+    \draw[dashed, color=gray, -] (10,0) -- (10, -2.5);
+
+    \draw [thin,-] (0,0) -- (10,0);
+    \node[circle,fill,inner sep=1.25pt,label=above:$1$] (1) at (0,0)  {};
+    \node[circle,fill,inner sep=1.25pt,label=above:$2$] (2) at (5,0)  {};
+    \node[circle,fill,inner sep=1.25pt,label=above:$3$] (3) at (10,0) {};
+
+    \draw[thick, -] (0,-1)    -- (5,-1)     node[below, midway] {$(1,2)$};
+    \draw[thick, -] (5,-1.75) -- (10,-1.75) node[below, midway] {$(2,3)$};
+    \draw[thick, -] (0,-2.5)  -- (10,-2.5)  node[below, midway] {$(1,3)$};
+
+    \node (L)      at (-2, 0)     {$L$};
+    \node (interL) at (-2, -1.75) {$\inter[L]$};
+    \draw [very thick,decorate,decoration = {brace}] (-1,-0.3) -- (-1,0.3);
+    \draw [very thick,decorate,decoration = {brace}] (-1,-2.6) -- (-1,-0.9);
+  \end{tikzpicture}
+  \caption{An example of the $\inter$ construction}
+  \label{fig:inter_example}
+\end{figure}
+
+Given an adjunction, it is always helpful to compute the associated unit and counit natural
+transformations. In our case, the unit is a natural transformation
+$\unit{} : \id{\aias} \to \inter[\points]$
+whose component at an interval algebra $A$ is given by
+$\unit{A} = \phi_{A,\points[A]}(\id{\points[A]})$. Computing this, we get the map
+\begin{equation*}
+  \unit{A} : A \to \inter[\points[A]] \text{ sending } I \mapsto (\istart{I}, \iend{I})
+\end{equation*}
+Dually, the counit here is a natural transformation $\counit{} : \points[\inter] \to \id{\slos}$
+where each of its components is given by $\counit{L} = \psi_{\inter[L],L}(\id{\inter[L]})$.
+Fixing some $L$ and working through this construction, we get
+\begin{equation*}
+  \counit{L} : \points[\inter[L]] \to L \text{ sending }
+    \istart{(a,b)} \mapsto a \text{ and } \iend{(a,b)} \mapsto b
+\end{equation*}
+
+\begin{prop}
+The counit component at a strict linear order $L$, $\counit{L}$, is an isomorphism if and only if
+$|L| \neq 1$.
+\end{prop}
+\begin{proof}
+  First, suppose that $|L|=1$, so $L = \{a\}$. Then $\inter[L] = \emptyset$ as we do not allow empty
+  intervals and so $\points[\inter[L]] = \emptyset$ too. As such, $\counit{L}$ cannot be an
+  isomorphism.
+
+  For the converse, first notice that $\counit{L}$ is a map in $\slos$, hence it must be injective.
+  Provided that $|L| \neq 1$ then it also turns out to be surjective: fix some
+  $a \in L$, there must be at least one distinct $b \in L$. Now either $a < b$, so $(a,b)$ is a
+  valid interval over $L$ and then $\counit{L}(\istart{(a,b)}) = a$. Alternatively, $b < a$, so
+  $(b, a)$ is an interval in $\inter[L]$ and $\counit{L}(\iend{(b,a)}) = a$
+\end{proof}
+
+As for the unit, it will give us an isomorphism when our interval algebra already has all possible
+intervals. More precisely, the unit is an isomorphism when it is of the form $\inter[L]$ for some
+linear order $L$.
+
+\begin{prop}
+  The unit component at an interval algebra $A$, $\unit{A}$, is an isomorphism if and only if
+  $A$ is isomorphic to $\inter[L]$ for some $L$.
+\end{prop}
+\begin{proof}
+  First, if $\unit{A}$ is an isomorphism, then we can set $L = \points[A]$ and $A \cong \inter[L]$.
+
+  For the converse, fix some isomorphism $f : A \to \inter[L]$ for some linear order $L$. If $L$ has
+  a single element, then $\inter[L] = \emptyset = \inter[\emptyset]$, so we can always assume that
+  $|L| \neq 1$ and that $\counit{L}$ is an isomorphism. Consider the composite
+  \begin{equation*}
+    \inter[\counit{L} \circ \points[f]] \circ \unit{A} \circ f^{-1} : \inter[L] \to \inter[L]
+  \end{equation*}
+  This will send an element $(a,b) \in \inter[L]$ to
+  \begin{align*}
+    \inter[\counit{L} \circ \points[f]] \circ \unit{A} \circ f^{-1}(a,b)
+      & = \inter[\counit{L} \circ \points[f]]\left( \istart{f^{-1}(a,b)}
+                                                  , \iend{f^{-1}(a,b)}
+                                             \right) \\
+      & = \left( \counit{L} \circ \points[f] (\istart{f^{-1}(a,b)})
+               , \counit{L} \circ \points[f] (\iend{f^{-1}(a,b)})
+          \right) \\
+      & = \left( \counit{L}(\istart{(a,b)})
+               , \counit{L}(\iend{(a,b)})
+          \right) \\
+      & = (a,b)
+  \end{align*}
+  That is, the above composite is the identity map on $\inter[L]$. Since $f$ and $\counit{L}$ are
+  isomorphisms, then $\inter[\counit{L} \circ \points[f]]$ is also an isomorphism. As a result,
+  $\unit[A]$ must also be an isomorphism as desired.
+\end{proof}
+
+The condition for the unit to be an isomorphism may not be as explicit as for the counit, but it
+can still be useful. In the finite case we have
+$|\inter[L]| = \binom{|L|}{2} = \frac{|L|(|L|-1)}{2}$, which is an increasing function in $|L|$.
+Going over the first few values we then see that $|\inter[L]|$ cannot be 2,4 or 5, which means that
+any interval algebra $A$ with 2,4 or 5 elements must be missing intervals, and as such $\unit{A}$
+will be only injective, but not surjective.
+
+\begin{cor}
+  There exists an equivalence of categories between the full subcategory of strict linear orders $L$
+  with $|L| \neq 1$ and the full subcategory of interval algebras of the form $\inter[L]$.
+\end{cor}
+\begin{proof}
+  An adjunction can always be restricted to an equivalence of categories by considering the full
+  subcategories where the unit and counit are isomorphisms.
+\end{proof}
 
 {\color{blue} TODO: consider what our functors do to elementary embeddings?}
 
@@ -546,7 +819,7 @@ the right, it isn't guaranteed that we have a corresponding map on the left.}
   \begin{equation*}
     f'(x) = \begin{cases}
       (x, g(a)) & \text{ if} f^{-1}(x) = \{a\} \\
-      (x, y)    & \text{ if } f^{-1}(x) = \empty
+      (x, y)    & \text{ if } f^{-1}(x) = \emptyset
     \end{cases}
   \end{equation*}
   This preserves the ordering of $L$ as it coincides with the identity map on the first coordinate
@@ -554,23 +827,23 @@ the right, it isn't guaranteed that we have a corresponding map on the left.}
   Defining $g' : P \to L \times P$ is slightly trickier. First, we must pick some $y_{L,U} \in L$
   such that $L \leq y_{L,U} \leq U$ for all subsets $L,U \subseteq L$ such that $L < U$. Once
   we have fixed our choices, for any $x \in P$ we denote
-  $y_x =  y_{\left{f(a)\ |\ g(a) < x\right}, \left{f(a)\ |\ x < g(a)\right}}$.
+  $y_x =  y_{\left\{f(a)\ |\ g(a) < x\right\}, \left\{f(a)\ |\ x < g(a)\right\}}$.
   Finally, we define
   \begin{equation*}
     g'(x) = \begin{cases}
       (f(a), x) & \text{ if} g^{-1}(x) = \{a\} \\
-      (y_x, x)  & \text{ if } f^{-1}(x) = \empty
+      (y_x, x)  & \text{ if } f^{-1}(x) = \emptyset
     \end{cases}
   \end{equation*}
   To check this preserves the ordering of $P$, we fix two elements $x < x'$ of $P$, then:
   \begin{itemize}
     \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \{b\}$, then $a < b$, which implies that
       $f(a) < f(b)$, so $g'(x) = (f(a),x) < (f(b),x') = g'(x')$.
-    \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \empty$, then we have picked $y_x$ such that
+    \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \emptyset$, then we have picked $y_x$ such that
       $f(a) < y_x$ so $g'(x) = (f(a),x) < (y_x, x) = g'(x')$.
-    \item If $g^{-1}(x) = \empty$ and $g^{-1}(x') = \{a\}$, then we have picked $y_x$ such that
+    \item If $g^{-1}(x) = \emptyset$ and $g^{-1}(x') = \{a\}$, then we have picked $y_x$ such that
       $y_x < f(a)$ so $g'(x) = (y_x, x) < (f(a),x) = g'(x')$.
-    \item If $g^{-1}(x) = g^{-1}(x') = \empty$ then notice that $y_x \leq y_{x'}$ since
+    \item If $g^{-1}(x) = g^{-1}(x') = \emptyset$ then notice that $y_x \leq y_{x'}$ since
       either there exists some $a \in A$ such that $x < g(a) < x'$, so then
       $y_x \leq g(a) \leq y_{x'}$ or no such $a$ exists and $y_x = y_{x'}$. Thus,
       $g'(x) = (y_x,x) < (y_{x'}, x') = g'(x')$.
@@ -597,22 +870,10 @@ the right, it isn't guaranteed that we have a corresponding map on the left.}
   $b$-arity, we need to pick a truth value for all tuples of size $b$ in $M$, so there are $2^{r^b}$
   options. Hence, if we denote by $a_i$ the arity of the symbol $f_i$ and $b_i$ the arity of the
   symbol $R_i$, then the total number of possible $\lang$-structures on $M$ is finite, more
-  specifically it is $r^{m + \Sum_{i=1}^{n} r^{a_i}} 2^{\Sum_{i=1}^{l} r^{b_i}}$. Hence the set of
+  specifically it is $r^{m + \sum_{i=1}^{n} r^{a_i}} 2^{\sum_{i=1}^{l} r^{b_i}}$. Hence the set of
   possible $\lang$-structures on initial segments $\{1,\dots,r\}$ of $\N$ is countable. As every
   finite $\lang$-structure must be isomorphic to at least one of these, the class of finite
   $\lang$-structures must be essentially countable.
-
-
-  {\color{orange} TODO prove this theorem. Something like
-  \begin{itemize}
-    \item HP: Show the result for all relational, universal theories, since this is referenced in
-      the later proof.
-    \item JEP: Given two finite strict linear orders, embed them into their disjoint union with
-      the left order befored the right order
-    \item AP: Given two finite strict linear orders A and B, with C embedding into both,
-      embed A and B into their product ordered lexicographically
-    \item EC: Show the result for all finite languages, since this is referenced in the later proof.
-  \end{itemize}}
 \end{proof}
 
 \begin{thm}
@@ -919,31 +1180,9 @@ have a colimit being preserved by a left adjoint (Int(-))}
       $A \models \lexord(I,J)$ and $A \models \lexord(J,K)$. Since $\lexord$ consists of the disjunction of 6
       relational symbols, there are 36 cases which would lead to this situation. Considering each of
       these cases individually and looking up our transitivity axioms for interval algebras, we can
-      find all possible relations between $I$ and $K$, which is detailed in table
-      \ref{tab:lexord_trans}. In all of these cases, we must still have $A \models \lexord(I,K)$, so
+      find all possible relations between $I$ and $K$, which is detailed in \cref{tab:lexord_trans}.
+      In all of these cases, we must still have $A \models \lexord(I,K)$, so
       $\lexord$ is transitive.
-      \transreltable{lexord_trans}{Cases for transitivy of $\lexord$.}{
-        \llrow & \slrow \\
-        \lmrow & \smrow \\
-        \lorow & \sorow \\
-        \lsrow & \ssrow \\
-        \lFrow & \sFrow \\
-        \lDrow & \sDrow \\
-        \hline
-        \mlrow & \Flrow \\
-        \mmrow & \Fmrow \\
-        \morow & \Forow \\
-        \msrow & \Fsrow \\
-        \mFrow & \FFrow \\
-        \mDrow & \FDrow \\
-        \hline
-        \olrow & \Dlrow \\
-        \omrow & \Dmrow \\
-        \oorow & \Dorow \\
-        \osrow & \Dsrow \\
-        \oFrow & \DFrow \\
-        \oDrow & \DDrow \\
-      }
     \item \textbf{trichotomy}: Fix two intervals $I, J \in A$. First notice that
       \begin{equation*}
         A \models \lexord(J,I) \iff
@@ -954,6 +1193,29 @@ have a colimit being preserved by a left adjoint (Int(-))}
       the interval algebra relations are exhaustive, which is one of our axioms. Hence the strict
       ordering given by $\lexord$ is linear.
   \end{itemize}
+
+  \transreltable{lexord_trans}{Cases for transitivy of $\lexord$.}{
+    \llrow & \slrow \\
+    \lmrow & \smrow \\
+    \lorow & \sorow \\
+    \lsrow & \ssrow \\
+    \lFrow & \sFrow \\
+    \lDrow & \sDrow \\
+    \hline
+    \mlrow & \Flrow \\
+    \mmrow & \Fmrow \\
+    \morow & \Forow \\
+    \msrow & \Fsrow \\
+    \mFrow & \FFrow \\
+    \mDrow & \FDrow \\
+    \hline
+    \olrow & \Dlrow \\
+    \omrow & \Dmrow \\
+    \oorow & \Dorow \\
+    \osrow & \Dsrow \\
+    \oFrow & \DFrow \\
+    \oDrow & \DDrow \\
+  }
 
   Now for any finite interval algebra $A$, all strict linear orders interpretable in $A$ will be
   bounded in size by $|A^k|$ for some $k \in \N$. In particular, all such linear orders must be
