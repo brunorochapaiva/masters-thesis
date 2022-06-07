@@ -1,4 +1,3 @@
-
 \documentclass[../main.tex]{subfiles}
 
 \begin{document}
@@ -6,6 +5,382 @@
 \section{Background}%
 \label{sec:background}
 
+\subsection{Allen's Interval Algebra}%
+\label{sub:allen_interval_algebras}
+
+The concept of Allen's interval algebras was first introduced in \cite{allen83}. The main
+idea was to introduce a new system for arguing about time intervals in a qualitative way, similar
+to how humans think about time. When one relates to someone else how some events might have
+happened, it is rarely done with specific figures in mind. For example, when retelling a story
+people will convey some ordering of events' start and end times, but skipping over the details
+of the figures. Now, this might happen because the specific time frames don't add to the
+story, or even because they are not known. Regardless of the reason, it is often helpful to argue
+about time without reference to specific times. Computers however, tend to argue about time in a
+quantitative manner: saving timestamps along with logs, such that if something goes wrong, the
+order of events can be gotten; checking the system clock to tell if access tokens have expired;
+so on. The difficulties of expressing time qualitatively on a computer become even more obvious
+when working towards artificial intelligence, like in natural language processing, where the
+computer must understand the timing of events from people's informal speech or writing.
+
+Interval algebras were Allen's approach to have computers reasong about time as humans did and
+still do. This was done by treating time intervals as a primitive notion, with binary relations
+recording their ordering and level of overlap. Allen's interval algebra consists of 13 basic
+relations which allow one to describe fully how any two intervals $I$ and $J$ might relate. The
+relations and their meaning can be found on table \ref{tab:basic_relations}: relations come in
+pairs (apart from $=$) since for each relation, one can get its dual (or opposite) relation.
+If it is known that \(I < J\), then it can be immediately infered that \(J > I\). Due to this
+duality, the meaning of the opposite relations has been omitted to save space, although it can be
+got by swapping the roles of $I$ and $J$. We have also used $I-$ and $I+$ as shorthands for the
+start and end points of the interval $I$.
+
+\begin{table}[htpb]
+  \centering
+  \begin{tabular}{|l|c|c|c|}
+    \hline
+    Relation & Symbol & Dual Symbol & Meaning \\
+    \hline
+    \(I\) starts \(J\)
+             & \(I < J\)
+             & \(I > J\)
+             & \(I- < I+ < J- < J+\)\\
+    \(I\) meets \(J\)
+             & \(I\text{ m }J\)
+             & \(I\text{ M }J\)
+             & \(I- < I+ = J - < J+\)\\
+    \(I\) overlaps \(J\)
+             & \(I\text{ o }J\)
+             & \(I\text{ O }J\)
+             & \(I- < J- < I+ < J+\)\\
+    \(I\) starts \(J\)
+             & \(I\text{ s }J\)
+             & \(I\text{ S }J\)
+             & \(J- < I- < I+ < J+\)\\
+    \(I\) finishes \(J\)
+             & \(I\text{ f }J\)
+             & \(I\text{ F }J\)
+             & \(I- = J- < I+ < J+\)\\
+    \(I\) during \(J\)
+             & \(I\text{ d }J\)
+             & \(I\text{ D }J\)
+             & \(J- < I- < I+ = J+\)\\
+    \(I\) equals \(J\)
+             & \(I = J\)
+             & \(I = J\)
+             & \(I- = J- < I+ = J+\)\\
+    \hline
+  \end{tabular}
+  \caption{13 Basic Relations of Allen's Interval Algebra}
+  \label{tab:basic_relations}
+\end{table}
+
+The choice of these 13 relations has some advantages which simplify reasoning: this set of
+relations is both exhaustive and mutually-exclusive. The first means that for any two intervals
+$I$ and $J$, there exists at least one relation R  such that $I\text{ R }J$. The latter
+means there exists at most one such relation. These facts will be important when coming up
+with a first-order axiomatisation of Allen's interval algebras, so it will be helpful to keep them
+in mind going forward.
+
+Reading the "Meaning" column of table \ref{tab:basic_relations}, it seems to be the case that
+no time points are not considered as valid intervals, since $I-$ is always strictly less than
+$I+$. This is no accident, as time points can cause ambiguities and thus complicate the
+semantics of interval algebras. This disallowance can be problematic too though, since the
+concept of points in time is often used without thought in natural language. For example, the 
+phrase "I caught the ball" suggests that the act of catching the ball was instantaneous, and in a
+sense it was, at least compared to the timescales used in everyday language. On the other hand,
+the sentence "I met with them yesterday" clearly gives an interval of 24 hours when this meeting
+might have taken place. In reality, what is or is not a time point depends a lot on the
+context of the sentence: in a history lesson, it is entirely reasonable to think of days as
+points, but describe to someone the big bang and nanoseconds suddenly become long intervals of
+time. This reliance on context should evidence that interval algebras do not need the concept
+of time points and that these can be modelled by suitably intervals.
+
+\subsubsection{Basic Algorithm}%
+\label{ssub:basic_algorithm}
+
+With some of the main ideas explained, now is a good time to see the basic algorithm described in
+\cite{allen83}. It takes as input some collection of intervals and their known relations, and
+attempts to infer as many of the missing relations as possible. As mentioned
+before, time intervals are primitives in Allen's interval algebra and since every two intervals
+must be related by one of the symbols on table \ref{tab:basic_relations}, a directed graphi with
+labeled edges is a good format to store this information. In this representation the nodes of the
+graph will be the intervals in question, and the labels on each edge will be sets of symbols that
+describe the possible relations between the source and target intervals. As an example, suppose
+there are two nodes $I$ and $J$ with the edge from $I$ to $J$ labelled by "< m o": this
+means that one of $I < J$, $I\text{ m }J$ and $I\text{ o }J$ is expected to hold, although it is
+uncertain which one. This labelling takes advantage of the fact that all the basic relations
+are mutually exclusive, so the implied disjunctions in the above notation cause no ambiguities.
+Similarly, the fact that the relation symbols are exhaustive also has a consequence for this
+representation: the interval graph should be a complete directed graph, but as the 13 basic
+relations all have a dual, it is always possible to tell what the label from $I$ to $J$ should be
+by reading the label from $J$ to $I$. As a result, with some care, one can use a normal graph
+as opposed to a directed graph, allowing for some saved space.
+
+It is helpful to first define a helper function for the main algorithm: when given two relation
+symbols $r1$ and $r2$ linking three intervals, $I\ r1\ J$ and $J\ r2\ L$, it is important to tell
+what symbols can relate $I$ and $L$. This is done by looking up the relevant entry $T(r1,r2)$ of
+table \ref{tab:transitivity}. Next, given two arcs going from $I$ to $J$ and $J$ to $L$, each 
+labelled by $R1$ and $R2$, let $\textit{Constraints}(R1,R2)$ be the maximum set of relation
+symbols which could relate $I$ and $L$. The pseudocode for computing this can be found in
+algorithm \ref{alg:constraints}.
+
+\begin{table}[htpb]
+  \centering
+  \input{transitivity_table.tex}
+  \caption{Transitivity table for basic relations -- adapted from \cite{thomaswebsite}.\\
+  Given relations $I\ r1\ J$ and $J\ r2\ L$,
+  the possible relations between $I$ and $L$ will be under row $r1$ and column $r2$. Entries
+  with the word "full" should contain all relations and entries labelled "con" should contain
+  "o s f d = O S F D".}
+  \label{tab:transitivity}
+\end{table}
+
+\begin{algorithm}
+  \caption{Computing constraints given two edge labels. \cite{allen83}}\label{alg:constraints}
+  \begin{algorithmic}
+    \Function{Constraints}{R1, R2}
+    \State $C \gets \emptyset$
+    \ForAll{$r1 \in R1$}
+      \ForAll{$r2 \in R2$}
+        \State $C \gets C \cup T(r1,r2)$
+      \EndFor
+    \EndFor
+    \State \Return C
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+Finally, the pseudocode to update a temporal network with a new label for a specific edge can be
+seen in algorithm \ref{alg:main_algo}. It is assumed there exists a \textit{ToDo} queue,
+where edges whose constraints need to be updated are put. Furthermore, for
+intervals $i$ and $j$, $N(i,j)$ denotes the relations on the arc from $i$ to $j$ in the interval
+graph and $R(i,j)$ denotes the new relations on the arc from $i$ to $j$. Lastly, in simpler cases
+the \textit{Comparable} function can be taken to always return true, but as the number of
+intervals grows, it is helpful to reduce the amount of updates needed through some optimisations
+explained in chapter 5 of \cite{allen83}.
+
+\begin{algorithm}
+  \caption{Updating temporal network. \cite{allen83}}\label{alg:main_algo}
+  \begin{algorithmic}
+    \Procedure{To Add}{R(i, j)}
+      \State Add $(i,j)$ to queue \textit{ToDo}
+      \While{\textit{ToDo} is not empty}
+        \State Get next $(i,j)$ from queue \textit{ToDo}
+        \State $N(i,j) \gets R(i,j)$
+        \ForAll{nodes $k$ such that \Call{Comparable}{k, j}}
+          \State $R(k, j) \gets N(k,j) \cap \Call{Constraints}{N(k,j), R(i,j)}$
+          \If{$R(k,j) \subset N(k,j)$} %TODO check if this should be j or i
+            \State Add $(k,j)$ to \textit{ToDo}
+          \EndIf
+        \EndFor
+        \ForAll{nodes $k$ such that \Call{Comparable}{i, k}}
+          \State $R(i, k) \gets N(i,k) \cap \Call{Constraints}{R(i,j), N(j,k)}$
+          \If{$R(i,k) \subset N(i,k)$}
+            \State Add $(i,k)$ to \textit{ToDo}
+          \EndIf
+        \EndFor
+      \EndWhile
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+An interesting question of correctness comes for this algorithm. Is it possible to infer an
+erroneous labelling of edges from a satisfiable starting graph? Thankfully this is not the case,
+but this is not to say the algorithm can detect all invalid arrangements it is given. During the
+execution of the algorithm, if at any point a pair of intervals $(k,l)$ is found such
+that $R(k,l) = \empty$, then the given configuration of intervals is impossible to satisfy.
+Unfortunately, as the labellings of edges are only updated by looking at paths of length two,
+this will only find inconsistencies in three node subgraphs, so global inconsistencies might
+not be noticed. If in doubt though, after the edges have all been updated, it is possible to
+do a search for valid assignments, which will hopefully be easier than at the start.
+
+\newpage
+
+\subsection{Model Theory}%
+\label{sub:model_theory}
+
+For a proper introduction to model theory see \cite{marker02}, the focus of this section shall be
+on concepts that might not be found in an introductory course to model theory.
+
+\subsubsection{Homogenous structures and Fraïssé classes}%
+\label{ssub:homogeneous_structures_and_fraisse_classes}
+
+We work with the definition of a homogenous structure found in \cite{macpherson11} as we are
+mainly interested in the study of Fraïssé limits.
+
+\begin{defn}
+  A homogenous structure is a countable, possibly finite, relational structure (with finite
+  language $\lang$) such that, for every isomorphism $f : U \to V$ between finite substructures $U$
+  and $V$ of $M$, there is an authomorphism $f' : M \to M$ extending $f$.
+\end{defn}
+
+\begin{exmp}
+  The rational numbers viewed as a strict linear order are homogeneous. This can be seen by a
+  standard back and forth argument to extend $f$ to an automorphism on all of $\Q$. Suppose
+  we have an order preserving isomorphism $f : U \to V$ between finite substructures of $\Q$. If
+  we fix any $a \in \Q \setminus U$, we can find the elements adjacent to $a$ inside of $U$,
+  denote them $x < a < y$. Then, since $\Q$ is dense, we can find some element
+  $b \in \Q \setminus V$ such that $f(x) < b < f(y)$. With this, we can extend $f$ to
+  $f' : U \cup \{a\} \to V \cup \{b\}$ by setting $f'(a)=b$. The same argument works if
+  $a$ only has one adjacent element in $U$, one just has to remove the irrelevant inequalities.
+  By iterating this process to $f$ and its inverse, we can get the desired automorphism on all of
+  $\Q$.
+\end{exmp}
+
+\begin{exmp}
+  Non-dense linear orders with more than 2 elements are \textit{not} homogeneous. To see this,
+  fix such a linear order and pick 2  elements $x,y$ with no elements in between. Since it there
+  exist at least 3 elements, pick another $z$ in our linear order. If $x < y < z$, consider
+  the map $f : \{x,z\} \to \{x,y\}$ sending $x \mapsto x, z \mapsto y$. Because no elements lie
+  between $x$ and $y$, we cannot extend this map so that its domain is $\{x,y,z\}$. A similar
+  map works in the case that $z < x < y$.
+\end{exmp}
+
+Given a homogenous structure $M$ with language $\lang$, we denote by $\age{M}$ the class of finite
+$\lang$-structures isomorphic to a finite substructure of $M$. The age of a homogeneous structure
+$M$ satisfies some properties which allow for $M$ to be reconstructed, up to isomorphism, from
+$\age{M}$. This leads to the question of when a class of finite $\lang$-structures is the age of some
+homogeneous $\lang$-structure.
+
+\begin{defn}
+  A class $\C$ has the hereditary property (HP) if it is closed under taking substructures, so if
+  $A, B$ are $\lang$-structures, $A \in \C$ and $B \subseteq A$ then $B \in \C$ too.
+\end{defn}
+
+\begin{defn}
+  A class $\C$ has the joint embedding property (JEP) if for any $A,B \in \C$, we can find a
+  third $\lang$-structure $C \in \C$ such that $A$ and $B$ both embed into it (by maps respecting the
+  language $\lang$).
+\end{defn}
+
+\begin{defn}
+  A class $\C$ has the amalgamation property (AP) if for any span
+  $A \longleftarrow C \longrightarrow B$ with $A,B,C \in \C$, there exists some $\lang$-structure
+  $\Omega \in C$ with embeddings $A \longrightarrow \Omega \longleftarrow B$ making the
+  following diagram commute.
+  \[\begin{tikzpicture}
+    \node[minimum size=7mm] (C)              {$C$};
+    \node[minimum size=7mm] (B) [right=of C] {$B$};
+    \node[minimum size=7mm] (A) [below=of C] {$A$};
+    \node[minimum size=7mm] (O) [right=of A] {$\Omega$};
+    \draw[->] (C.east) -- (B.west);
+    \draw[->] (C.south) -- (A.north);
+    \draw[->] (B.south) -- (O.north);
+    \draw[->] (A.east) -- (O.west);
+  \end{tikzpicture}\]
+\end{defn}
+
+%\todo{talk about fields and difference between JEP and AP}
+
+\begin{defn}
+  A class $\C$ is essentially countable (EC) if, up to isomorphism, there are only countably many
+  $\lang$-structures.
+\end{defn}
+
+Given a countable relational structure $M$, it can be seen that $\age{M}$ must satisfy the HP,
+JEP and be EC. The hereditary property is satisfied because any subset of a finite set must also
+be finite, hence the substructure of an element of $\age{M}$ must itself be in $\age{M}$. As for
+the JEP, notice that we are working with a purely relational language, hence given two finite
+$\lang$-substructures of $M$, their union must also be finite and an $\lang$-substructure of $M$.
+Finally, because $\lang$ is finite, there can only be a finite number of isomorphism classes of
+$\lang$-structures with size $n \in \N$. This means the total number of isomorphism classes in
+$\age{M}$ is a countably infinite union of finite sets, which can be at most countably infinite.
+
+With the further constraint on $M$ to be a homogenous structure, it turns out that $\age{M}$ must
+also have the AP. For a proof see \cite{hodges93}.
+
+%\todo{prove that $\age{M}$ has the AP if $M$ is homogeneous}
+
+Next, we have a theorem of Fraïssé, which tells us when a class $\C$ of finite $\lang$-structures is
+the age of some homogeneous structure $M$.
+
+\begin{thm}[Fraïssé's theorem]
+  Given a class $\C$ of finite $\lang$-structures satisfying the properties HP, JEP, AP and EC, then
+  there exists some homogeneous $\lang$-structure $M$ such that $\age{M} = \C$. Furthermore, if we
+  have two such homogeneous $\lang$-structures $M$ and $N$, then necessarily $M \cong N$.
+\end{thm}
+
+A proof of this theorem can be found in \cite{hodges93}. When this structure $M$ exists, we will
+call it the Fraïssé limit of $\C$.
+
+It is important to note that the uniqueness of the Fraïssé limit only applies to homogeneous
+structures. In fact, if we consider the class of finite strict linear orders, we can see it
+coincides with not only $\age{\Q}$, but also $\age{\Z}$ and $\age{\N}$. Despite this, all three
+of these linear orders are non-isomorphic; this happens as neither $\Z$ nor $\N$ are homogeneous,
+as seen in an earlier example.
+
+\subsubsection{Stable theories}%
+\label{ssub:stable_theories}
+
+\begin{defn}
+  Let $T$ be a complete theory in a countable language. For an infinite cardinal $\kappa$, $T$ is
+  $\kappa$-stable if for every every model $M$ of $T$ and subset $A \subseteq M$ with cardinality
+  $|A| = \kappa$, then the set of complete $n$-types in $M$ over $A$,  $S_n^M(A)$, has cardinality
+  $\kappa$.
+\end{defn}
+
+If a theory $T$ is not $\kappa$-stable for any infinite cardinal $\kappa$, then it is called
+unstable. Given a model $M$, we say that $M$ is stable (resp. unstable) if the full theory of $M$
+is stable (resp. unstable).
+
+The following theorem gives us a characterisation of stability in terms of linear orders, which can
+be simpler to reason with, especially when one considers the close relation between linear orders
+and interval algebras.
+
+\begin{thm}\label{thm:stable_order_property}
+  Let $\theory$ be a complete theory in a countable language, then $\theory$ is stable if and only
+  if there exists a formula $\phi(v_1,\dots,v_n,w_1,\dots,w_n)$ and a model $M \models \theory$ with
+  a sequence $x_1,x_2,\dots \in M^n$ such that
+  \begin{equation*}
+    M \models \phi(x_i,x_j) \iff i < j
+  \end{equation*}
+\end{thm}
+\begin{proof}
+  {\color{orange} TODO plop a proof down here}
+\end{proof}
+
+\begin{exmp}
+  A linear order $L$ is stable if and only if it is finite, as a corollary of
+  \cref{thm:stable_order_property}.
+\end{exmp}
+
+\begin{exmp}
+  A complete theory is strongly minimal if for all models $M$, any definable set (with parameters)
+  $D \subseteq M$ is either finite or cofinite. This means that unstable theories cannot be
+  strongly minimal: Suppose a theory is unstable, then by compactness we may assume there exists
+  {\color{orange} TODO try showing a proof here}
+
+  We know from \cite{marker02} that the following are strongly minimal and hence stable:
+  \begin{itemize}
+    \item The theory of algebraically closed fields in characteristic $p$ in the language of rings:
+      all definable sets of an algebraically closed field $k$ are boolean combinations of zero sets
+      of polynomials in $k[x]$. Since these zero sets are either finite or all of $k$, then the
+      claim of strong minimality follows.
+    \item The theory of $\Q$-vector spaces in the language of modules: for a $\Q$-vector space $V$,
+      all definable sets $D \subseteq V$ are given by boolean combinations of formulas of the form
+      $nx = a$ where $n \in \N$, and $a \in V$. If $a$ is nonzero, such a formula can have at most
+      one solution, hence $D$ will have to be either finite or cofinite.
+  \end{itemize}
+\end{exmp}
+
+\subsubsection{NIP theories}
+\label{ssub:nip_theories}
+
+\begin{defn}
+  For a complete theory $\theory$, we say that a formula $\phi(x,y)$ has the independence property
+  if there is a model $M \models \theory$ and sequences $(a_i)_{i<\omega}$,
+  $(b_I)_{I \subseteq \omega}$ in $M$ such that
+  \begin{equation*}
+    M \models \phi(a_i,b_I) \iff i \in I
+  \end{equation*}
+\end{defn}
+
+\begin{defn}
+  a theory is IP or NIP if blah
+\end{defn}
+
+\begin{exmp}
+  All stable theories are also NIP since if 
+\end{exmp}
 
 
 \end{document}
