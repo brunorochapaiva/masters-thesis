@@ -1,8 +1,5 @@
-\documentclass[../main.tex]{subfiles}
-
-\begin{document}
-
 \section{Axiomatisation of Interval Algebras}
+\label{sec:axiomatisation}
 
 \begin{defn}
   We define the language of strict linear orders $\lslo$ as the single binary relation $\{ < \}$.
@@ -128,8 +125,10 @@ reasonable linear order
       algebra relations (along with equality) are mutually exclusive and $I = I$, no other relation
       can hold for the pair $(I,I)$. Regardless of the value of $n$, $\plt(n,n)(I,I)$ does not
       include $I = I$ as a disjunct, so $A \not\models \plt(n,n)(I,I)$ and $<$ is irreflexive.
-    \item \textbf{transitivity}: Aaaaa
-    {\color{orange} TODO Show transitivity}
+    \item \textbf{transitivity}: To show transitivity we start by fixing intervals $I,J,K \in A$ and
+      assuming that $[(n,I)] < [(m,J)]$ and $[(m,J)] < [(l,K)]$. Then there are 8 cases
+      based on the values of $n,m,k \in \{0,1\}$, all of which are considered in
+      \cref{tab:plt_trans_000} up to \cref{tab:plt_trans_111}.
     \item \textbf{trichotomy}: Fix two $I,J \in A$. To check the trichotomy condition holds, we need
       to show that for all $n,m \in \{0,1\}$ we have
       \begin{equation*}
@@ -163,14 +162,18 @@ reasonable linear order
 
 | I relation J | drawing of I and J | is I- less than J- | is I+ lt J+ | is I- lt J + | is I+ lt J - |}
 
+
+
+{\color{orange} TODO figure out whether or not to keep this.
+
 Now that this axiomatisation is justified, show that we can't remove any axioms without making
-it into something we do not want.
+it into something we do not want.}
 
-\include{03_results/plt_transitivity_tables.tex} %TODO change this from include to subfile
-
+\include{03_results/plt_transitivity_tables.tex}
 
 \newpage
 \section{A Detour Into Category Theory}
+\label{sec:adjunction}
 
 \begin{defn}
   Given a theory $\theory$ over language $\lang$, we denote by $\mods{\lang}{\theory}$ the category
@@ -664,269 +667,97 @@ will be only injective, but not surjective.
   subcategories where the unit and counit are isomorphisms.
 \end{proof}
 
-{\color{blue} TODO: consider what our functors do to elementary embeddings?}
+% {\color{blue} TODO: consider what our functors do to elementary embeddings?}
 
 \newpage
 \section{The Model Theory of Interval Algebras}
+\label{sec:model_theory}
 
-\begin{thm}
-  The class $\finslo$ of finite strict linear orders satisfies the hereditary property (HP),
-  the joint embedding property (JEP), the amalgamation property (AP) and is essentially countable
-  (EC). In other words, $\finslo$ is a Fraïssé class.
-\end{thm}
+\subsection{The Fraïssé Limit of the Finite Interval Algebras}
+
+We start by considering the class $\finaia$ of finite interval algebras. From our work in
+\cref{ssub:homogeneous_structures_and_fraisse_classes}, we know that $\finaia$ satisfies the HP,
+since $\taia$ is universal and relational. $\laia$ is also finite, so $\finaia$ must be EC.
+
+To prove that $\finaia$ has the JEP and AP, notice that $\points$ must send finite interval algebras
+to finite strict linear orders. In fact, given an interval algebra $A$, $|\points[A]| \leq 2|A|$
+since $\points[A]$ is a quotient of $A + A$. Similarly, $\inter$ must also send finite strict linear
+orders to finite interval algebras as given a strict linear order $L$,
+$|\inter[L]| = \binom{|L|}{2}$. Using this fact, we will be able to reduce the proof of these
+properties to the proof that $\finslo$ satisfies them.
+
+\begin{prop}
+  The class $\finaia$ has the joint embedding property.
+\end{prop}
 \begin{proof}
-  First we show that the class of finite models of a relational universal theory $\theory$ always
-  has the hereditary property. Fix some finite model $M \models \theory$ and a substructure
-  $N \subseteq M$. Since $M$ was finite, $N$ must also be finite. Now, suppose we have a universal
-  sentence $\phi = \forall x_1, \dots, \forall x_n, \psi(x_1,\dots,x_n)$ where $\psi$ is a
-  quantifier free formula such that $M \models \phi$. Fixing some tuple $(a_1,\dots,a_n) \in N^n$ we
-  know that $M \models \psi(a_1,\dots,a_n)$, but $N$ is a substructure of $M$ and the truth value
-  of quantifier free formulas is preserved by embeddings, so $N \models \psi(a_1,\dots,a_n)$ too.
-  As we fixed an arbitrary tuple of elements in $N$, this means that $N \models \phi$.
-  The theory $\theory$ is taken to be universal, hence all of its sentences must be preserved
-  under taking substructures, so $N \models \theory$.
-
-  Given two strict linear orders $L,P$, we can turn their disjoint union $L \sqcup P$ into a
-  strict linear order by carrying over the orderings from $L$ and $P$ and setting
-  $x < y$ for all $x \in L$ and $y \in P$. Then, the usual injections into the disjoint union
-  $f : L \to L \sqcup P$ and $g : P \to L \sqcup P$ become order preserving maps. In the case
-  that $L,P$ are both finite, so will $L \sqcup P$ be, hence the class of finite strict
-  linear orders has the joint embedding property.
-
-  Given linear orders $A,L,P$ and order embeddings $f : A \to L$, $g : A \to P$, we wish to
-  find a linear order $\Omega$ and order embeddings $f' : L \to \Omega$, $g' : P \to \Omega$ such
-  that $f' \circ f = g' \circ g$. If any of $A,L,P$ is empty, we devolve to the previous proof,
-  so we may assume that all of $A,L,P$ are non-empty. We take the product $L \times P$ and
-  order it lexicographically, such that for all $(x,y), (x',y') \in L \times P$
-  \begin{equation*}
-    (x,y) < (x',y') \iff (x < y') \lor ((x = x') \land (y < y'))
-  \end{equation*}
-  Fixing some $y \in P$ we define $f' : L \to L \times P$ by
-  \begin{equation*}
-    f'(x) = \begin{cases}
-      (x, g(a)) & \text{ if} f^{-1}(x) = \{a\} \\
-      (x, y)    & \text{ if } f^{-1}(x) = \emptyset
-    \end{cases}
-  \end{equation*}
-  This preserves the ordering of $L$ as it coincides with the identity map on the first coordinate
-  and we are ordering $L \times P$ lexicographically.
-  Defining $g' : P \to L \times P$ is slightly trickier. First, we must pick some $y_{L,U} \in L$
-  such that $L \leq y_{L,U} \leq U$ for all subsets $L,U \subseteq L$ such that $L < U$. Once
-  we have fixed our choices, for any $x \in P$ we denote
-  $y_x =  y_{\left\{f(a)\ |\ g(a) < x\right\}, \left\{f(a)\ |\ x < g(a)\right\}}$.
-  Finally, we define
-  \begin{equation*}
-    g'(x) = \begin{cases}
-      (f(a), x) & \text{ if} g^{-1}(x) = \{a\} \\
-      (y_x, x)  & \text{ if } f^{-1}(x) = \emptyset
-    \end{cases}
-  \end{equation*}
-  To check this preserves the ordering of $P$, we fix two elements $x < x'$ of $P$, then:
-  \begin{itemize}
-    \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \{b\}$, then $a < b$, which implies that
-      $f(a) < f(b)$, so $g'(x) = (f(a),x) < (f(b),x') = g'(x')$.
-    \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \emptyset$, then we have picked $y_x$ such that
-      $f(a) < y_x$ so $g'(x) = (f(a),x) < (y_x, x) = g'(x')$.
-    \item If $g^{-1}(x) = \emptyset$ and $g^{-1}(x') = \{a\}$, then we have picked $y_x$ such that
-      $y_x < f(a)$ so $g'(x) = (y_x, x) < (f(a),x) = g'(x')$.
-    \item If $g^{-1}(x) = g^{-1}(x') = \emptyset$ then notice that $y_x \leq y_{x'}$ since
-      either there exists some $a \in A$ such that $x < g(a) < x'$, so then
-      $y_x \leq g(a) \leq y_{x'}$ or no such $a$ exists and $y_x = y_{x'}$. Thus,
-      $g'(x) = (y_x,x) < (y_{x'}, x') = g'(x')$.
-  \end{itemize}
-  Now that we have the required order embeddings into $\Omega = L \times P$, we just check the
-  necessary commutativity condition:
-  \begin{equation*}
-    f' \circ f(a) = f'(f(a)) = (f(a),g(a)) = g'(g(a)) = g' \circ g(a)
-  \end{equation*}
-  In the case that $A,L,P$ are finite, then $L \times P$ will also be finite, so this
-  shows that the class of finite strict linear orders has the amalgamation property.
-
-  Finally, fix some finite language
-  \begin{equation*}
-    \lang = \{c_1, \dots, c_m, f_1, \dots, f_n, R_1, \dots, R_l \}
-  \end{equation*}
-  where the $c_i$ are constant symbols, the $f_i$ are function symbols and the $R_i$ are relation
-  symbols. We will show that the class of finite $\lang$-structures must be essentially countable.
-  First, consider the set $M = \{1,\dots,r\} \subset \N$. If we wish to turn $M$ into a
-  $\lang$-structure then we must pick interpretations for all the symbols in $\lang$. For a constant
-  symbol this consists of picking a single element, so there are $r$ possible options. For a
-  function symbol with $a$-arity, we need to pick an element of $M$ for every input tuple of $a$
-  elements of $M$, so there are $r^{r^a}$ possibilities. Similarly, for a relation symbol $R$ with
-  $b$-arity, we need to pick a truth value for all tuples of size $b$ in $M$, so there are $2^{r^b}$
-  options. Hence, if we denote by $a_i$ the arity of the symbol $f_i$ and $b_i$ the arity of the
-  symbol $R_i$, then the total number of possible $\lang$-structures on $M$ is finite, more
-  specifically it is $r^{m + \sum_{i=1}^{n} r^{a_i}} 2^{\sum_{i=1}^{l} r^{b_i}}$. Hence the set of
-  possible $\lang$-structures on initial segments $\{1,\dots,r\}$ of $\N$ is countable. As every
-  finite $\lang$-structure must be isomorphic to at least one of these, the class of finite
-  $\lang$-structures must be essentially countable.
+  Given two finite interval algebras $A$ and $B$, we use the JEP of strict
+  linear orders to get the following diagram in $\slos$
+  \[\begin{tikzcd}
+    {\points[A]} \\
+    && \Omega \\
+    {\points[B]}
+    \arrow["f", from=1-1, to=2-3]
+    \arrow["g"', from=3-1, to=2-3]
+  \end{tikzcd}\]
+  Then, applying $\inter$ and using the adjunction unit $\eta$, we get
+  % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFsyLDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzQsMSwiXFxpbnRlcltcXE9tZWdhXSJdLFswLDAsIkEiXSxbMCwyLCJCIl0sWzAsMiwiXFxpbnRlcltmXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzEsMiwiXFxpbnRlcltnXSIsMix7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzQsMSwiXFx1bml0e0J9IiwyXSxbMywwLCJcXHVuaXR7QX0iXV0=
+  \[\begin{tikzcd}
+    A && {\inter[\points[A]]} \\
+    &&&& {\inter[\Omega]} \\
+    B && {\inter[\points[B]]}
+    \arrow["{\inter[f]}", color={rgb,255:red,214;green,92;blue,92}, from=1-3, to=2-5]
+    \arrow["{\inter[g]}"', color={rgb,255:red,214;green,92;blue,92}, from=3-3, to=2-5]
+    \arrow["{\unit{B}}"', from=3-1, to=3-3]
+    \arrow["{\unit{A}}", from=1-1, to=1-3]
+  \end{tikzcd}\]
+  And the composites $\inter[f] \circ \unit{A}$ and $\inter[g] \circ \unit{B}$ along with
+  the interval algebra $\Omega$ give us the joint embedding of $A$ and $B$.
 \end{proof}
 
-\begin{thm}
-  The Fraïssé limit of $\finslo$ is $\Q$ with its usual order.
-\end{thm}
+\begin{prop}
+  The class $\finaia$ has the amalgamation property.
+\end{prop}
 \begin{proof}
-  To show this, it suffices to show that $\Q$ is homogeneous and that its age is $\finslo$.
-
-  First we show that $\Q$ is in fact homogeneous. For this, it is helpful to see how to expand the
-  domain of an order isomorphism $f : L \to P$ with $L, P \subseteq \Q$ both finite. Suppose that we
-  wish to extend the domain of $f$ to include some $a \in \Q \setminus L$. There are three cases to
-  worry about here:
-  \begin{itemize}
-    \item If $a$ is an upper bound for $L$, we find some upper bound $b$ of $P$ which is
-      not in $P$, such a $b$ must exist as $\Q$ is unbounded and $P$ is finite. Then we extend
-      $f : L \to P$ to $g : L \cup \{a\} \to P \cup \{b\}$ by sending $g(a) = b$. This remains an
-      order isomorphism since for any $x \in P$, we know that $x < a$ and $g(x) < b = g(a)$ since
-      $a$ and $b$ are both upper bounds of $L$ and $P$ respectively.
-    \item If $a$ is a lower bound for $L$, then we find a lower bound $b$ of $P$ not already in
-      $P$ and extend $f$ to $g : L \cup \{a\} \to P \cup \{b\}$ by sending $a$ to $b$ again.
-      Similarly to the upper bound case, since $a$ and $b$ are both lower bounds of the domain and
-      codomain, this remains an order isomorphism.
-    \item If $a$ is neither, then we notice that $L,P$ are finite linear orders and hence discrete.
-      This means that we may find $a_1,a_2 \in L$ such that $a_1 < a < a_2$ and for no $x \in L$ do
-      we have $a_1 < x < a_2$. Now we can find some $b \in \Q \setminus P$ such that
-      $g(a_1) < b < g(a_2)$ since $\Q$ is dense and $P$ finite. We now extend $f$ to
-      $g : L \cup \{a\} \to P \cup \{b\}$ by sending g(a) = b. This remains an order isomorphism
-      since for any $x \in L$ we have either $x \leq a_1 < a$, so
-      \begin{equation*}
-        g(x) = f(x) \leq f(a_1) = g(a_1) < b = g(a)
-      \end{equation*}
-      or we have $a < a_2 \leq x$, in which case
-      \begin{equation*}
-        g(a) = b < g(a_2) = f(a_2) \leq f(x) = g(x)
-      \end{equation*}
-  \end{itemize}
-  If we wanted to expand the codomain of $f$ in a similar way, we could just regard $f^{-1}$ as
-  an order isomorphism between finite subsets of $\Q$, extend its domain to include whichever
-  element we needed giving us a function $g$, then $g^{-1}$ would be the required extension of $f$.
-
-  Now, fix two finite suborders $L,P \subseteq \Q$
-  and suppose we have some order isomorphism $f : L \to P$. To extend $f$ to an automorphism of $\Q$
-  we start by fixing an enumeration $(a_1, a_2, \dots)$ of the elements of $\Q$ and we define
-  three sequences: $(L_1, L_2, \dots)$ and $(P_1, P_2, \dots)$ of increasing subsets of $\Q$ and
-  $(g_1, g_2, \dots)$ of bijections $g_i : L_i \to P_i$ where each $g_i$ extends its predecessors.
-  We define this sequences by induction:
-  \begin{itemize}
-    \item $k = 1$: let $L_1 = L,\ P_1 = P$ and $g_1 = f$.
-    \item $k = 2l$ for $l \in \{1, 2, \dots\}$: at even indices we focus on increasing the domain of
-      $g_i$ to all of $\Q$. If $a_l \in L_{k-1}$ then we let
-      \begin{align*}
-        L_k & = L_{k-1} \\
-        P_k & = P_{k-1} \\
-        g_k & = g_{k-1}
-      \end{align*}
-      Otherwise we extend $g_{k-1}$ to an order isomorphism
-      $h : L_{k-1} \cup \{a_l\} \to P_{k-1} \cup \{b\}$ for some $b$ chosen appropriately and let
-      \begin{align*}
-        L_k & = L_{k-1} \cup \{a_l\} \\
-        P_k & = P_{k-1} \cup \{b\} \\
-        g_k & = h
-      \end{align*}
-    \item $k = 2l + 1$ for $l \in \{1, 2, \dots\}$: at odd indices we focus on increasing the
-      codomain of $g_i$ to all of $\Q$. If $a_l \in P_{k-1}$ then we let
-      \begin{align*}
-        L_k & = L_{k-1} \\
-        P_k & = P_{k-1} \\
-        g_k & = g_{k-1}
-      \end{align*}
-      Otherwise we extend $g_{k-1}$ to an order isomorphism
-      $h : L_{k-1} \cup \{b\} \to P_{k-1} \cup \{a_l\}$ for some $b$ chosen appropriately and let
-      \begin{align*}
-        L_k & = L_{k-1} \cup \{b\} \\
-        P_k & = P_{k-1} \cup \{a_l\} \\
-        g_k & = h
-      \end{align*}
-  \end{itemize}
-  Finally, it is the case that $\Cup L_k = \Cup P_k = \Q$ since each $x \in \Q$ must appear as $a_l$
-  in our enumeration for some $l \in \{1, 2, \dots\}$. Then $x \in L_{2l}$ and $x \in P_{2l+1}$ so
-  definitely $x \in \Cup L_k$ and $x \in \Cup P_k$, so these unions must equal $\Q$. This means that
-  we now have the function $g = \Cup g_k$ which extends $f$ by construction.
-
-  To finish the proof we show that $\age{\Q} = \finslo$. Clearly $\age{\Q} \subseteq \finslo$ since
-  a suborder of a linear order must still be linear. To see that $\finslo \subseteq \age{\Q}$ we fix
-  some finite linear order $L$, then there is an order preserving isomorphism from $L$ to an initial
-  segment of $\N$. The inclusion $\N \in \Q$ means this isomorphism realises $L$ as a finite
-  suborder of $\Q$.
-\end{proof}
-
-\begin{thm}
-  The class $\finaia$ of finite interval algebras is a Fraïssé class.
-\end{thm}
-\begin{proof}
-  First, notice that $\points$ must send finite interval algebras to finite strict linear orders.
-  In fact, given an interval algebra $A$, $|\points[A]| \leq 2|A|$ since
-  $\points[A]$ is a quotient of $A + A$. Similarly, $\inter$ must also send finite strict linear
-  orders to finite interval algebras: given a strict linear order $L$, $|\inter[L]| = |L|^2$.
-
-  Next, with this in mind, we check the Fraïssé class conditions:
-  \begin{itemize}
-    \item \textbf{HP}: This follows from the fact that $\laia$ is a relational language and
-      $\taia$ is a universal theory, same as the case for strict linear orders.
-    \item \textbf{JEP}: Given two finite interval algebras $A$ and $B$, we use the JEP of strict
-      linear orders to get the following diagram in $\slos$
-      \[\begin{tikzcd}
-        {\points[A]} \\
-        && \Omega \\
-        {\points[B]}
-        \arrow["f", from=1-1, to=2-3]
-        \arrow["g"', from=3-1, to=2-3]
-      \end{tikzcd}\]
-      Then, applying $\inter$ and using the adjunction unit $\eta$, we get
-      % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFsyLDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzQsMSwiXFxpbnRlcltcXE9tZWdhXSJdLFswLDAsIkEiXSxbMCwyLCJCIl0sWzAsMiwiXFxpbnRlcltmXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzEsMiwiXFxpbnRlcltnXSIsMix7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzQsMSwiXFx1bml0e0J9IiwyXSxbMywwLCJcXHVuaXR7QX0iXV0=
-      \[\begin{tikzcd}
-        A && {\inter[\points[A]]} \\
-        &&&& {\inter[\Omega]} \\
-        B && {\inter[\points[B]]}
-        \arrow["{\inter[f]}", color={rgb,255:red,214;green,92;blue,92}, from=1-3, to=2-5]
-        \arrow["{\inter[g]}"', color={rgb,255:red,214;green,92;blue,92}, from=3-3, to=2-5]
-        \arrow["{\unit{B}}"', from=3-1, to=3-3]
-        \arrow["{\unit{A}}", from=1-1, to=1-3]
-      \end{tikzcd}\]
-      And the composites $\inter[f] \circ \unit{A}$ and $\inter[g] \circ \unit{B}$ along with
-      the interval algebra $\Omega$ give us the joint embedding of $A$ and $B$.
-    \item \textbf{AP}: Suppose we have the following diagram in $\aias$
-      % https://q.uiver.app/?q=WzAsNCxbMiwwLCJBIl0sWzIsMiwiQiJdLFswLDEsIkMiXSxbNCwxXSxbMiwwLCJmIl0sWzIsMSwiZyIsMl1d
-      \[\begin{tikzcd}
-        && A \\
-        C &&&& {} \\
-        && B
-        \arrow["f", from=2-1, to=1-3]
-        \arrow["g"', from=2-1, to=3-3]
-      \end{tikzcd}\]
-      Applying $\points$ takes us to $\slos$, at which point we can use the AP of strict linear
-      orders to get the commuting square
-      % https://q.uiver.app/?q=WzAsNCxbMiwwLCJcXHBvaW50c1tBXSJdLFsyLDIsIlxccG9pbnRzW0JdIl0sWzAsMSwiXFxwb2ludHNbQ10iXSxbNCwxLCJcXE9tZWdhIl0sWzIsMCwiXFxwb2ludHNbZl0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDEsIlxccG9pbnRzW2ddIiwyLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMCwzLCJmJyJdLFsxLDMsImcnIiwyXV0=
-      \[\begin{tikzcd}
-        && {\points[A]} \\
-        {\points[C]} &&&& \Omega \\
-        && {\points[B]}
-        \arrow["{\points[f]}", color={rgb,255:red,214;green,92;blue,92}, from=2-1, to=1-3]
-        \arrow["{\points[g]}"', color={rgb,255:red,214;green,92;blue,92}, from=2-1, to=3-3]
-        \arrow["{f'}", from=1-3, to=2-5]
-        \arrow["{g'}"', from=3-3, to=2-5]
-      \end{tikzcd}\]
-      Now going back to $\aias$ gives the commuting diagram
-      % https://q.uiver.app/?q=WzAsOSxbNCwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFs0LDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzIsMSwiXFxpbnRlcltcXHBvaW50c1tDXV0iXSxbNiwxLCJcXGludGVyW1xcT21lZ2FdIl0sWzAsMSwiQyJdLFswLDBdLFsxLDBdLFsyLDAsIkEiXSxbMiwyLCJCIl0sWzIsMCwiXFxpbnRlcltcXHBvaW50c1tmXV0iLDEseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDEsIlxcaW50ZXJbXFxwb2ludHNbZ11dIiwxLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMCwzLCJcXGludGVyW2YnXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzEsMywiXFxpbnRlcltnJ10iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs4LDEsIlxcdW5pdHtCfSIsMl0sWzcsMCwiXFx1bml0e0F9Il0sWzQsMiwiXFx1bml0e0N9IiwxXSxbNCw3LCJmIl0sWzQsOCwiZyIsMl1d
-      \[\begin{tikzcd}
-        {} & {} & A && {\inter[\points[A]]} \\
-        C && {\inter[\points[C]]} &&&& {\inter[\Omega]} \\
-        && B && {\inter[\points[B]]}
-        \arrow["{\inter[\points[f]]}"{description}, color={rgb,255:red,214;green,92;blue,92}, from=2-3, to=1-5]
-        \arrow["{\inter[\points[g]]}"{description}, color={rgb,255:red,214;green,92;blue,92}, from=2-3, to=3-5]
-        \arrow["{\inter[f']}", color={rgb,255:red,214;green,92;blue,92}, from=1-5, to=2-7]
-        \arrow["{\inter[g']}"', color={rgb,255:red,214;green,92;blue,92}, from=3-5, to=2-7]
-        \arrow["{\unit{B}}"', from=3-3, to=3-5]
-        \arrow["{\unit{A}}", from=1-3, to=1-5]
-        \arrow["{\unit{C}}"{description}, from=2-1, to=2-3]
-        \arrow["f", from=2-1, to=1-3]
-        \arrow["g"', from=2-1, to=3-3]
-      \end{tikzcd}\]
-      For the AP of the finite interval algebras, we are only interested in the outer square. The
-      necessary maps are then $\inter[f'] \circ \unit{A}$ and $\inter[g'] \circ \unit{B}$, both
-      mapping into $\inter[\Omega]$.
-    \item \textbf{EC}: Follows from the fact that $\laia$ is finite, similarly to the strict linear
-      order case.
-\end{itemize}
+  Suppose we have the following diagram in $\aias$
+  % https://q.uiver.app/?q=WzAsNCxbMiwwLCJBIl0sWzIsMiwiQiJdLFswLDEsIkMiXSxbNCwxXSxbMiwwLCJmIl0sWzIsMSwiZyIsMl1d
+  \[\begin{tikzcd}
+    && A \\
+    C &&&& {} \\
+    && B
+    \arrow["f", from=2-1, to=1-3]
+    \arrow["g"', from=2-1, to=3-3]
+  \end{tikzcd}\]
+  Applying $\points$ takes us to $\slos$, at which point we can use the AP of strict linear
+  orders to get the commuting square
+  % https://q.uiver.app/?q=WzAsNCxbMiwwLCJcXHBvaW50c1tBXSJdLFsyLDIsIlxccG9pbnRzW0JdIl0sWzAsMSwiXFxwb2ludHNbQ10iXSxbNCwxLCJcXE9tZWdhIl0sWzIsMCwiXFxwb2ludHNbZl0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDEsIlxccG9pbnRzW2ddIiwyLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMCwzLCJmJyJdLFsxLDMsImcnIiwyXV0=
+  \[\begin{tikzcd}
+    && {\points[A]} \\
+    {\points[C]} &&&& \Omega \\
+    && {\points[B]}
+    \arrow["{\points[f]}", color={rgb,255:red,214;green,92;blue,92}, from=2-1, to=1-3]
+    \arrow["{\points[g]}"', color={rgb,255:red,214;green,92;blue,92}, from=2-1, to=3-3]
+    \arrow["{f'}", from=1-3, to=2-5]
+    \arrow["{g'}"', from=3-3, to=2-5]
+  \end{tikzcd}\]
+  Now going back to $\aias$ gives the commuting diagram
+  % https://q.uiver.app/?q=WzAsOSxbNCwwLCJcXGludGVyW1xccG9pbnRzW0FdXSJdLFs0LDIsIlxcaW50ZXJbXFxwb2ludHNbQl1dIl0sWzIsMSwiXFxpbnRlcltcXHBvaW50c1tDXV0iXSxbNiwxLCJcXGludGVyW1xcT21lZ2FdIl0sWzAsMSwiQyJdLFswLDBdLFsxLDBdLFsyLDAsIkEiXSxbMiwyLCJCIl0sWzIsMCwiXFxpbnRlcltcXHBvaW50c1tmXV0iLDEseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDEsIlxcaW50ZXJbXFxwb2ludHNbZ11dIiwxLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMCwzLCJcXGludGVyW2YnXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzEsMywiXFxpbnRlcltnJ10iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs4LDEsIlxcdW5pdHtCfSIsMl0sWzcsMCwiXFx1bml0e0F9Il0sWzQsMiwiXFx1bml0e0N9IiwxXSxbNCw3LCJmIl0sWzQsOCwiZyIsMl1d
+  \[\begin{tikzcd}
+    {} & {} & A && {\inter[\points[A]]} \\
+    C && {\inter[\points[C]]} &&&& {\inter[\Omega]} \\
+    && B && {\inter[\points[B]]}
+    \arrow["{\inter[\points[f]]}"{description}, color={rgb,255:red,214;green,92;blue,92}, from=2-3, to=1-5]
+    \arrow["{\inter[\points[g]]}"{description}, color={rgb,255:red,214;green,92;blue,92}, from=2-3, to=3-5]
+    \arrow["{\inter[f']}", color={rgb,255:red,214;green,92;blue,92}, from=1-5, to=2-7]
+    \arrow["{\inter[g']}"', color={rgb,255:red,214;green,92;blue,92}, from=3-5, to=2-7]
+    \arrow["{\unit{B}}"', from=3-3, to=3-5]
+    \arrow["{\unit{A}}", from=1-3, to=1-5]
+    \arrow["{\unit{C}}"{description}, from=2-1, to=2-3]
+    \arrow["f", from=2-1, to=1-3]
+    \arrow["g"', from=2-1, to=3-3]
+  \end{tikzcd}\]
+  For the AP of the finite interval algebras, we are only interested in the outer square. The
+  necessary maps are then $\inter[f'] \circ \unit{A}$ and $\inter[g'] \circ \unit{B}$, both
+  mapping into $\inter[\Omega]$.
 \end{proof}
 
 \begin{thm}
@@ -934,102 +765,102 @@ will be only injective, but not surjective.
 \end{thm}
 \begin{proof}
   To show that the Fraïssé limit of the finite interval algebras is $\inter[\Q]$, it suffices to
-  show the following:
+  show that $\age(\inter[\Q]) = \finaia$ and that $\inter[\Q]$ is homogeneous.
+
+  To see that $\age(\inter[\Q]) = \finaia$, prove that both sides include into the other.
+  Suppose we have some finitely generated $\laia$-substructure $A \subset \inter[\Q]$. Since
+  $\taia$ is universal, $A$ must also be an interval algebra. Furthermore, since $\laia$ is
+  relational, $A$ must also be finite, so $A \in \finaia$. For the converse inclusion, consider
+  some finite interval algebra $A$, it must embed into $\inter[\points[A]]$, which in turn
+  embeds into $\inter[\Q]$ (since $\points[A]$ is finite, hence embeddable into $\Q$).
+  Restricting these composition of these embeddings onto their image in $\inter[\Q]$ then gives
+  the needed isomorphism.
+
+  As for why $\inter[\Q]$ is homogeneous, fix two $\laia$-substructures $A,B \subseteq \inter[\Q]$,
+  along with some $\laia$-isomorphism $f : A \to B$. In essence we have the following
+  diagram of interval algebras, where $i$ and $j$ are the inclusions into $\inter[\Q]$:
+  % https://q.uiver.app/?q=WzAsNCxbMCwyLCJBIl0sWzIsMiwiQiJdLFswLDAsIlxcaW50ZXJbXFxRXSJdLFsyLDAsIlxcaW50ZXJbXFxRXSJdLFswLDEsImYiXSxbMCwyLCJpIl0sWzEsMywiaiIsMl1d
+  \[\begin{tikzcd}
+    {\inter[\Q]} && {\inter[\Q]} \\
+    \\
+    A && B
+    \arrow["f", from=3-1, to=3-3]
+    \arrow["i", from=3-1, to=1-1]
+    \arrow["j"', from=3-3, to=1-3]
+  \end{tikzcd}\]
+  Applying $\inter$ to move to linear orders, we can postcompose $\points[i]$ and $\points[j]$ with
+  the counit at $\Q$ to realise $\points[A]$ and $\points[B]$ as $\lslo$-substructures of $\Q$.
+  Now, $\points[f]$ is still an isomorphism as these are preserved by functors, and using the
+  fact that $\Q$ is homogeneous, we can extend $\points[f]$ to an isomorphism $g$, giving the
+  commuting diagram
+  % https://q.uiver.app/?q=WzAsNyxbMCw0LCJcXHBvaW50c1tBXSJdLFsyLDQsIlxccG9pbnRzW0JdIl0sWzAsMiwiXFxwb2ludHNbXFxpbnRlcltcXFFdXSJdLFsyLDIsIlxccG9pbnRzW1xcaW50ZXJbXFxRXV0iXSxbMCwwLCJcXFEiXSxbMiwwLCJcXFEiXSxbMCwxXSxbMCwxLCJcXHBvaW50c1tmXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzAsMiwiXFxwb2ludHNbaV0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDQsIlxcY291bml0e1xcUX0iXSxbMyw1LCJcXGNvdW5pdHtcXFF9IiwyXSxbMSwzLCJcXHBvaW50c1tqXSIsMix7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzQsNSwiZyJdXQ==
+  \[\begin{tikzcd}
+    \Q && \Q \\
+    {} \\
+    {\points[\inter[\Q]]} && {\points[\inter[\Q]]} \\
+    \\
+    {\points[A]} && {\points[B]}
+    \arrow["{\points[f]}", color={rgb,255:red,214;green,92;blue,92}, from=5-1, to=5-3]
+    \arrow["{\points[i]}", color={rgb,255:red,214;green,92;blue,92}, from=5-1, to=3-1]
+    \arrow["{\counit{\Q}}", from=3-1, to=1-1]
+    \arrow["{\counit{\Q}}"', from=3-3, to=1-3]
+    \arrow["{\points[j]}"', color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=3-3]
+    \arrow["g", from=1-1, to=1-3]
+  \end{tikzcd}\]
+  Finally, we apply $\inter$ to bring us back to interval algebras, where we have the following
+  diagram:
+  % If modifying diagram, don't forget to add [scale cd=0.91]
+  % https://q.uiver.app/?q=WzAsMTIsWzIsNCwiXFxpbnRlcltcXHBvaW50c1tBXV0iXSxbNCw0LCJcXGludGVyW1xccG9pbnRzW0JdXSJdLFsyLDIsIlxcaW50ZXJbXFxwb2ludHNbXFxpbnRlcltcXFFdXV0iXSxbNCwyLCJcXGludGVyW1xccG9pbnRzW1xcaW50ZXJbXFxRXV1dIl0sWzIsMCwiXFxpbnRlcltcXFFdIl0sWzQsMCwiXFxpbnRlcltcXFFdIl0sWzQsNiwiQiJdLFsyLDYsIkEiXSxbNiwyLCJcXGludGVyW1xcUV0iXSxbMCwyLCJcXGludGVyW1xcUV0iXSxbMCw0LCJBIl0sWzYsNCwiQiJdLFswLDEsIlxcaW50ZXJbXFxwb2ludHNbZl1dIiwwLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMSwzLCJcXGludGVyW1xccG9pbnRzW2ldXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzAsMiwiXFxpbnRlcltcXHBvaW50c1tpXV0iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDQsIlxcaW50ZXJbXFxjb3VuaXR7XFxRfV0iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFszLDUsIlxcaW50ZXJbXFxjb3VuaXR7XFxRfV0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs0LDUsIlxcaW50ZXJbZ10iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs3LDAsIlxcdW5pdHtBfSIsMl0sWzYsMSwiXFx1bml0e0J9Il0sWzgsMywiXFx1bml0e1xcaW50ZXJbXFxRXX0iXSxbOSwyLCJcXHVuaXR7XFxpbnRlcltcXFFdfSIsMl0sWzgsNSwiXFxpZHtcXGludGVyW1xcUV19IiwyLHsiY3VydmUiOjN9XSxbOSw0LCJcXGlke1xcaW50ZXJbXFxRXX0iLDAseyJjdXJ2ZSI6LTN9XSxbNyw2LCJmIiwyXSxbMTAsOSwiaSJdLFsxMCwwLCJcXHVuaXR7QX0iLDJdLFs3LDEwLCJcXGlke0F9IiwwLHsiY3VydmUiOi0zfV0sWzExLDgsImoiLDJdLFsxMSwxLCJcXHVuaXR7Qn0iXSxbNiwxMSwiXFxpZHtCfSIsMix7ImN1cnZlIjozfV1d
+  \[\begin{tikzcd}[scale cd=0.91]
+    && {\inter[\Q]} && {\inter[\Q]} \\
+    \\
+    {\inter[\Q]} && {\inter[\points[\inter[\Q]]]} && {\inter[\points[\inter[\Q]]]} && {\inter[\Q]} \\
+    \\
+    A && {\inter[\points[A]]} && {\inter[\points[B]]} && B \\
+    \\
+    && A && B
+    \arrow["{\inter[\points[f]]}", color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=5-5]
+    \arrow["{\inter[\points[i]]}", color={rgb,255:red,214;green,92;blue,92}, from=5-5, to=3-5]
+    \arrow["{\inter[\points[i]]}"', color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=3-3]
+    \arrow["{\inter[\counit{\Q}]}"', color={rgb,255:red,214;green,92;blue,92}, from=3-3, to=1-3]
+    \arrow["{\inter[\counit{\Q}]}", color={rgb,255:red,214;green,92;blue,92}, from=3-5, to=1-5]
+    \arrow["{\inter[g]}", color={rgb,255:red,214;green,92;blue,92}, from=1-3, to=1-5]
+    \arrow["{\unit{A}}"', from=7-3, to=5-3]
+    \arrow["{\unit{B}}", from=7-5, to=5-5]
+    \arrow["{\unit{\inter[\Q]}}", from=3-7, to=3-5]
+    \arrow["{\unit{\inter[\Q]}}"', from=3-1, to=3-3]
+    \arrow["{\id{\inter[\Q]}}"', curve={height=18pt}, from=3-7, to=1-5]
+    \arrow["{\id{\inter[\Q]}}", curve={height=-18pt}, from=3-1, to=1-3]
+    \arrow["f"', from=7-3, to=7-5]
+    \arrow["i", from=5-1, to=3-1]
+    \arrow["{\unit{A}}"', from=5-1, to=5-3]
+    \arrow["{\id{A}}", curve={height=-18pt}, from=7-3, to=5-1]
+    \arrow["j"', from=5-7, to=3-7]
+    \arrow["{\unit{B}}", from=5-7, to=5-5]
+    \arrow["{\id{B}}"', curve={height=18pt}, from=7-5, to=5-7]
+  \end{tikzcd}\]
+  Although not obvious at first, the above diagram commutes, to check this we look at all the
+  "irreducible components" individually:
   \begin{itemize}
-    \item $\age{\inter[\Q]} = \finaia$: We show that both sides include into the other. First,
-      suppose we have some finitely generated $\laia$-substructure $A \subset \inter[\Q]$. Since
-      $\taia$ is universal, $A$ must also be an interval algebra. Furthermore, since $\laia$ is
-      relational, $A$ must also be finite, so $A \in \finaia$. For the converse inclusion, consider
-      some finite interval algebra $A$, it must embed into $\inter[\points[A]]$, which in turn
-      embeds into $\inter[\Q]$ (since $\points[A]$ is finite, hence embeddable into $\Q$).
-      Restricting these composition of these embeddings onto their image in $\inter[\Q]$ then gives
-      the needed isomorphism.
-    \item $\inter[\Q]$ is homogeneous: fix two $\laia$-substructures $A,B \subseteq \inter[\Q]$,
-      along with some $\laia$-isomorphism $f : A \to B$. In essence we have the following
-      diagram of interval algebras, where $i$ and $j$ are the inclusions into $\inter[\Q]$:
-      % https://q.uiver.app/?q=WzAsNCxbMCwyLCJBIl0sWzIsMiwiQiJdLFswLDAsIlxcaW50ZXJbXFxRXSJdLFsyLDAsIlxcaW50ZXJbXFxRXSJdLFswLDEsImYiXSxbMCwyLCJpIl0sWzEsMywiaiIsMl1d
-      \[\begin{tikzcd}
-        {\inter[\Q]} && {\inter[\Q]} \\
-        \\
-        A && B
-        \arrow["f", from=3-1, to=3-3]
-        \arrow["i", from=3-1, to=1-1]
-        \arrow["j"', from=3-3, to=1-3]
-      \end{tikzcd}\]
-      Applying $\inter$ to move to linear orders, we can postcompose $\points[i]$ and $\points[j]$ with
-      the counit at $\Q$ to realise $\points[A]$ and $\points[B]$ as $\lslo$-substructures of $\Q$.
-      Now, $\points[f]$ is still an isomorphism as these are preserved by functors, and using the
-      fact that $\Q$ is homogeneous, we can extend $\points[f]$ to an isomorphism $g$, giving the
-      commuting diagram
-      % https://q.uiver.app/?q=WzAsNyxbMCw0LCJcXHBvaW50c1tBXSJdLFsyLDQsIlxccG9pbnRzW0JdIl0sWzAsMiwiXFxwb2ludHNbXFxpbnRlcltcXFFdXSJdLFsyLDIsIlxccG9pbnRzW1xcaW50ZXJbXFxRXV0iXSxbMCwwLCJcXFEiXSxbMiwwLCJcXFEiXSxbMCwxXSxbMCwxLCJcXHBvaW50c1tmXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzAsMiwiXFxwb2ludHNbaV0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDQsIlxcY291bml0e1xcUX0iXSxbMyw1LCJcXGNvdW5pdHtcXFF9IiwyXSxbMSwzLCJcXHBvaW50c1tqXSIsMix7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzQsNSwiZyJdXQ==
-      \[\begin{tikzcd}
-        \Q && \Q \\
-        {} \\
-        {\points[\inter[\Q]]} && {\points[\inter[\Q]]} \\
-        \\
-        {\points[A]} && {\points[B]}
-        \arrow["{\points[f]}", color={rgb,255:red,214;green,92;blue,92}, from=5-1, to=5-3]
-        \arrow["{\points[i]}", color={rgb,255:red,214;green,92;blue,92}, from=5-1, to=3-1]
-        \arrow["{\counit{\Q}}", from=3-1, to=1-1]
-        \arrow["{\counit{\Q}}"', from=3-3, to=1-3]
-        \arrow["{\points[j]}"', color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=3-3]
-        \arrow["g", from=1-1, to=1-3]
-      \end{tikzcd}\]
-      Finally, we apply $\inter$ to bring us back to interval algebras, where we have the following
-      diagram:
-      % If modifying diagram, don't forget to add [scale cd=0.91]
-      % https://q.uiver.app/?q=WzAsMTIsWzIsNCwiXFxpbnRlcltcXHBvaW50c1tBXV0iXSxbNCw0LCJcXGludGVyW1xccG9pbnRzW0JdXSJdLFsyLDIsIlxcaW50ZXJbXFxwb2ludHNbXFxpbnRlcltcXFFdXV0iXSxbNCwyLCJcXGludGVyW1xccG9pbnRzW1xcaW50ZXJbXFxRXV1dIl0sWzIsMCwiXFxpbnRlcltcXFFdIl0sWzQsMCwiXFxpbnRlcltcXFFdIl0sWzQsNiwiQiJdLFsyLDYsIkEiXSxbNiwyLCJcXGludGVyW1xcUV0iXSxbMCwyLCJcXGludGVyW1xcUV0iXSxbMCw0LCJBIl0sWzYsNCwiQiJdLFswLDEsIlxcaW50ZXJbXFxwb2ludHNbZl1dIiwwLHsiY29sb3VyIjpbMCw2MCw2MF19LFswLDYwLDYwLDFdXSxbMSwzLCJcXGludGVyW1xccG9pbnRzW2ldXSIsMCx7ImNvbG91ciI6WzAsNjAsNjBdfSxbMCw2MCw2MCwxXV0sWzAsMiwiXFxpbnRlcltcXHBvaW50c1tpXV0iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFsyLDQsIlxcaW50ZXJbXFxjb3VuaXR7XFxRfV0iLDIseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFszLDUsIlxcaW50ZXJbXFxjb3VuaXR7XFxRfV0iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs0LDUsIlxcaW50ZXJbZ10iLDAseyJjb2xvdXIiOlswLDYwLDYwXX0sWzAsNjAsNjAsMV1dLFs3LDAsIlxcdW5pdHtBfSIsMl0sWzYsMSwiXFx1bml0e0J9Il0sWzgsMywiXFx1bml0e1xcaW50ZXJbXFxRXX0iXSxbOSwyLCJcXHVuaXR7XFxpbnRlcltcXFFdfSIsMl0sWzgsNSwiXFxpZHtcXGludGVyW1xcUV19IiwyLHsiY3VydmUiOjN9XSxbOSw0LCJcXGlke1xcaW50ZXJbXFxRXX0iLDAseyJjdXJ2ZSI6LTN9XSxbNyw2LCJmIiwyXSxbMTAsOSwiaSJdLFsxMCwwLCJcXHVuaXR7QX0iLDJdLFs3LDEwLCJcXGlke0F9IiwwLHsiY3VydmUiOi0zfV0sWzExLDgsImoiLDJdLFsxMSwxLCJcXHVuaXR7Qn0iXSxbNiwxMSwiXFxpZHtCfSIsMix7ImN1cnZlIjozfV1d
-      \[\begin{tikzcd}[scale cd=0.91]
-        && {\inter[\Q]} && {\inter[\Q]} \\
-        \\
-        {\inter[\Q]} && {\inter[\points[\inter[\Q]]]} && {\inter[\points[\inter[\Q]]]} && {\inter[\Q]} \\
-        \\
-        A && {\inter[\points[A]]} && {\inter[\points[B]]} && B \\
-        \\
-        && A && B
-        \arrow["{\inter[\points[f]]}", color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=5-5]
-        \arrow["{\inter[\points[i]]}", color={rgb,255:red,214;green,92;blue,92}, from=5-5, to=3-5]
-        \arrow["{\inter[\points[i]]}"', color={rgb,255:red,214;green,92;blue,92}, from=5-3, to=3-3]
-        \arrow["{\inter[\counit{\Q}]}"', color={rgb,255:red,214;green,92;blue,92}, from=3-3, to=1-3]
-        \arrow["{\inter[\counit{\Q}]}", color={rgb,255:red,214;green,92;blue,92}, from=3-5, to=1-5]
-        \arrow["{\inter[g]}", color={rgb,255:red,214;green,92;blue,92}, from=1-3, to=1-5]
-        \arrow["{\unit{A}}"', from=7-3, to=5-3]
-        \arrow["{\unit{B}}", from=7-5, to=5-5]
-        \arrow["{\unit{\inter[\Q]}}", from=3-7, to=3-5]
-        \arrow["{\unit{\inter[\Q]}}"', from=3-1, to=3-3]
-        \arrow["{\id{\inter[\Q]}}"', curve={height=18pt}, from=3-7, to=1-5]
-        \arrow["{\id{\inter[\Q]}}", curve={height=-18pt}, from=3-1, to=1-3]
-        \arrow["f"', from=7-3, to=7-5]
-        \arrow["i", from=5-1, to=3-1]
-        \arrow["{\unit{A}}"', from=5-1, to=5-3]
-        \arrow["{\id{A}}", curve={height=-18pt}, from=7-3, to=5-1]
-        \arrow["j"', from=5-7, to=3-7]
-        \arrow["{\unit{B}}", from=5-7, to=5-5]
-        \arrow["{\id{B}}"', curve={height=18pt}, from=7-5, to=5-7]
-      \end{tikzcd}\]
-      Although not obvious at first, the above diagram commutes, to check this we look at all the
-      "irreducible components" individually:
-      \begin{itemize}
-        \item The middle rectangle in red commutes since it already commuted for linear orders.
-        \item The top triangles commute by triangle identities of our adjunction.
-        \item The squares to the left, right and bottom of the red rectangle commute by naturality
-          of the unit.
-        \item The bottom triangles commute due to the use of the identity.
-      \end{itemize}
-      Chasing around the outside of the diagram, we see that
-      \begin{equation*}
-        \inter[g] \circ \id{\inter[\Q]} \circ i \circ \id{A} =
-          \id{\inter[\Q]} \circ j \circ \id{B} \circ f
-      \end{equation*}
-      Simplifying by removing identities shows that $\inter[g] \circ i = j \circ f$. Now, since $g$
-      was an isomorphism, so is $\inter[g]$, so we have successfully extended $f$ to an
-      automorphism of $\inter[\Q]$.
+    \item The middle rectangle in red commutes since it already commuted for linear orders.
+    \item The top triangles commute by triangle identities of our adjunction.
+    \item The squares to the left, right and bottom of the red rectangle commute by naturality
+      of the unit.
+    \item The bottom triangles commute due to the use of the identity.
   \end{itemize}
+  Chasing around the outside of the diagram, we see that
+  \begin{equation*}
+    \inter[g] \circ \id{\inter[\Q]} \circ i \circ \id{A} =
+      \id{\inter[\Q]} \circ j \circ \id{B} \circ f
+  \end{equation*}
+  Simplifying by removing identities shows that $\inter[g] \circ i = j \circ f$. Now, since $g$
+  was an isomorphism, so is $\inter[g]$, so we have successfully extended $f$ to an
+  automorphism of $\inter[\Q]$.
 \end{proof}
 
-{\color{blue} TODO Fraisse Limits can be seen as a type of colimit, check if there is anything
-interesting/noteworthy to say here -- left adjoints only preserve limits generally, but here we
-have a colimit being preserved by a left adjoint (Int(-))}
+% {\color{blue} TODO Fraisse Limits can be seen as a type of colimit, check if there is anything
+% interesting/noteworthy to say here -- left adjoints only preserve limits generally, but here we
+% have a colimit being preserved by a left adjoint (Int(-))}
 % Fraisse Limits can be seen as a type of colimit, look into this?
 % It's interesting that this colimit is preserved by a right adjoint, namely Int(-)
 % WARNING: Not sure if the following makes any sense, I am quite tired -- I suspect my reasoning is
@@ -1041,7 +872,7 @@ have a colimit being preserved by a left adjoint (Int(-))}
 % Int(Pts(D(-))), and since Ints(Pts(D(-))) is naturally isomorphic to D(-), the colimit of
 % Int(Pts(D(-))) must also be isomorphic to the colimit of D(-)
 
-% ------ Stability theory
+\subsection*{The Classification theory of Interval Agebras}
 
 \begin{thm}
   An interval algebra $A$ is stable if and only if it is finite.
@@ -1112,35 +943,11 @@ have a colimit being preserved by a left adjoint (Int(-))}
 \end{proof}
 
 \begin{thm}
-  If a model M is interpretable in an NIP model, then M must also be NIP
+  For any linear order $L$, the interval algebra $\inter[L]$ is NIP.
 \end{thm}
 \begin{proof}
-  {\color{orange} Prove the contrapositive (if M is IP, then anything M is interpretable in is IP)
-  If M is interpretable in $N^k$, and there is a formula $\phi$ which has the IP in M,
-  then viewing this formula as a formula over $N$ implies that $N$ is also IP.}
 \end{proof}
 
-\begin{cor}
-  Given an NIP linear order $L$, the interval algebra $\inter[L]$ is also NIP.
-\end{cor}
-\begin{proof}
-  {\color{orange} TODO Prove this.
-
-  $\inter[L]$ is interpretable in $L$ by its construction.}
-\end{proof}
-
-\begin{thm}
-  Given an linear order $L$ with no upper bound (or no lower bound), $L$ is an NIP model if and only
-  if $\inter[L]$ is an NIP model.
-\end{thm}
-\begin{proof}
-  {\color{orange} TODO Prove this.
-
-  The left to right implication holds by the previous corollary.
-  For the right to left implication, we notice that we can interpret the linear order $L$ in
-  $\inter[L]$ as it has no upper bound (use a construction similar to Points where we only consider
-  the end points of an interval -- the lower bound analogue follows from the start point
-  construction).}
-\end{proof}
-
-\end{document}
+\begin{exmp}
+  Construct an interval algebra with the IP.
+\end{exmp}

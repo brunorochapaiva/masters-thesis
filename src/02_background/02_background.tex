@@ -1,7 +1,3 @@
-\documentclass[../main.tex]{subfiles}
-
-\begin{document}
-
 \section{Background}%
 \label{sec:background}
 
@@ -84,7 +80,7 @@ Reading the "Meaning" column of table \ref{tab:basic_relations}, it seems to be 
 no time points are not considered as valid intervals, since $I-$ is always strictly less than
 $I+$. This is no accident, as time points can cause ambiguities and thus complicate the
 semantics of interval algebras. This disallowance can be problematic too though, since the
-concept of points in time is often used without thought in natural language. For example, the 
+concept of points in time is often used without thought in natural language. For example, the
 phrase "I caught the ball" suggests that the act of catching the ball was instantaneous, and in a
 sense it was, at least compared to the timescales used in everyday language. On the other hand,
 the sentence "I met with them yesterday" clearly gives an interval of 24 hours when this meeting
@@ -118,14 +114,14 @@ as opposed to a directed graph, allowing for some saved space.
 It is helpful to first define a helper function for the main algorithm: when given two relation
 symbols $r1$ and $r2$ linking three intervals, $I\ r1\ J$ and $J\ r2\ L$, it is important to tell
 what symbols can relate $I$ and $L$. This is done by looking up the relevant entry $T(r1,r2)$ of
-table \ref{tab:transitivity}. Next, given two arcs going from $I$ to $J$ and $J$ to $L$, each 
+table \ref{tab:transitivity}. Next, given two arcs going from $I$ to $J$ and $J$ to $L$, each
 labelled by $R1$ and $R2$, let $\textit{Constraints}(R1,R2)$ be the maximum set of relation
 symbols which could relate $I$ and $L$. The pseudocode for computing this can be found in
 algorithm \ref{alg:constraints}.
 
 \begin{table}[htpb]
   \centering
-  \input{transitivity_table.tex}
+  \input{02_background/transitivity_table.tex}
   \caption{Transitivity table for basic relations -- adapted from \cite{thomaswebsite}.\\
   Given relations $I\ r1\ J$ and $J\ r2\ L$,
   the possible relations between $I$ and $L$ will be under row $r1$ and column $r2$. Entries
@@ -198,8 +194,25 @@ do a search for valid assignments, which will hopefully be easier than at the st
 \subsection{Model Theory}%
 \label{sub:model_theory}
 
-For a proper introduction to model theory see \cite{marker02}, the focus of this section shall be
-on concepts that might not be found in an introductory course to model theory.
+We assume some familiarity with the basics of model theory, for which we recommend \cite{marker02}.
+In this section we will focus mainly on the definitions needed to understand the work done in
+\cref{sec:model_theory}.
+
+First we introduce the idea of homogeneous structures, and how to construct examples of these
+using Fraïssé limits. These structures will be characterised by their ability to extend isomorphisms
+between substructures to automorphisms. As a result, homgeneous structures can have very interesting
+automorphism groups and their study helps link model theory, group theory and combinatorics. For a
+thorough survey of the area see \cite{macpherson11}.
+
+Then we will cover some important classes of theories arising from classification theory, namely we
+will introduce stable theories and one of their possible generalisations, NIP theories. The advent
+of classification theory came with Morley's Categoricity Theorem, which related the number of
+non-isomorphic models of different cardinalities for countable complete theories, often called the
+spectrum of the theory. The concept of stable theories arose to study these spectra, offering a very
+definitive answer through the use of tools like forking and dividing. NIP theories generalise the
+class of stable theories to include important examples like linear orders and geometric examples
+like algebraically closed valued fields \cite{acvf-NIP} or the real exponential field
+\cite{steinhorn1999}.
 
 \subsubsection{Homogenous structures and Fraïssé classes}%
 \label{ssub:homogeneous_structures_and_fraisse_classes}
@@ -213,33 +226,135 @@ mainly interested in the study of Fraïssé limits.
   and $V$ of $M$, there is an authomorphism $f' : M \to M$ extending $f$.
 \end{defn}
 
-\begin{exmp}
-  The rational numbers viewed as a strict linear order are homogeneous. This can be seen by a
-  standard back and forth argument to extend $f$ to an automorphism on all of $\Q$. Suppose
-  we have an order preserving isomorphism $f : U \to V$ between finite substructures of $\Q$. If
-  we fix any $a \in \Q \setminus U$, we can find the elements adjacent to $a$ inside of $U$,
-  denote them $x < a < y$. Then, since $\Q$ is dense, we can find some element
-  $b \in \Q \setminus V$ such that $f(x) < b < f(y)$. With this, we can extend $f$ to
-  $f' : U \cup \{a\} \to V \cup \{b\}$ by setting $f'(a)=b$. The same argument works if
-  $a$ only has one adjacent element in $U$, one just has to remove the irrelevant inequalities.
-  By iterating this process to $f$ and its inverse, we can get the desired automorphism on all of
-  $\Q$.
-\end{exmp}
+The simplest example of a homogeneous structure comes from the rationals viewed as a linear
+order.
 
-\begin{exmp}
-  Non-dense linear orders with more than 2 elements are \textit{not} homogeneous. To see this,
-  fix such a linear order and pick 2  elements $x,y$ with no elements in between. Since it there
-  exist at least 3 elements, pick another $z$ in our linear order. If $x < y < z$, consider
-  the map $f : \{x,z\} \to \{x,y\}$ sending $x \mapsto x, z \mapsto y$. Because no elements lie
-  between $x$ and $y$, we cannot extend this map so that its domain is $\{x,y,z\}$. A similar
-  map works in the case that $z < x < y$.
-\end{exmp}
+\begin{prop}
+  The strict linear order $(\Q,<)$ is homogeneous.
+\end{prop}
+\begin{proof}
+  First we see how to expand the
+  domain of an order isomorphism $f : L \to P$ with $L, P \subseteq \Q$ both finite. Suppose that we
+  wish to extend the domain of $f$ to include some $a \in \Q \setminus L$. There are three cases to
+  worry about here:
+  \begin{itemize}
+    \item If $a$ is an upper bound for $L$, we find some upper bound $b$ of $P$ which is
+      not in $P$, such a $b$ must exist as $\Q$ is unbounded and $P$ is finite. Then we extend
+      $f : L \to P$ to $g : L \cup \{a\} \to P \cup \{b\}$ by sending $g(a) = b$. This remains an
+      order isomorphism since for any $x \in P$, we know that $x < a$ and $g(x) < b = g(a)$ since
+      $a$ and $b$ are both upper bounds of $L$ and $P$ respectively.
+    \item If $a$ is a lower bound for $L$, then we find a lower bound $b$ of $P$ not already in
+      $P$ and extend $f$ to $g : L \cup \{a\} \to P \cup \{b\}$ by sending $a$ to $b$ again.
+      Similarly to the upper bound case, since $a$ and $b$ are both lower bounds of the domain and
+      codomain, this remains an order isomorphism.
+    \item If $a$ is neither, then we notice that $L,P$ are finite linear orders and hence discrete.
+      This means that we may find $a_1,a_2 \in L$ such that $a_1 < a < a_2$ and for no $x \in L$ do
+      we have $a_1 < x < a_2$. Now we can find some $b \in \Q \setminus P$ such that
+      $g(a_1) < b < g(a_2)$ since $\Q$ is dense and $P$ finite. We now extend $f$ to
+      $g : L \cup \{a\} \to P \cup \{b\}$ by sending g(a) = b. This remains an order isomorphism
+      since for any $x \in L$ we have either $x \leq a_1 < a$, so
+      \begin{equation*}
+        g(x) = f(x) \leq f(a_1) = g(a_1) < b = g(a)
+      \end{equation*}
+      or we have $a < a_2 \leq x$, in which case
+      \begin{equation*}
+        g(a) = b < g(a_2) = f(a_2) \leq f(x) = g(x)
+      \end{equation*}
+  \end{itemize}
+  If we wanted to expand the codomain of $f$ in a similar way, we could just regard $f^{-1}$ as
+  an order isomorphism between finite subsets of $\Q$, extend its domain to include whichever
+  element we needed giving us a function $g$, then $g^{-1}$ would be the required extension of $f$.
 
-Given a homogenous structure $M$ with language $\lang$, we denote by $\age{M}$ the class of finite
-$\lang$-structures isomorphic to a finite substructure of $M$. The age of a homogeneous structure
-$M$ satisfies some properties which allow for $M$ to be reconstructed, up to isomorphism, from
-$\age{M}$. This leads to the question of when a class of finite $\lang$-structures is the age of some
-homogeneous $\lang$-structure.
+  Now, fix two finite suborders $L,P \subseteq \Q$
+  and suppose we have some order isomorphism $f : L \to P$. To extend $f$ to an automorphism of $\Q$
+  we start by fixing an enumeration $(a_1, a_2, \dots)$ of the elements of $\Q$ and we define
+  three sequences: $(L_1, L_2, \dots)$ and $(P_1, P_2, \dots)$ of increasing subsets of $\Q$ and
+  $(g_1, g_2, \dots)$ of bijections $g_i : L_i \to P_i$ where each $g_i$ extends its predecessors.
+  We define this sequences by induction:
+  \begin{itemize}
+    \item $k = 1$: let $L_1 = L,\ P_1 = P$ and $g_1 = f$.
+    \item $k = 2l$ for $l \in \{1, 2, \dots\}$: at even indices we focus on increasing the domain of
+      $g_i$ to all of $\Q$. If $a_l \in L_{k-1}$ then we let
+      \begin{align*}
+        L_k & = L_{k-1} \\
+        P_k & = P_{k-1} \\
+        g_k & = g_{k-1}
+      \end{align*}
+      Otherwise we extend $g_{k-1}$ to an order isomorphism
+      $h : L_{k-1} \cup \{a_l\} \to P_{k-1} \cup \{b\}$ for some $b$ chosen appropriately and let
+      \begin{align*}
+        L_k & = L_{k-1} \cup \{a_l\} \\
+        P_k & = P_{k-1} \cup \{b\} \\
+        g_k & = h
+      \end{align*}
+    \item $k = 2l + 1$ for $l \in \{1, 2, \dots\}$: at odd indices we focus on increasing the
+      codomain of $g_i$ to all of $\Q$. If $a_l \in P_{k-1}$ then we let
+      \begin{align*}
+        L_k & = L_{k-1} \\
+        P_k & = P_{k-1} \\
+        g_k & = g_{k-1}
+      \end{align*}
+      Otherwise we extend $g_{k-1}$ to an order isomorphism
+      $h : L_{k-1} \cup \{b\} \to P_{k-1} \cup \{a_l\}$ for some $b$ chosen appropriately and let
+      \begin{align*}
+        L_k & = L_{k-1} \cup \{b\} \\
+        P_k & = P_{k-1} \cup \{a_l\} \\
+        g_k & = h
+      \end{align*}
+  \end{itemize}
+  Finally, it is the case that $\Cup L_k = \Cup P_k = \Q$ since each $x \in \Q$ must appear as $a_l$
+  in our enumeration for some $l \in \{1, 2, \dots\}$. Then $x \in L_{2l}$ and $x \in P_{2l+1}$ so
+  definitely $x \in \Cup L_k$ and $x \in \Cup P_k$, so these unions must equal $\Q$. This means that
+  we now have the function $g = \Cup g_k$ which extends $f$ by construction.
+\end{proof}
+
+The main bulk of the work above comes from the density of $\Q$, in fact, non dense linear orders are
+only homogeneous in the trivial case.
+
+\begin{prop}
+  A non-dense strict linear order $L$ with more than one element is not homogeneous.
+\end{prop}
+\begin{proof}
+  If the linear order is $\{x < y\}$ then the map partial isomorphism
+  $x \mapsto y$ cannot be extended further.
+
+  If the linear order has more than 3 elements, we can find either find $x < y < z$ or
+  $z < x < y$ where $x$ and $y$ have no elements inbetween (as the order is not dense). In the first
+  case, the partial order isomorphism
+  \begin{equation*}
+    f : \{x,z\} \to \{x,y\} \text{ sending } x \mapsto x \text{ and } z \mapsto y.
+  \end{equation*}
+  cannot be extended since there is no $w$ such that $f(x) = x < w < y = f(z)$, so $y$ cannot be
+  added to the domain. By a similar argument, the following map handles the second case
+  \begin{equation*}
+    f : \{y,z\} \to \{x,y\} \text{ sending } y \mapsto y \text{ and } z \mapsto x.
+  \end{equation*}
+\end{proof}
+
+\begin{cor}
+  $\N$ and $\Z$ are not homogeneous.
+\end{cor}
+
+
+% Given a relational structure $M$ with language $\lang$, we denote by $\age(M)$ the class of finite
+% $\lang$-structures isomorphic to a finite substructure of $M$. The age of a homogeneous structure
+% $M$ satisfies some properties allowing $M$ to be reconstructed, up to isomorphism, from
+% $\age(M)$. This leads to the question of when a class of finite $\lang$-structures is the age of some
+% homogeneous $\lang$-structure.
+
+% Given a countable relational structure $M$, it can be seen that $\age(M)$ must satisfy the HP,
+% JEP and be EC. The hereditary property is satisfied because any subset of a finite set must also
+% be finite, hence the substructure of an element of $\age(M)$ must itself be in $\age(M)$. As for
+% the JEP, notice that we are working with a purely relational language, hence given two finite
+% $\lang$-substructures of $M$, their union must also be finite and an $\lang$-substructure of $M$.
+% Finally, because $\lang$ is finite, there can only be a finite number of isomorphism classes of
+% $\lang$-structures with size $n \in \N$. This means the total number of isomorphism classes in
+% $\age(M)$ is a countably infinite union of finite sets, which can be at most countably infinite.
+
+Now, it would be interesting to see how to build homogeneous models of a theory. Towards this goal,
+we will consider the class of finite $\lang$-structures which embed into a relational structure $M$.
+This will be called the age of the structure $M$, denoted $\age(M)$. In general, the age of any
+countable relational structure will satisfy the following three properties.
 
 \begin{defn}
   A class $\C$ has the hereditary property (HP) if it is closed under taking substructures, so if
@@ -251,6 +366,16 @@ homogeneous $\lang$-structure.
   third $\lang$-structure $C \in \C$ such that $A$ and $B$ both embed into it (by maps respecting the
   language $\lang$).
 \end{defn}
+
+\begin{defn}
+  A class $\C$ is essentially countable (EC) if, up to isomorphism, there are only countably many
+  $\lang$-structures.
+\end{defn}
+
+Given a class $\C$ satisfying the above three properties, then one may construct a countable model
+$M$ such that $\age(M) = \C$ by enumerating all the isomorphism classes in $\C$ and gluing all of
+these in order using the JEP. Suppose that $M$ is homogeneous though, then we can say something
+further about its age, namely it will satisfy the following.
 
 \begin{defn}
   A class $\C$ has the amalgamation property (AP) if for any span
@@ -269,50 +394,176 @@ homogeneous $\lang$-structure.
   \end{tikzpicture}\]
 \end{defn}
 
-%\todo{talk about fields and difference between JEP and AP}
-
-\begin{defn}
-  A class $\C$ is essentially countable (EC) if, up to isomorphism, there are only countably many
-  $\lang$-structures.
-\end{defn}
-
-Given a countable relational structure $M$, it can be seen that $\age{M}$ must satisfy the HP,
-JEP and be EC. The hereditary property is satisfied because any subset of a finite set must also
-be finite, hence the substructure of an element of $\age{M}$ must itself be in $\age{M}$. As for
-the JEP, notice that we are working with a purely relational language, hence given two finite
-$\lang$-substructures of $M$, their union must also be finite and an $\lang$-substructure of $M$.
-Finally, because $\lang$ is finite, there can only be a finite number of isomorphism classes of
-$\lang$-structures with size $n \in \N$. This means the total number of isomorphism classes in
-$\age{M}$ is a countably infinite union of finite sets, which can be at most countably infinite.
-
-With the further constraint on $M$ to be a homogenous structure, it turns out that $\age{M}$ must
-also have the AP. For a proof see \cite{hodges93}.
-
-%\todo{prove that $\age{M}$ has the AP if $M$ is homogeneous}
-
-Next, we have a theorem of Fraïssé, which tells us when a class $\C$ of finite $\lang$-structures is
-the age of some homogeneous structure $M$.
+Considering again a class of models $\C$ satisfying the HP, EC, and JEP, suppose that we assume that
+$\C$ also has the AP. Then a theorem of Fraïssét tells us that gluing all of $\C$ will give us a
+homogeneous model $M$ with age $\C$.
 
 \begin{thm}[Fraïssé's theorem]
   Given a class $\C$ of finite $\lang$-structures satisfying the properties HP, JEP, AP and EC, then
-  there exists some homogeneous $\lang$-structure $M$ such that $\age{M} = \C$. Furthermore, if we
+  there exists some homogeneous $\lang$-structure $M$ such that $\age(M) = \C$. Furthermore, if we
   have two such homogeneous $\lang$-structures $M$ and $N$, then necessarily $M \cong N$.
 \end{thm}
 
-A proof of this theorem can be found in \cite{hodges93}. When this structure $M$ exists, we will
-call it the Fraïssé limit of $\C$.
+A proof of this, along with proofs that $\age(M)$ satisfies the relevant properties can be found in
+\cite{hodges93}. When the above structure $M$ exists for a class $\C$, then we call $M$ the Fraïssé
+limit of $\C$.
 
-It is important to note that the uniqueness of the Fraïssé limit only applies to homogeneous
+Note that the uniqueness condition of the Fraïssé limit only applies to homogeneous
 structures. In fact, if we consider the class of finite strict linear orders, we can see it
-coincides with not only $\age{\Q}$, but also $\age{\Z}$ and $\age{\N}$. Despite this, all three
-of these linear orders are non-isomorphic; this happens as neither $\Z$ nor $\N$ are homogeneous,
+coincides with $\age(\Q)$, $\age(\Z)$ and also $\age(\N)$. It is certainly true that neither of
+these linear orders are isomorphic. This happens as neither $\Z$ nor $\N$ are homogeneous,
 as seen in an earlier example.
+
+To exemplify this, we will consider the class of finite strict linear orders $\finslo$ and attempt
+to compute its Fraïssé limit. First, to see that this limit exists, we need to check that $\finslo$
+satisfies the 4 properties needed to apply Fraïssé's theorem.
+
+First we prove some general results about the HP and EC which we will use later.
+
+\begin{prop}
+  Given a relational, universal theory $\theory$, the class of finite models of $\theory$ satisfies
+  the hereditary property.
+\end{prop}
+\begin{proof}
+  Fix some finite model $M \models \theory$ and a substructure
+  $N \subseteq M$. Since $M$ was finite, $N$ must also be finite. Now, suppose we have a universal
+  sentence
+  \begin{equation*}
+    \phi = \forall x_1, \dots, \forall x_n, \psi(x_1,\dots,x_n)
+  \end{equation*}
+  where $\psi$ is a quantifier free formula such that $M \models \phi$. Fixing some tuple $(a_1,\dots,a_n) \in N^n$ we
+  know that $M \models \psi(a_1,\dots,a_n)$, but $N$ is a substructure of $M$ and the truth value
+  of quantifier free formulas is preserved by embeddings, so $N \models \psi(a_1,\dots,a_n)$ too.
+  As we fixed an arbitrary tuple of elements in $N$, this means that $N \models \phi$.
+  The theory $\theory$ is taken to be universal, hence all sentences $\phi \in \theory$ are
+  equivalent to some universal sentence modulo $\theory$. As said universal sentence is preserved
+  under taking substructures, so must be $\phi$. Hence if $M \models \theory$, then any substructure
+  $N \subseteq M$ will also be a model of $\theory$.
+\end{proof}
+
+\begin{cor}
+  The class $\finslo$ has the HP.
+\end{cor}
+
+\begin{prop}
+  For any finite language $\lang$, the class of all finite $\lang$-structures is essentially
+  countable.
+\end{prop}
+\begin{proof}
+  Fix some finite language
+  \begin{equation*}
+    \lang = \{c_1, \dots, c_m, f_1, \dots, f_n, R_1, \dots, R_l \}
+  \end{equation*}
+  where the $c_i$ are constant symbols, the $f_i$ are function symbols and the $R_i$ are relation
+  symbols. We will show that the class of finite $\lang$-structures must be essentially countable.
+  First, consider the set $M = \{1,\dots,r\} \subset \N$. If we wish to turn $M$ into a
+  $\lang$-structure then we must pick interpretations for all the symbols in $\lang$. For a constant
+  symbol this consists of picking a single element, so there are $r$ possible options. For a
+  function symbol with $a$-arity, we need to pick an element of $M$ for every input tuple of $a$
+  elements of $M$, so there are $r^{r^a}$ possibilities. Similarly, for a relation symbol $R$ with
+  $b$-arity, we need to pick a truth value for all tuples of size $b$ in $M$, so there are $2^{r^b}$
+  options. Hence, if we denote by $a_i$ the arity of the symbol $f_i$ and $b_i$ the arity of the
+  symbol $R_i$, then the total number of possible $\lang$-structures on $M$ is finite, more
+  specifically it is $r^{m + \sum_{i=1}^{n} r^{a_i}} 2^{\sum_{i=1}^{l} r^{b_i}}$. Hence the set of
+  possible $\lang$-structures on initial segments $\{1,\dots,r\}$ of $\N$ is countable. As every
+  finite $\lang$-structure must be isomorphic to at least one of these, the class of finite
+  $\lang$-structures must be essentially countable.
+\end{proof}
+
+\begin{cor}
+  The class $\finslo$ is EC.
+\end{cor}
+\begin{proof}
+  The class $\finslo$ is a subclass of all finite strict linear orders, hence if the latter is EC,
+  then the first must also be EC.
+\end{proof}
+
+Now we focus solely on strict linear orders.
+
+\begin{prop}
+  The class $\finslo$ has the joint embedding property.
+\end{prop}
+\begin{proof}
+  Given two strict linear orders $L,P$, we can turn their disjoint union $L \sqcup P$ into a
+  strict linear order by carrying over the orderings from $L$ and $P$ and setting
+  $x < y$ for all $x \in L$ and $y \in P$. Then, the usual injections into the disjoint union
+  $f : L \to L \sqcup P$ and $g : P \to L \sqcup P$ become order preserving maps. In the case
+  that $L,P$ are both finite, so will $L \sqcup P$ be, hence the class of finite strict
+  linear orders has the joint embedding property.
+\end{proof}
+
+\begin{prop}
+  The class $\finslo$ has the amalgamation property.
+\end{prop}
+\begin{proof}
+  Given linear orders $A,L,P$ and order embeddings $f : A \to L$, $g : A \to P$, we wish to
+  find a linear order $\Omega$ and order embeddings $f' : L \to \Omega$, $g' : P \to \Omega$ such
+  that $f' \circ f = g' \circ g$. If any of $A,L,P$ is empty, we devolve to the previous proof,
+  so we may assume that all of $A,L,P$ are non-empty. We take the product $L \times P$ and
+  order it lexicographically, such that for all $(x,y), (x',y') \in L \times P$
+  \begin{equation*}
+    (x,y) < (x',y') \iff (x < y') \lor ((x = x') \land (y < y'))
+  \end{equation*}
+  Fixing some $y \in P$ we define $f' : L \to L \times P$ by
+  \begin{equation*}
+    f'(x) = \begin{cases}
+      (x, g(a)) & \text{ if} f^{-1}(x) = \{a\} \\
+      (x, y)    & \text{ if } f^{-1}(x) = \emptyset
+    \end{cases}
+  \end{equation*}
+  This preserves the ordering of $L$ as it coincides with the identity map on the first coordinate
+  and we are ordering $L \times P$ lexicographically.
+  Defining $g' : P \to L \times P$ is slightly trickier. First, we must pick some $y_{L,U} \in L$
+  such that $L \leq y_{L,U} \leq U$ for all subsets $L,U \subseteq L$ such that $L < U$. Once
+  we have fixed our choices, for any $x \in P$ we denote
+  $y_x =  y_{\left\{f(a)\ |\ g(a) < x\right\}, \left\{f(a)\ |\ x < g(a)\right\}}$.
+  Finally, we define
+  \begin{equation*}
+    g'(x) = \begin{cases}
+      (f(a), x) & \text{ if} g^{-1}(x) = \{a\} \\
+      (y_x, x)  & \text{ if } f^{-1}(x) = \emptyset
+    \end{cases}
+  \end{equation*}
+  To check this preserves the ordering of $P$, we fix two elements $x < x'$ of $P$, then:
+  \begin{itemize}
+    \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \{b\}$, then $a < b$, which implies that
+      $f(a) < f(b)$, so $g'(x) = (f(a),x) < (f(b),x') = g'(x')$.
+    \item If $g^{-1}(x) = \{a\}$ and $g^{-1}(x') = \emptyset$, then we have picked $y_x$ such that
+      $f(a) < y_x$ so $g'(x) = (f(a),x) < (y_x, x) = g'(x')$.
+    \item If $g^{-1}(x) = \emptyset$ and $g^{-1}(x') = \{a\}$, then we have picked $y_x$ such that
+      $y_x < f(a)$ so $g'(x) = (y_x, x) < (f(a),x) = g'(x')$.
+    \item If $g^{-1}(x) = g^{-1}(x') = \emptyset$ then notice that $y_x \leq y_{x'}$ since
+      either there exists some $a \in A$ such that $x < g(a) < x'$, so then
+      $y_x \leq g(a) \leq y_{x'}$ or no such $a$ exists and $y_x = y_{x'}$. Thus,
+      $g'(x) = (y_x,x) < (y_{x'}, x') = g'(x')$.
+  \end{itemize}
+  Now that we have the required order embeddings into $\Omega = L \times P$, we just check the
+  necessary commutativity condition:
+  \begin{equation*}
+    f' \circ f(a) = f'(f(a)) = (f(a),g(a)) = g'(g(a)) = g' \circ g(a)
+  \end{equation*}
+  In the case that $A,L,P$ are finite, then $L \times P$ will also be finite, so this
+  shows that the class of finite strict linear orders has the amalgamation property.
+\end{proof}
+
+\begin{thm}
+  The Fraïssé limit of $\finslo$ is $\Q$ with its usual order.
+\end{thm}
+\begin{proof}
+  As $\finslo$ satisfies the HP, JEP, AP and is EC, then it must have a Fraïssé limit $M$. We saw
+  before that $\Q$ is homogeneous. By uniqueness of the Fraïssé limit, it suffices to show that
+  $\age(\Q) = \finslo$. Clearly $\age(\Q) \subseteq \finslo$ since
+  a suborder of a linear order must still be linear. To see that $\finslo \subseteq \age(\Q)$ we fix
+  some finite linear order $L$, then there is an order preserving isomorphism from $L$ to an initial
+  segment of $\N$. The inclusion $\N \in \Q$ means this isomorphism realises $L$ as a finite
+  suborder of $\Q$.
+\end{proof}
 
 \subsubsection{Stable theories}%
 \label{ssub:stable_theories}
 
 \begin{defn}
-  Let $T$ be a complete theory in a countable language. For an infinite cardinal $\kappa$, $T$ is
+  Let $T$ be a complete theory. For an infinite cardinal $\kappa$, $T$ is
   $\kappa$-stable if for every every model $M$ of $T$ and subset $A \subseteq M$ with cardinality
   $|A| = \kappa$, then the set of complete $n$-types in $M$ over $A$,  $S_n^M(A)$, has cardinality
   $\kappa$.
@@ -327,27 +578,27 @@ be simpler to reason with, especially when one considers the close relation betw
 and interval algebras.
 
 \begin{thm}\label{thm:stable_order_property}
-  Let $\theory$ be a complete theory in a countable language, then $\theory$ is stable if and only
-  if there exists a formula $\phi(v_1,\dots,v_n,w_1,\dots,w_n)$ and a model $M \models \theory$ with
+  Let $\theory$ be a complete theory, then $\theory$ is stable if and only
+  if there exists a formula $\phi(v_1,\dots,v_n;w_1,\dots,w_n)$ and a model $M \models \theory$ with
   a sequence $x_1,x_2,\dots \in M^n$ such that
   \begin{equation*}
-    M \models \phi(x_i,x_j) \iff i < j
+    M \models \phi(x_i;x_j) \iff i < j
   \end{equation*}
+  Such a formula is said to have the order property.
 \end{thm}
-\begin{proof}
-  {\color{orange} TODO plop a proof down here}
-\end{proof}
 
-\begin{exmp}
-  A linear order $L$ is stable if and only if it is finite, as a corollary of
-  \cref{thm:stable_order_property}.
-\end{exmp}
+The proof for this is somewhat involved, so we refer the interested reader to \cite{marker02}.
+
+\begin{cor}
+  A linear order $L$ is stable if and only if it is finite.
+\end{cor}
 
 \begin{exmp}
   A complete theory is strongly minimal if for all models $M$, any definable set (with parameters)
-  $D \subseteq M$ is either finite or cofinite. This means that unstable theories cannot be
-  strongly minimal: Suppose a theory is unstable, then by compactness we may assume there exists
-  {\color{orange} TODO try showing a proof here}
+  $D \subseteq M$ is either finite or cofinite. This turns out to be a very strong requirement,
+  meaning that strongly minimal theories must also be stable. The proof for this relies on the
+  equivalence between stability of a theory and non-existence of a formula with the strict order
+  property (which is slightly different from the order property), and so is omitted.
 
   We know from \cite{marker02} that the following are strongly minimal and hence stable:
   \begin{itemize}
@@ -366,21 +617,133 @@ and interval algebras.
 \label{ssub:nip_theories}
 
 \begin{defn}
-  For a complete theory $\theory$, we say that a formula $\phi(x,y)$ has the independence property
+  For a complete theory $\theory$, we say that a formula $\phi(x;y)$ has the independence property
   if there is a model $M \models \theory$ and sequences $(a_i)_{i<\omega}$,
   $(b_I)_{I \subseteq \omega}$ in $M$ such that
   \begin{equation*}
     M \models \phi(a_i,b_I) \iff i \in I
   \end{equation*}
+  If a formula does not have the IP, we say it has the NIP.
 \end{defn}
 
 \begin{defn}
-  a theory is IP or NIP if blah
+  A complete theory has the IP if there exists some formula with the IP. It has the NIP if all
+  formulas have the NIP.
 \end{defn}
 
+By compactness, to show that a specific formula has the IP, it suffices to consider only arbitrarily
+large finite sequences.
+
+\begin{prop}
+  For a complete theory $\theory$, a formula $\phi(x;y)$ has the IP if and only if the following
+  is satisfiable
+  \begin{equation*}
+    \theory \cup \{\phi(a_i,b_I)\ |\ i \in I \subseteq \{0,1,\dots,n\}\}
+  \end{equation*}
+  for arbitrarily large $n$ (where the $a_i$ and $b_I$ are new constant symbols).
+\end{prop}
+\begin{proof}
+  The forwards implication follows by taking the model and sequences $(a_i)_{i<\omega}$,
+  $(b_I)_{I \subseteq \omega}$ which realise the IP for $\phi(x;y)$ and discarding the
+  $a_i$ with $i > n$ and $I \nsubseteq \{0,1,\dots,n\}$.
+
+  The converse, showing that $\phi(x;y)$ has the IP amounts to showing
+  the satisfiability of
+  \begin{equation*}
+    \theory \cup \{\phi(a_i,b_I)\ |\ i \in I \subseteq \N \}
+  \end{equation*}
+  But by compactness, it suffices to show satisfiability of
+  \begin{equation*}
+    \theory \cup \{\phi(a_{i_1},b_{I_1}), \phi(a_{i_2},b_{I_2}) \dots, \phi(a_{i_m},b_{I_m})\}
+  \end{equation*}
+  where $i_k \in I_k$ for all $k$. Letting $n = \max(i_1,i_2,\dots,i_m)$ and applying our
+  hypothesis, we see this is indeed satisfiable.
+\end{proof}
+
+This means that if a theory has the NIP, then for all formulas $\phi(x;y)$ and all models $M$,
+there exists a maximum $n \in \N$ such that for all $\{a_1, \dots, a_n\} \subseteq M$, there exists
+some subset ${a_{i_1}, \dots, a_{i_m}}$ which we cannot pick out with $\phi$ by varying the
+parameter $y$.
+
+Now, it would be helpful to see both some examples and some non-examples of NIP theories. The
+following proposition helps with this.
+
+\begin{prop}
+  All stable theories have the NIP.
+\end{prop}
+\begin{proof}
+  Suppose we have a theory $\theory$ which has the IP, so the IP is realised for some formula
+  $\phi(x;y)$, a model $M \models \theory$ and elements $(a_i)_{i<\omega}$,
+  $(b_I)_{I \subseteq \omega}$. Then the formula $\psi(x,x';y,y') = \phi(x;y')$ is unstable,
+  since if we define the sequence $(c_i)_{i<\omega}$ by $c_i=(a_i,b_{\{n | n < i\}})$ then
+  \begin{equation*}
+    M \models \psi(c_i;c_j) \iff
+      M \models \phi(a_i; b_{\{n|n < j\}}) \iff
+      i \in \{n\ |\ n < j\} \iff
+      i < j
+  \end{equation*}
+  This shows that $\psi$ has the order property, so $\theory$ must be unstable.
+\end{proof}
+
+This means that all our examples of stable theories are also examples of NIP theories. However not
+all NIP theories are stable, for example all linear orders, infinite or not, are NIP. The proof of
+this requires some machinery which is not relevant to the rest of this paper, but the details
+can be found in \cite{simon15}.
+
+
 \begin{exmp}
-  All stable theories are also NIP since if 
+  The real exponential field $(\R,+,\cdot,0,1,e^x)$ has the NIP \cite{steinhorn1999}. This means
+  that for any formula $\phi(x;y)$ there exists some maximum $n$ such that
+  \begin{equation*}
+    \fulltheory(\R) \cup \{\phi(a_i,b_I)\ |\ i \in I \subseteq \{0,1,\dots,n\}\}
+  \end{equation*}
+  is satisfiable. We refer to this $n$ as the VC dimension of $\phi(x;y)$. This notion of VC
+  dimension is not only relevant in model theory, in machine learning it can be used to measure the
+  expressive power of a classification model. One interesting and often studied class of
+  classification models comes from feedforward neural networks with sigmoid activation functions. It
+  turns out that any such neural network can be expressed as a first order formula in the language
+  of exponential fields with its weights as parameters \cite{macintyre93} and as such any
+  feedforward neural network with sigmoid activation functions will have finite VC dimension.
 \end{exmp}
 
+Interestingly, by modifying the above slightly to consider the complex exponential field, we get a
+theory with the IP, which in a sense, indicates that having an NIP theory is quite a special
+occurrence, and even slight variations may give a theory the IP.
 
-\end{document}
+\begin{exmp}
+  To see why the complex exponential field $(\mathbb{C},+,\cdot,0,1,e^x)$ has the IP, we will show
+  that we can define the set of integers. For this, notice that the set $\{i,-i\}$ is defined by
+  the formula $\phi(x) = x \cdot x = 1$. Then, recall that we have
+  \begin{equation*}
+    \sin(\theta) = \frac{e^{i\theta} - e^{(-i)\theta}}{2i}
+                 = \frac{e^{(-i)\theta} - e^{i\theta}}{2(-i)}
+  \end{equation*}
+  hence we can define sine using the formula
+  \begin{equation*}
+    \psi(x,y) = \exists a, \exists b, (a \neq b) \land \phi(a) \land \phi(b) \land
+      \left(y = \frac{e^{ax} - e^{bx}}{2a}\right)
+  \end{equation*}
+  In turn, this allows us to define $2\pi \Z \subseteq \mathbb{\C}$ as the zero set of the sine
+  function. Finally, the following formula, which essentially says that as integers, $y$ divides
+  $x$, has the IP
+  \begin{equation*}
+    \varphi(x;y,\pi) = \exists z, \psi(z,0) \land \left(y \cdot \frac{z}{2\pi} = x\right)
+  \end{equation*}
+  which we show by considering arbitrarily large finite sets. Fix some $n$, then the subsets of
+  $\{1,\dots,n\}$ can be put in bijection with $\{1,\dots,n^2\}$ under some $f$. Using $p_k$
+  to refer to the $k$th prime, we let
+  \begin{equation*}
+    b_I = (p_{f(I)}, \pi)
+  \end{equation*}
+  for each $I \subseteq \{1,\dots,n\}$. Also for each $i \in \{1,\dots,n\}$ we let
+  \begin{equation*}
+    a_i = \prod_{\substack{J \subseteq \{1,\dots,n\},\\ i \in J}} p_{f(J)}
+  \end{equation*}
+  With the use of these parameters
+  \begin{equation*}
+    \C \models \varphi(a_i;b_I)
+      \iff p_{f(I)}\ | \prod_{\substack{J \subseteq \{1,\dots,n\},\\ i \in J}} p_{f(J)}
+      \iff i \in I
+  \end{equation*}
+  As this works for arbitrarily $n$, $\varphi(x;y,a)$ must have the IP.
+\end{exmp}

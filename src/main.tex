@@ -29,7 +29,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
-\usepackage{subfiles}
+%\usepackage{subfiles}
 
 % Used to scale tikz-cd diagrams properly
 \tikzcdset{scale cd/.style={every label/.append style={scale=#1},
@@ -52,7 +52,8 @@
 % Model Theory
 \newcommand{\lang}{\mathcal{L}}
 \newcommand{\theory}{\mathbb{T}}
-\newcommand{\age}[1]{\text{Age}\left(#1\right)}
+\DeclareMathOperator{\age}{Age}
+\DeclareMathOperator{\fulltheory}{Th}
 
 \newcommand{\finslo}{\textbf{FCh}}
 \newcommand{\finaia}{\textbf{FIA}}
@@ -128,9 +129,16 @@
 \maketitle %TODO add proper title
 \newpage
 
-\subfile{02_background/02_background.tex}
+%TODO add abstract
+%TODO add introduction
+%TODO add evaluation (?)
+%TODO add conclusion
+
+%TODO add references to A. Pillay's notes on model theory
+
+\input{02_background/02_background.tex}
 \newpage
-\subfile{03_results/03_results.tex}
+\input{03_results/03_results.tex}
 \newpage
 
 \bibliographystyle{unsrt} %unsrt
