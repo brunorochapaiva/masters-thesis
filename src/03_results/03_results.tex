@@ -22,8 +22,8 @@
   {\color{orange} TODO write out the axioms of interval algebras}
 \end{defn}
 
-{\color{orange} TODO show it suffices to consider relations of the form -> when showing a function is
-an embedding}
+{\color{orange} TODO show it suffices to consider relations of the form -> when showing a function
+is an embedding}
 % mention how we only need to prove the forward implication to show something is a
 % $\laia$-embedding. This is enough since the relations are mutually-exclusive and exhaustive.
 % Also it is enough to check that the relations of the form -> are preserved -- if that is the case
@@ -86,7 +86,7 @@ reasonable linear order
   Where $\peq$ assigns $\laia$-formulas with open variables $I,J$ to pairs $(n,m) \in \{0,1\}^2$
   \begin{equation*}
     \peq(n,m)(I,J) = \begin{cases}
-      I \starts J \lor I \startedby J \lor I = J \quad & \text{if } n = m = 0\\
+      I \starts J \lor I \startedby J \lor I = J \quad & \text{if } n = m = 0 \\
       I \finishes J \lor I \finishedby J \lor I = J    & \text{if } n = m = 1 \\
       I \metby J                                       & \text{if } n = 0,\ m = 1 \\
       I \meets J                                       & \text{if } n = 1,\ m = 0
@@ -98,7 +98,7 @@ reasonable linear order
 
 \begin{thm}
   Given an Allen interval algebra $A$, the interpretation of the symbol $<$ in $\points[A]$ given by
-  $(n,I) < (m,J) \iff A \models \plt(n,m)(I,J)$ is well-defined and turns $A$ into a model of
+  $[(n,I)] < [(m,J)] \iff A \models \plt(n,m)(I,J)$ is well-defined and turns $A$ into a model of
   $\tslo$.
 
   Here, $\plt$ is a function assigning $\laia$-formulas with open variables $I,J$ to pairs
@@ -116,7 +116,61 @@ reasonable linear order
   \end{equation*}
 \end{thm}
 \begin{proof}
-  {\color{orange} TODO Show that $<$ is well defined}
+  First we must check that this ordering relation on $\points[A]$ is well-defined. For this fix
+  intervals $I_1,I_2,J_1,J_2 \in A$ and $n_1,n_2,m_1,m_2 \in \{0,1\}$ and assume that
+  \begin{equation*}
+    [(n_1,I_1)] = [(n_2,I_2)] < [(m_2,J_2)] = [(m_1,J_1)]
+  \end{equation*}
+  Then we must show that indeed, $[(n_1,I_1)] < [(m_1,J_1)]$. There are 16 distinct cases which
+  we cover in \cref{tab:plt_well_defined}. Since, in each of the cases, with the possible relations
+  $I_1 \longrightarrow J_1$ found in the last column, it is definitely the case that
+  $A \models \plt(n_1,m_1)(I_1,J_1)$.
+
+  \begin{table}[ht]
+    \centering
+    \setlength\extrarowheight{5pt}
+    \begin{tabular}{|c|c|c|}
+      \hline
+      $(n_1,n_2,m_1,m_2)$ & Relation between $I_1,I_2,J_1,J_2$ & Relation between $I_1,J_1$ \\
+      \hline\hline
+      $(0,0,0,0)$ & $I_1 \aiaarrow{s=S} I_2 \aiaarrow{<moFD} J_2 \aiaarrow{s=S} I_1$ &
+        $I_1 \aiaarrow{<moFD} J_1$ \\\hline
+      $(0,0,0,1)$ & $I_1 \aiaarrow{s=S} I_2 \aiaarrow{<mosfd=OSFD} J_2 \aiaarrow{m} I_1$ &
+        $I_1 \aiaarrow{<moFD} J_1$ \\\hline
+      $(0,0,1,0)$ & $I_1 \aiaarrow{s=S} I_2 \aiaarrow{<moFD} J_2 \aiaarrow{M} I_1$ &
+        $I_1 \aiaarrow{<mosfd=OSFD} J_1$ \\\hline
+      $(0,0,1,1)$ & $I_1 \aiaarrow{s=S} I_2 \aiaarrow{<mosfd=OSFD} J_2 \aiaarrow{f=F} I_1$ &
+        $I_1 \aiaarrow{<mosfd=OSFD} J_1$ \\\hline
+      $(0,1,0,0)$ & $I_1 \aiaarrow{M} I_2 \aiaarrow{<} J_2 \aiaarrow{s=S} I_1$ &
+        $I_1 \aiaarrow{<moFD} J_1 $ \\\hline
+      $(0,1,0,1)$ & $I_1 \aiaarrow{M} I_2 \aiaarrow{<mosd} J_2 \aiaarrow{m} I_1$ &
+        $I_1 \aiaarrow{<moFD} J_1 $ \\\hline
+      $(0,1,1,0)$ & $I_1 \aiaarrow{M} I_2 \aiaarrow{<} J_2 \aiaarrow{M} I_1$ &
+        $I_1 \aiaarrow{<mosfd=OSFD} J_1$ \\\hline
+      $(0,1,1,1)$ & $I_1 \aiaarrow{M} I_2 \aiaarrow{<mosd} J_2 \aiaarrow{f=F} I_1$ &
+        $I_1 \aiaarrow{<mosfd=OSFD} J_1$ \\\hline
+      $(1,0,0,0)$ & $I_1 \aiaarrow{m} I_2 \aiaarrow{<moFD} J_2 \aiaarrow{s=S} I_1$ &
+        $I_1 \aiaarrow{<} J_1$ \\\hline
+      $(1,0,0,1)$ & $I_1 \aiaarrow{m} I_2 \aiaarrow{<mosfd=OSFD} J_2 \aiaarrow{m} I_1$ &
+        $I_1 \aiaarrow{<} J_1$ \\\hline
+      $(1,0,1,0)$ & $I_1 \aiaarrow{m} I_2 \aiaarrow{<moFD} J_2 \aiaarrow{M} I_1$ &
+        $I_1 \aiaarrow{<mosd} J_1$ \\\hline
+      $(1,0,1,1)$ & $I_1 \aiaarrow{m} I_2 \aiaarrow{<mosfd=OSFD} J_2 \aiaarrow{f=F} I_1$ &
+        $I_1 \aiaarrow{<mosd} J_1$ \\\hline
+      $(1,1,0,0)$ & $I_1 \aiaarrow{f=F} I_2 \aiaarrow{<} J_2 \aiaarrow{s=S} I_1$ &
+        $I_1 \aiaarrow{<} J_1$ \\\hline
+      $(1,1,0,1)$ & $I_1 \aiaarrow{f=F} I_2 \aiaarrow{<mosd} J_2 \aiaarrow{m} I_1$ &
+        $I_1 \aiaarrow{<} J_1$ \\\hline
+      $(1,1,1,0)$ & $I_1 \aiaarrow{f=F} I_2 \aiaarrow{<} J_2 \aiaarrow{M} I_1$ &
+        $I_1 \aiaarrow{<mosd} J_1$ \\\hline
+      $(1,1,1,1)$ & $I_1 \aiaarrow{f=F} I_2 \aiaarrow{<mosd} J_2 \aiaarrow{f=F} I_1$ &
+        $I_1 \aiaarrow{<mosd} J_1$ \\\hline
+    \end{tabular}
+    \caption{
+      All cases to check if the ordering on $\points[A]$ is well defined.
+    }
+    \label{tab:plt_well_defined}
+  \end{table}
 
   Now we know that our definition of $<$ does not depend on a choice of representative, we need
   to check whether it satisfies $\tslo$:
@@ -157,6 +211,8 @@ reasonable linear order
       which allows us to reduce to the second case above.
   \end{itemize}
 \end{proof}
+
+{\color{orange} TODO acknowledge that this is not an interpretation generally.}
 
 {\color{blue} TODO Consider adding table justifying these definitions? Something like:
 

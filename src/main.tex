@@ -14,6 +14,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 
+\usepackage{array}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amssymb}
@@ -70,8 +71,8 @@
 \newcommand{\aiaindex}{\{<,m,o,s,f,d\}}
 
 % Allen Interval Algebra Relations
-\newcommand{\aiaarrow}[1]{\overset{#1}{\longrightarrow}}
-\newcommand{\raiaarrow}[1]{\overset{#1}{\longleftarrow}}
+\newcommand{\aiaarrow}[1]{\xrightarrow{\;#1\;}}
+\newcommand{\raiaarrow}[1]{\xleftarrow{\;#1\;}}
 \newcommand{\before}{\aiaarrow{<}}
 \newcommand{\meets}{\aiaarrow{m}}
 \newcommand{\overlaps}{\aiaarrow{o}}
