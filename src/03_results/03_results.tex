@@ -22,13 +22,6 @@
   {\color{orange} TODO write out the axioms of interval algebras}
 \end{defn}
 
-{\color{orange} TODO show it suffices to consider relations of the form -> when showing a function
-is an embedding}
-% mention how we only need to prove the forward implication to show something is a
-% $\laia$-embedding. This is enough since the relations are mutually-exclusive and exhaustive.
-% Also it is enough to check that the relations of the form -> are preserved -- if that is the case
-% then the relations of the form <- are automatically also preserved by "duality"?/"symmetry"?
-
 % ------ Justifying this axiomatisation of interval algebras
 
 \begin{defn}
@@ -61,6 +54,10 @@ is an embedding}
   \end{align*}
 \end{defn}
 
+Notice that the subset $\inter[L] \subseteq L^2$ is definable using the language of strict linear
+orders. Similarly, the interpretations of the relations are also given by formulas in this language.
+As a result, the structure $\inter[L]$ is interpretable in the strict linear order $L$.
+
 \begin{thm}
   Given a strict linear order $L$, $\inter[L]$ is a model of $\taia$ under the above
   interpretations.
@@ -77,43 +74,62 @@ The theory is satisfiable in a reasonable way, including the expected models ind
 orders. To further support this tight connection, we see interval algebras also induce a quite
 reasonable linear order
 
+Consider the function $\peq : \{0,1\}^2 \to \{ \laia-\text{formulas } \phi(I,J)$ defined by
+\begin{equation*}
+  \peq(n,m)(I,J) = \begin{cases}
+    I \starts J \lor I \startedby J \lor I = J \quad & \text{if } n = m = 0 \\
+    I \finishes J \lor I \finishedby J \lor I = J    & \text{if } n = m = 1 \\
+    I \metby J                                       & \text{if } n = 0,\ m = 1 \\
+    I \meets J                                       & \text{if } n = 1,\ m = 0
+  \end{cases}
+\end{equation*}
+This function takes as inputs tuples $(n,m)$ with $n,m \in \{0,1\}$ and assigns them
+the $\laia$-formulas $\peq(n,m)$ with $I$ and $J$ as free variables. We want to use this function
+to quotient out the disjoint union $A + A$ in the following way:
+\begin{equation*}
+  (n,I) \psim (m,J) \iff A \models \peq(n,m)(I,J)
+\end{equation*}
+Of course, first we need to figure out whether this gives an equivalence relation.
+
+\begin{prop}
+  The relation $\psim$ defined as above is an equivalence relation on $A + A$.
+\end{prop}
+\begin{proof}
+  The relation is reflexive, since $\peq(n,n)$ always contains $I = J$ as a disjunct, hence
+  $A \models \peq(n,n)(I,I)$ and so $(n,I) \psim (n,I)$.
+
+  The relation is also symmetric, since $A \models \peq(n,m)(I,J)$ if and only if
+  $A \models \peq(m,n)(J,I)$. To see this, notice that the formula $\peq(m,n)$ is always given by
+  taking the dual of the relation symbols in $\peq(n,m)$. Hence $(n,I) \psim (m,J)$ if and only if
+  $(m,J) \psim (n,I)$.
+
+  {\color{orange} TODO prove transitivity}
+\end{proof}
+
 \begin{defn}
-  Given an Allen interval algebra $A$, we define $\points[A] = \frac{A + A}{\psim}$ where
-  $\psim$ is an equivalence relation on the set $A + A$ defined by
-  \begin{equation*}
-    (n,I) \psim (m,J) \iff A \models \peq(n,m)(I,J)
-  \end{equation*}
-  Where $\peq$ assigns $\laia$-formulas with open variables $I,J$ to pairs $(n,m) \in \{0,1\}^2$
-  \begin{equation*}
-    \peq(n,m)(I,J) = \begin{cases}
-      I \starts J \lor I \startedby J \lor I = J \quad & \text{if } n = m = 0 \\
-      I \finishes J \lor I \finishedby J \lor I = J    & \text{if } n = m = 1 \\
-      I \metby J                                       & \text{if } n = 0,\ m = 1 \\
-      I \meets J                                       & \text{if } n = 1,\ m = 0
-    \end{cases}
-  \end{equation*}
+  Given an Allen interval algebra $A$, we define the points of $A$ as
+  $\points[A] = \frac{A + A}{\psim}$.
 \end{defn}
 
-{\color{orange} TODO at least add a remark why this is an equivalence relation}
+Consider the function $\plt : \{0,1\}^2 \to \{ \laia-\text{formulas } \phi(I,J)$ defined by
+\begin{equation*}
+  \plt(n,m)(I,J) = \begin{cases}
+    (I \before J) \lor (I \meets J) \lor (I \overlaps J)  \lor (I \finishedby J)
+                  \lor (I \contains J)        & \text{if } n = m = 0\\
+    (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
+                \lor (I \contained J)         & \text{if } n = m = 1 \\
+    \lnot\,(I \after J) \land \lnot\,(I \metby J)
+                                              & \text{if } n = 0,\ m = 1 \\
+    I \before J                               & \text{if } n = 1,\ m = 0
+  \end{cases}
+\end{equation*}
+Using this, we may order the start and end points of intervals in $A$, turning $\points[A]$ into
+a strict linear order.
 
 \begin{thm}
   Given an Allen interval algebra $A$, the interpretation of the symbol $<$ in $\points[A]$ given by
   $[(n,I)] < [(m,J)] \iff A \models \plt(n,m)(I,J)$ is well-defined and turns $A$ into a model of
   $\tslo$.
-
-  Here, $\plt$ is a function assigning $\laia$-formulas with open variables $I,J$ to pairs
-  $(n,m) \in \{0,1\}^2$ defined as:
-  \begin{equation*}
-    \plt(n,m)(I,J) = \begin{cases}
-      (I \before J) \lor (I \meets J) \lor (I \overlaps J)  \lor (I \finishedby J)
-                    \lor (I \contains J)        & \text{if } n = m = 0\\
-      (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
-                  \lor (I \contained J)         & \text{if } n = m = 1 \\
-      \lnot\,(I \after J) \land \lnot\,(I \metby J)
-                                                & \text{if } n = 0,\ m = 1 \\
-      I \before J                               & \text{if } n = 1,\ m = 0
-    \end{cases}
-  \end{equation*}
 \end{thm}
 \begin{proof}
   First we must check that this ordering relation on $\points[A]$ is well-defined. For this fix
@@ -212,13 +228,17 @@ reasonable linear order
   \end{itemize}
 \end{proof}
 
-{\color{orange} TODO acknowledge that this is not an interpretation generally.}
-
-{\color{blue} TODO Consider adding table justifying these definitions? Something like:
-
-| I relation J | drawing of I and J | is I- less than J- | is I+ lt J+ | is I- lt J + | is I+ lt J - |}
-
-
+In general, this will not be interpretable in the interval algebra $A$, since we need to
+take the disjoint union of two sets which is not a priori available in first order logic.
+However, provided that $|A| \neq 1$, then it is possible to define quotient $A^2$ by an appropriate
+definable equivalence relation, something along the lines of
+\begin{equation*}
+  \phi(I,J) = \lnot (I = J)
+\end{equation*}
+So then we would encode $(0,I) \in A + A$ as the pair $(I,I) \in A^2$ and $(1,I) \in A + A$ as
+$(I,J) \in A^2$ where $J$ is any interval different from $I$. Modifying the above definitions to
+use this encoding would then show that the strict linear order $\inter[A]$ can be interpreted in
+$A$.
 
 {\color{orange} TODO figure out whether or not to keep this.
 
@@ -441,10 +461,10 @@ it into something we do not want.}
                                 \lor (I \contains J)
       \end{equation*}
       Since $f$ is an $\laia$-embedding, this means that
-      \begin{equation*}
-        \inter[L] \models (f(I) \before f(J)) \lor (f(I) \meets f(J)) \lor (f(I) \overlaps f(J))
-                                        \lor (f(I) \finishedby f(J)) \lor (f(I) \contains f(J))
-      \end{equation*}
+      \begin{align*}
+        \inter[L] \models\, & (f(I) \before f(J)) \lor (f(I) \meets f(J)) \lor (f(I) \overlaps f(J)) \\
+                            & \qquad \lor (f(I) \finishedby f(J)) \lor (f(I) \contains f(J))
+      \end{align*}
       This means the ordering of the elements $a,b,c,d$ must be one of:
       \begin{gather*}
         a < b < c < d \qquad a < b = c = d  \qquad a < c < b < d \\
@@ -474,7 +494,7 @@ it into something we do not want.}
       \begin{equation*}
         \inter[L] \models f(I) \before f(J)
       \end{equation*}
-      So in $L$ we must have $a < b < c < d$, which means that
+      So in $L$ we must have $a < b < c < d$, and so
       $\psi_{A,L}(f)(\iend{I}) = b < c = \psi_{A,L}(f)(\istart{J})$.
     \item If $\iend{I} < \iend{J}$ then we must have
       \begin{equation*}
@@ -482,10 +502,10 @@ it into something we do not want.}
                                 \lor (I \contained J)
       \end{equation*}
       Since $f$ is an $\laia$-embedding, this means that
-      \begin{equation*}
-        \inter[L] \models (f(I) \before f(J)) \lor (f(I) \meets f(J)) \lor (f(I) \overlaps f(J))
-                                              \lor (f(I) \starts f(J)) \lor (f(I) \contained f(J))
-      \end{equation*}
+      \begin{align*}
+        \inter[L] \models\, & (f(I) \before f(J)) \lor (f(I) \meets f(J)) \lor (f(I) \overlaps f(J)) \\
+                          & \qquad \lor (f(I) \starts f(J)) \lor (f(I) \contained f(J)
+      \end{align*}
       This gives 5 possible orderings of $a,b,c,d$ in $L$:
       \begin{gather*}
         a < b < c < d \qquad a < b = c = d  \qquad a < c < b < d \\
@@ -594,9 +614,9 @@ $\slos(L,\points[A])$.
     \draw[dashed, color=gray, -] (6,-0.75) -- (6, -3);
     \draw[dashed, color=gray, -] (10,-1.5) -- (10, -3);
 
-    \draw[thick, -] (0,0)     -- (3,0)     node[above, midway] {$I$};
-    \draw[thick, -] (2,-0.75) -- (6,-0.75) node[above, midway] {$J$};
-    \draw[thick, -] (6,-1.5)  -- (10,-1.5) node[above, midway] {$K$};
+    \draw[thick, |-|] (0,0)     -- (3,0)     node[above, midway] {$I$};
+    \draw[thick, |-|] (2,-0.75) -- (6,-0.75) node[above, midway] {$J$};
+    \draw[thick, |-|] (6,-1.5)  -- (10,-1.5) node[above, midway] {$K$};
 
     \draw[thin, -] (0,-3) -- (10,-3);
     \node[circle,fill,inner sep=1.25pt,label=below:$\istart{I}$]            (1) at (0, -3) {};
@@ -617,23 +637,23 @@ $\slos(L,\points[A])$.
 \begin{figure}[ht]
   \centering
   \begin{tikzpicture}
-    \draw[dashed, color=gray, -] (0,0)     -- (0, -2.5);
-    \draw[dashed, color=gray, -] (5,0)     -- (5, -2.5);
-    \draw[dashed, color=gray, -] (10,0) -- (10, -2.5);
+    \draw[dashed, color=gray, -] (0,0) -- (0, -1.75);
+    \draw[dashed, color=gray, -] (5,0) -- (5, -1.75);
+    \draw[dashed, color=gray, -] (10,0) -- (10, -1.75);
 
     \draw [thin,-] (0,0) -- (10,0);
     \node[circle,fill,inner sep=1.25pt,label=above:$1$] (1) at (0,0)  {};
     \node[circle,fill,inner sep=1.25pt,label=above:$2$] (2) at (5,0)  {};
     \node[circle,fill,inner sep=1.25pt,label=above:$3$] (3) at (10,0) {};
 
-    \draw[thick, -] (0,-1)    -- (5,-1)     node[below, midway] {$(1,2)$};
-    \draw[thick, -] (5,-1.75) -- (10,-1.75) node[below, midway] {$(2,3)$};
-    \draw[thick, -] (0,-2.5)  -- (10,-2.5)  node[below, midway] {$(1,3)$};
+    \draw[thick, |-|] (0,-1) -- (5,-1) node[below, midway] {$(1,2)$};
+    \draw[thick, |-|] (5,-1) -- (10,-1) node[below, midway] {$(2,3)$};
+    \draw[thick, |-|] (0,-1.75) -- (10,-1.75) node[below, midway] {$(1,3)$};
 
     \node (L)      at (-2, 0)     {$L$};
-    \node (interL) at (-2, -1.75) {$\inter[L]$};
+    \node (interL) at (-2, -1.375) {$\inter[L]$};
     \draw [very thick,decorate,decoration = {brace}] (-1,-0.3) -- (-1,0.3);
-    \draw [very thick,decorate,decoration = {brace}] (-1,-2.6) -- (-1,-0.9);
+    \draw [very thick,decorate,decoration = {brace}] (-1,-1.85) -- (-1,-0.9);
   \end{tikzpicture}
   \caption{An example of the $\inter$ construction}
   \label{fig:inter_example}
@@ -672,51 +692,230 @@ $|L| \neq 1$.
 \end{proof}
 
 As for the unit, it will give us an isomorphism when our interval algebra already has all possible
-intervals. More precisely, the unit is an isomorphism when it is of the form $\inter[L]$ for some
-linear order $L$.
+intervals. More precisely, we will say that an interval algebra has all possible intervals if it
+satisfies the following sentence
+\begin{align*}
+  \allints = & \left(\forall I,\; \forall J,\;
+        (I \before J)    \rightarrow \exists K,\; (I \meets K)      \land (K \meets J)    \right)\\
+    & \land \left(\forall I,\; \forall J,\;
+        (I \meets J)     \rightarrow \exists K,\; (I \startedby K)  \land (K \finishes J) \right)\\
+    & \land \left(\forall I,\; \forall J,\;
+        (I \overlaps J)  \rightarrow \exists K,\; (I \finishedby K) \land (K \starts J)   \right)\\
+    & \land \left(\forall I,\; \forall J,\;
+        (I \starts J)    \rightarrow \exists K,\; (I \meets K)      \land (K \finishes J) \right)\\
+    & \land \left(\forall I,\; \forall J,\;
+        (I \finishes J)  \rightarrow \exists K,\; (I \metby K)      \land (K \starts J)   \right)\\
+    & \land \left(\forall I,\; \forall J,\;
+        (I \contained J) \rightarrow \exists K,\; (I \metby K)      \land (K \starts J)   \right)
+\end{align*}
+
+{\color{orange} TODO add something about the uniqueness of such intervals}
 
 \begin{prop}
   The unit component at an interval algebra $A$, $\unit{A}$, is an isomorphism if and only if
-  $A$ is isomorphic to $\inter[L]$ for some $L$.
+  $A \models \allints$.
 \end{prop}
 \begin{proof}
-  First, if $\unit{A}$ is an isomorphism, then we can set $L = \points[A]$ and $A \cong \inter[L]$.
+  First, suppose that $\unit{A}$ is an isomorphism. To show that $A \models allints$ we fix
+  two intervals $I,J \in A$. Now we have to consider 6 cases:
+  \begin{itemize}
+    \item If $I \before J$ then in $\inter[\points[A]]$ we must have
+      $\istart{I} < \iend{I} < \istart{J} < \iend{J}$. This means the following are all valid
+      intervals
+      \begin{equation*}
+        \unit{A}(I) = (\istart{I}, \iend{I}) \meets (\iend{I}, \istart{J})
+          \meets (\istart{J}, \iend{J}) = \unit{A}(J)
+      \end{equation*}
+      so taking $K = \unit{A}^{-1}((\iend{I},\istart{J}))$ we see that the first conjunct holds.
+    \item If $I \meets J$ then $\istart{I} < \iend{I} = \istart{J} < \iend{J}$, hence taking
+      $K = \unit{A}^{-1}((\istart{I}, \iend{J}))$ shows that the second conjunct holds.
+    \item If $I \overlaps J$ then $\istart{I} < \istart{J} < \iend{I} < \iend{J}$ and we can take
+      $K = \unit{A}^{-1}((\istart{J}, \iend{I}))$ to prove the third conjunct.
+    \item If $I \starts J$ then $\istart{I} = \istart{J} < \iend{I} < \iend{J}$, so taking
+      $K = \unit{A}^{-1}((\iend{I}, \iend{J}))$ proves the fourth conjunct.
+    \item If $I \finishes J$ then $\istart{J} < \istart{I} < \iend{I} = \iend{J}$ so the choice
+      $K = \unit{A}^{-1}((\istart{J}, \istart{I}))$ gives a proof of the penultimate conjunct.
+    \item If $I \contained J$ then $\istart{J} < \istart{I} < \iend{I} < \iend{J}$ and if we let
+      $K = \unit{A}^{-1}((\istart{J}, \istart{I}))$ then we see the last conjunct holds too.
+  \end{itemize}
+  As all conjuncts hold, this implies that $A \models \allints$ as expected.
 
-  For the converse, fix some isomorphism $f : A \to \inter[L]$ for some linear order $L$. If $L$ has
-  a single element, then $\inter[L] = \emptyset = \inter[\emptyset]$, so we can always assume that
-  $|L| \neq 1$ and that $\counit{L}$ is an isomorphism. Consider the composite
+  Next, suppose that we have an interval algebra $A$ such that $A \models \allints$ and fix two intervals
+  $I,J \in A$. Since $I$ and $J$ are arbitrary, it will suffice to consider the basic non-dual
+  relations.
+  \begin{itemize}
+    \item If $I \before J$ then we get some $K_1$ which is met by $I$ and meets $J$. Then we can glue
+      $I$ and $K_1$ to get $K_2$ and similarly we glue $K_1$ and $J$ to get $K_3$. Finally, gluing
+      $K_2$ and $J$ gives us $K_4$. This gives the following picture
+      \begin{center}
+        \begin{tikzpicture}
+          \draw[dashed, color=gray, -] (0,0) -- (0, -3.25);
+          \draw[dashed, color=gray, -] (3,0) -- (3, -3.25);
+          \draw[dashed, color=gray, -] (6,0) -- (6, -3.25);
+          \draw[dashed, color=gray, -] (9,0) -- (9, -3.25);
+
+          \draw [thin,-] (0,-3.25) -- (9,-3.25);
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{I}$] (1) at (0,-3.25)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{I}$] (2) at (3,-3.25)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{J}$] (3) at (6,-3.25) {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{J}$] (3) at (9,-3.25) {};
+
+          \draw[thick, |-|] (0,0) -- (3,0) node[above, midway] {$I$};
+          \draw[thick, |-|] (6,0) -- (9,0) node[above, midway] {$J$};
+          \draw[thick, |-|] (3,0)  -- (6,0) node[above, midway] {$K_1$};
+          \draw[thick, |-|] (0,-0.75)  -- (6,-0.75) node[above, midway] {$K_2$};
+          \draw[thick, |-|] (3,-1.5)  -- (9,-1.5) node[above, midway] {$K_3$};
+          \draw[thick, |-|] (0,-2.25)  -- (9,-2.25) node[above, midway] {$K_4$};
+        \end{tikzpicture}
+      \end{center}
+      Then the unit $\unit{A}$ surjects on all intervals over the start and end points of $I,J$:
+      \begin{align*}
+        (\istart{I},\istart{J}) = \unit{A}(K_2) \qquad\qquad (\istart{I},\iend{J}) = \unit{A}(K_4) \\
+        (\iend{I},\istart{J}) = \unit{A}(K_1)   \qquad\qquad (\iend{I},\iend{J}) = \unit{A}(K_3)
+      \end{align*}
+    \item If $I \meets J$ then we can glue $I$ and $J$ to get $K$, yielding the following
+      \begin{center}
+        \begin{tikzpicture}
+          \draw[dashed, color=gray, -] (0,0) -- (0, -1.75);
+          \draw[dashed, color=gray, -] (5,0) -- (5, -1.75);
+          \draw[dashed, color=gray, -] (10,0) -- (10, -1.75);
+
+          \draw [thin,-] (0,-1.75) -- (10,-1.75);
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{I}$] (1) at (0,-1.75)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:${\iend{I}=\istart{J}}$] (2) at (5,-1.75) {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{J}$] (3) at (10,-1.75) {};
+
+          \draw[thick, |-|] (0,0) -- (5,0) node[above, midway] {$I$};
+          \draw[thick, |-|] (5,0)  -- (10,0) node[above, midway] {$J$};
+          \draw[thick, |-|] (0,-0.75) -- (10,-0.75) node[above, midway] {$K$};
+        \end{tikzpicture}
+      \end{center}
+      The unit also surjects on all valid intervals over the start and end poits of $I,J$:
+      \begin{align*}
+        (\istart{I},\istart{J}) = \unit{A}(J)   \qquad (\istart{I},\iend{J}) = \unit{A}(K)
+          \qquad (\iend{I},\iend{J}) = \unit{A}(J)
+      \end{align*}
+      In this case there are only 3 in this case since $\iend{I} = \istart{J}$ so
+      $(\iend{I}, \istart{J})$ is not a valid interval over $\points[A]$.
+    \item If $I \overlaps J$ then first we intersect $I$ and $J$ giving $K_1$. Similarly we can
+      intersect $K_1$ with $I$ and $J$ giving $K_2$ and $K_3$ respectively. Finally gluing $I$ and
+      $K_3$ together gives $K_4$.
+      \begin{center}
+        \begin{tikzpicture}
+          \draw[dashed, color=gray, -] (0,0) -- (0, -3.25);
+          \draw[dashed, color=gray, -] (3,-0.75) -- (3, -3.25);
+          \draw[dashed, color=gray, -] (6,0) -- (6, -3.25);
+          \draw[dashed, color=gray, -] (9,-0.75) -- (9, -3.25);
+
+          \draw [thin,-] (0,-3.25) -- (9,-3.25);
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{I}$] (1) at (0,-3.25)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{J}$] (2) at (3,-3.25)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{I}$] (3) at (6,-3.25) {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{J}$] (3) at (9,-3.25) {};
+
+          \draw[thick, |-|] (0,0) -- (6,0) node[above, midway] {$I$};
+          \draw[thick, |-|] (3,-0.75) -- (9,-0.75) node[above, midway] {$J$};
+          \draw[thick, |-|] (6,-1.5) -- (9,-1.5) node[above, midway] {$K_3$};
+          \draw[thick, |-|] (0,-1.5) -- (3,-1.5) node[above, midway] {$K_2$};
+          \draw[thick, |-|] (3,-1.5)  -- (6,-1.5) node[above, midway] {$K_1$};
+          \draw[thick, |-|] (0,-2.25)  -- (9,-2.25) node[above, midway] {$K_4$};
+        \end{tikzpicture}
+      \end{center}
+      Similar to the $I \before J$ case, the unit is then surjective onto the 4 possible intervals
+      involving $\istart{I}, \iend{I}, \istart{J}, \iend{J}$.
+    \item When $I \starts J$ we can intersec $I$ and $J$ to get $K$
+      \begin{center}
+        \begin{tikzpicture}
+          \draw[dashed, color=gray, -] (0,0) -- (0, -1.75);
+          \draw[dashed, color=gray, -] (5,0) -- (5, -1.75);
+          \draw[dashed, color=gray, -] (10,0) -- (10, -1.75);
+
+          \draw [thin,-] (0,-1.75) -- (10,-1.75);
+          \node[circle,fill,inner sep=1.25pt,label=below:${\istart{I}=\istart{J}}$] (1) at (0,-1.75)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{I}$] (2) at (5,-1.75) {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{J}$] (3) at (10,-1.75) {};
+
+          \draw[thick, |-|] (0,0) -- (5,0) node[above, midway] {$I$};
+          \draw[thick, |-|] (0,-0.75) -- (10,-0.75) node[above, midway] {$J$};
+          \draw[thick, |-|] (5,0)  -- (10,0) node[above, midway] {$K$};
+        \end{tikzpicture}
+      \end{center}
+      We get 4 intervals over the start and end points of $I$ and $J$, which are given by
+      \begin{align*}
+        (\istart{I},\iend{J}) = \unit{A}(J) \qquad (\istart{I},\iend{I}) = \unit{A}(I)
+          \qquad (\iend{I},\iend{J}) = \unit{A}(K)
+      \end{align*}
+    \item The $I \finishes J$ follows similarly to the previous case, by intersecting $I$ and $J$ to
+      get $K$
+      \begin{center}
+        \begin{tikzpicture}
+          \draw[dashed, color=gray, -] (0,0) -- (0, -1.75);
+          \draw[dashed, color=gray, -] (5,0) -- (5, -1.75);
+          \draw[dashed, color=gray, -] (10,0) -- (10, -1.75);
+
+          \draw [thin,-] (0,-1.75) -- (10,-1.75);
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{J}$] (1) at (0,-1.75)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{I}$] (2) at (5,-1.75) {};
+          \node[circle,fill,inner sep=1.25pt,label=below:${\iend{I} = \iend{J}}$] (3) at (10,-1.75) {};
+
+          \draw[thick, |-|] (5,0)  -- (10,0) node[above, midway] {$I$};
+          \draw[thick, |-|] (0,-0.75) -- (10,-0.75) node[above, midway] {$J$};
+          \draw[thick, |-|] (0,0) -- (5,0) node[above, midway] {$K$};
+        \end{tikzpicture}
+      \end{center}
+      And again the 3 valid intervals over $\istart{I},\iend{I},\istart{J},\iend{J}$ all
+      lie in the image of the unit
+      \begin{align*}
+        (\istart{J},\istart{I}) = \unit{A}(K) \qquad (\istart{J},\iend{I}) = \unit{A}(J)
+          \qquad (\istart{I},\iend{J}) = \unit{A}(I)
+      \end{align*}
+    \item Finally there is the $I \contained J$ case. By $\allints$ we can get the initial segment
+      $K_1$ of $J$ which meets $I$. Then we intersect $K_1$ and $J$ to get $K_2$, which in turn we
+      intersect with $I$ to get $K_3$. Finally gluing $K_1$ and $I$ gives $K_4$.
+      \begin{center}
+        \begin{tikzpicture}
+          \draw[dashed, color=gray, -] (0,0) -- (0, -3.25);
+          \draw[dashed, color=gray, -] (3,-0.75) -- (3, -3.25);
+          \draw[dashed, color=gray, -] (6,-0.75) -- (6, -3.25);
+          \draw[dashed, color=gray, -] (9,0) -- (9, -3.25);
+
+          \draw [thin,-] (0,-3.25) -- (9,-3.25);
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{J}$] (1) at (0,-3.25)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\istart{I}$] (2) at (3,-3.25)  {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{I}$] (3) at (6,-3.25) {};
+          \node[circle,fill,inner sep=1.25pt,label=below:$\iend{J}$] (3) at (9,-3.25) {};
+
+          \draw[thick, |-|] (0,0) -- (9,0) node[above, midway] {$J$};
+          \draw[thick, |-|] (3,-0.75) -- (6,-0.75) node[above, midway] {$I$};
+          \draw[thick, |-|] (0,-0.75) -- (3,-0.75) node[above, midway] {$K_1$};
+          \draw[thick, |-|] (6,-0.75) -- (9,-0.75) node[above, midway] {$K_3$};
+          \draw[thick, |-|] (3,-1.5)  -- (9,-1.5) node[above, midway] {$K_2$};
+          \draw[thick, |-|] (0,-2.25)  -- (6,-2.25) node[above, midway] {$K_4$};
+        \end{tikzpicture}
+      \end{center}
+      This gives 4 intervals which all lie in the image of the unit
+      \begin{align*}
+        (\istart{J},\istart{I}) = \unit{A}(K_1) \qquad\qquad (\istart{J},\iend{I}) = \unit{A}(K_4) \\
+        (\istart{I},\iend{J}) = \unit{A}(K_2)   \qquad\qquad (\iend{I},\iend{J}) = \unit{A}(K_3)
+      \end{align*}
+  \end{itemize}
+  This is sufficient to see that $\unit{A}$ is surjective. After all fix some arbitrary interval
   \begin{equation*}
-    \inter[\counit{L} \circ \points[f]] \circ \unit{A} \circ f^{-1} : \inter[L] \to \inter[L]
+    ([(n,I)], [(m,J)]) \in \inter[\points[A]]
   \end{equation*}
-  This will send an element $(a,b) \in \inter[L]$ to
-  \begin{align*}
-    \inter[\counit{L} \circ \points[f]] \circ \unit{A} \circ f^{-1}(a,b)
-      & = \inter[\counit{L} \circ \points[f]]\left( \istart{f^{-1}(a,b)}
-                                                  , \iend{f^{-1}(a,b)}
-                                             \right) \\
-      & = \left( \counit{L} \circ \points[f] (\istart{f^{-1}(a,b)})
-               , \counit{L} \circ \points[f] (\iend{f^{-1}(a,b)})
-          \right) \\
-      & = \left( \counit{L}(\istart{(a,b)})
-               , \counit{L}(\iend{(a,b)})
-          \right) \\
-      & = (a,b)
-  \end{align*}
-  That is, the above composite is the identity map on $\inter[L]$. Since $f$ and $\counit{L}$ are
-  isomorphisms, then $\inter[\counit{L} \circ \points[f]]$ is also an isomorphism. As a result,
-  $\unit[A]$ must also be an isomorphism as desired.
+  If $I = J$ then we must have
+  \begin{equation*}
+    ([(n,I)], [(m,J)]) = (\istart{I}, \iend{I}) = \unit{A}(I)
+  \end{equation*}
+  If $I \neq J$, then after possibly swapping $I,J$ we may assume $I \aiaarrow{<mosfd}$, which
+  brings us to one of the cases handled above, where all intervals involing $\istart{I}, \iend{I},
+  \istart{J}$ and $\iend{J}$ were in the image of the unit.
 \end{proof}
 
-The condition for the unit to be an isomorphism may not be as explicit as for the counit, but it
-can still be useful. In the finite case we have
-$|\inter[L]| = \binom{|L|}{2} = \frac{|L|(|L|-1)}{2}$, which is an increasing function in $|L|$.
-Going over the first few values we then see that $|\inter[L]|$ cannot be 2,4 or 5, which means that
-any interval algebra $A$ with 2,4 or 5 elements must be missing intervals, and as such $\unit{A}$
-will be only injective, but not surjective.
 
 \begin{cor}
   There exists an equivalence of categories between the full subcategory of strict linear orders $L$
-  with $|L| \neq 1$ and the full subcategory of interval algebras of the form $\inter[L]$.
+  with $|L| \neq 1$ and the full subcategory of interval algebras satisfying $\allints$.
 \end{cor}
 \begin{proof}
   An adjunction can always be restricted to an equivalence of categories by considering the full
@@ -928,7 +1127,10 @@ properties to the proof that $\finslo$ satisfies them.
 % Int(Pts(D(-))), and since Ints(Pts(D(-))) is naturally isomorphic to D(-), the colimit of
 % Int(Pts(D(-))) must also be isomorphic to the colimit of D(-)
 
-\subsection*{The Classification theory of Interval Agebras}
+\subsection*{The Classification Theory of Interval Agebras}
+
+The question of stability for interval algebras is answered similarly to linear orders, as only the
+finite interval algebras are stable.
 
 \begin{thm}
   An interval algebra $A$ is stable if and only if it is finite.
@@ -998,12 +1200,70 @@ properties to the proof that $\finslo$ satisfies them.
   of $A$, but as $A$ is stable this linear order must be finite, hence $A$ must be finite.
 \end{proof}
 
+Restricting our attention to interval algebras with all possible intervals, the question of which
+interval algebras are NIP has an answer similar to the linear order case.
+
 \begin{thm}
   For any linear order $L$, the interval algebra $\inter[L]$ is NIP.
 \end{thm}
 \begin{proof}
+  Suppose that $\inter[L]$ has the IP, so there is some formula $\phi(x;y)$ which has the IP. Let
+  the IP of $\phi(x;y)$ be realised by the model $A \models \fulltheory(\inter[L])$ and sequences
+  $(a_i)_{i < \omega}$ and $(b_I)_{I \subseteq \omega}$. Since finite interval algebras are stable
+  and hence NIP, we may assume that $L$ is infinite, so
+  the counit $\counit{L}$ is an isomorphism. By the triangle laws of our adjunction we know that
+  \begin{equation*}
+    \inter[\counit{L}] \circ \unit{\inter[L]} = \id{\inter[L]}
+  \end{equation*}
+  As $\counit{L}$ is an isomorphism, $\inter[\counit{L}]$ must also be an isomorphism, so
+  $\unit{\inter[L]}$ too is an isomorphism. In particular, this implies that
+  $\inter[L] \models \allints$. As a result, $A \models \allints$ too and $A \cong \inter[L']$ for
+  some strict linear order $L'$. Recall that $\inter[L']$ is interpretable in $L'$, hence we can
+  translate the formula $\phi(x;y)$ to some formula $\phi'(x;y)$ in the language of strict linear
+  orders. In addition, we can also translate the sequences of tuples $(a_i)_{i < \omega}$ and
+  $(b_I)_{I \subseteq \omega}$ to sequences of tuples in $L'$. This means that the formula
+  $\phi'(x;y)$ has the IP, making the linear order $L'$ also have the IP. This is a contradiction as
+  all linear orders have the NIP, so $\inter[L]$ must also have the NIP.
 \end{proof}
 
+However, as we saw before with the exponential fields case, by modifying models even slightly we can
+add enough expressive power to get the IP. Likewise, by starting with an interval algebra with the
+NIP, we can remove enough intervals to allow for the IP.
+
 \begin{exmp}
-  Construct an interval algebra with the IP.
+  Let $L = \R \sqcup \N$ be the linear order given by putting all the elements of $\R$ before $\N$.
+  By picking out the right substructure $A \subseteq \inter[L]$ we should get an interval algebra
+  with the IP.
+
+  First fix some bijection $f : \PS(\N) \overset{\sim}{\longrightarrow} \R$ and then let $A$ be the
+  substructure of $\inter[L]$ given by
+  \begin{align*}
+    A = & \left\{ (x,y) \ \big|\ x,y \in \R \text{ such that } x < y \right\} \\
+        & \qquad \cup \left\{ (f(I),i) \ \big|\ I \subseteq \N, i \in I \right\} \\
+        & \qquad \cup \left\{ (x,y)\ \big|\ x,y \in \N \text{ such that } x < y \right\}
+  \end{align*}
+  In particular, the only intervals $(x,a) \in A$ with $x \in \R$ and $a \in \N$ come from the
+  set comprehension $\left\{ (f(I),i) \ \big|\ I \subseteq \N, i \in I \right\}$. This would end
+  up with an interval algebra looking somewhat like
+  {\color{orange} TODO add drawing}
+
+  Now the formula
+  \begin{equation*}
+    \phi(I;J) = \exists K,\; (J \meets K) \land (K \meets I)
+  \end{equation*}
+  has the IP and this is realised in $A$ by the sequences $(a_i)_{i \in \N}$ and
+  $(b_I)_{I \subseteq \N}$ defined by
+  \begin{equation*}
+    a_i = (i, i+1) \qquad\qquad b_I = (f(I) - 1, f(I))
+  \end{equation*}
+  Since for any $i \in \N$ and $I \subseteq \N$, $A \models \phi(a_i, b_I)$ if and only if there
+  exists some interval $(x,y) \in A$ with $x,y \in L$ such that
+  \begin{equation*}
+    (f(I) - 1, f(I)) \meets (x,y) \land (x,y) \meets (i, i + 1)
+  \end{equation*}
+  This can only happen if $x = f(I)$ and $y = i$, so we would require
+  \begin{equation*}
+    (f(I), i) \in \left\{ (f(I),i) \ \big|\ I \subseteq \N, i \in I \right\}
+  \end{equation*}
+  which happens if and only if $i \in I$ as needed.
 \end{exmp}
