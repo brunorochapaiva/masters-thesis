@@ -97,7 +97,7 @@ With some of the main ideas explained, now is a good time to see the basic algor
 \cite{allen83}. It takes as input some collection of intervals and their known relations, and
 attempts to infer as many of the missing relations as possible. As mentioned
 before, time intervals are primitives in Allen's interval algebra and since every two intervals
-must be related by one of the symbols on table \ref{tab:basic_relations}, a directed graphi with
+must be related by one of the symbols on table \ref{tab:basic_relations}, a directed graph with
 labeled edges is a good format to store this information. In this representation the nodes of the
 graph will be the intervals in question, and the labels on each edge will be sets of symbols that
 describe the possible relations between the source and target intervals. As an example, suppose
@@ -208,7 +208,7 @@ Then we will cover some important classes of theories arising from classificatio
 will introduce stable theories and one of their possible generalisations, NIP theories. The advent
 of classification theory came with Morley's Categoricity Theorem, which related the number of
 non-isomorphic models of different cardinalities for countable complete theories, often called the
-spectrum of the theory. The concept of stable theories arose to study these spectra, offering a very
+spectrum of the theory. The concept of stable theories arose to study these spectra, offering a
 definitive answer through the use of tools like forking and dividing. NIP theories generalise the
 class of stable theories to include important examples like linear orders and geometric examples
 like algebraically closed valued fields \cite{acvf-NIP} or the real exponential field
@@ -241,7 +241,7 @@ order.
     \item If $a$ is an upper bound for $L$, we find some upper bound $b$ of $P$ which is
       not in $P$, such a $b$ must exist as $\Q$ is unbounded and $P$ is finite. Then we extend
       $f : L \to P$ to $g : L \cup \{a\} \to P \cup \{b\}$ by sending $g(a) = b$. This remains an
-      order isomorphism since for any $x \in P$, we know that $x < a$ and $g(x) < b = g(a)$ since
+      order isomorphism since for any $x \in P$, we must have $x < a$ and $g(x) < b = g(a)$ since
       $a$ and $b$ are both upper bounds of $L$ and $P$ respectively.
     \item If $a$ is a lower bound for $L$, then we find a lower bound $b$ of $P$ not already in
       $P$ and extend $f$ to $g : L \cup \{a\} \to P \cup \{b\}$ by sending $a$ to $b$ again.
@@ -395,8 +395,8 @@ further about its age, namely it will satisfy the following.
 \end{defn}
 
 Considering again a class of models $\C$ satisfying the HP, EC, and JEP, suppose that we assume that
-$\C$ also has the AP. Then a theorem of Fraïssét tells us that gluing all of $\C$ will give us a
-homogeneous model $M$ with age $\C$.
+$\C$ also has the AP. Then a theorem of Fraïssé tells us that gluing all of the models in $\C$
+yields a homogeneous model $M$ with age $\C$.
 
 \begin{thm}[Fraïssé's theorem]
   Given a class $\C$ of finite $\lang$-structures satisfying the properties HP, JEP, AP and EC, then
@@ -410,13 +410,14 @@ limit of $\C$.
 
 Note that the uniqueness condition of the Fraïssé limit only applies to homogeneous
 structures. In fact, if we consider the class of finite strict linear orders, we can see it
-coincides with $\age(\Q)$, $\age(\Z)$ and also $\age(\N)$. It is certainly true that neither of
-these linear orders are isomorphic. This happens as neither $\Z$ nor $\N$ are homogeneous,
-as seen in an earlier example.
+coincides with $\age(\Q)$, $\age(\Z)$ and also $\age(\N)$ despite neither of these linear orders
+being isomorphic. This happens as neither $\Z$ nor $\N$ are homogeneous,
+as seen earlier.
 
-To exemplify this, we will consider the class of finite strict linear orders $\finslo$ and attempt
-to compute its Fraïssé limit. First, to see that this limit exists, we need to check that $\finslo$
-satisfies the 4 properties needed to apply Fraïssé's theorem.
+As we have decided not to show a lot of proofs for this section, we will instead consider in
+detail how to compute the Fraïssé limit of the class $\finslo$ of finite strict linear orders,
+to hopefully ground all these definitions a bit better. First, to see that this limit exists, we
+need to check that $\finslo$ satisfies the 4 properties needed to apply Fraïssé's theorem.
 
 First we prove some general results about the HP and EC which we will use later.
 
@@ -466,10 +467,10 @@ First we prove some general results about the HP and EC which we will use later.
   symbol $R_i$, then the total number of possible $\lang$-structures on $M$ is finite, more
   specifically it is
   $r^{\left(m + \sum_{i=1}^{n} r^{a_i}\right)}2^{\left(\sum_{i=1}^{l} r^{b_i}\right)}$.
-  Hence the set of
-  possible $\lang$-structures on initial segments $\{1,\dots,r\}$ of $\N$ is countable. As every
-  finite $\lang$-structure must be isomorphic to at least one of these, the class of finite
-  $\lang$-structures must be essentially countable.
+  As such, the set of
+  possible $\lang$-structures on all initial segments $\{1,\dots,r\} \subseteq \N$ is countable.
+  Every finite $\lang$-structure must be isomorphic to at least one of these, so the class of finite
+  $\lang$-structures is essentially countable.
 \end{proof}
 
 \begin{cor}
@@ -667,8 +668,8 @@ there exists a maximum $n \in \N$ such that for all $\{a_1, \dots, a_n\} \subset
 some subset ${a_{i_1}, \dots, a_{i_m}}$ which we cannot pick out with $\phi$ by varying the
 parameter $y$.
 
-Now, it would be helpful to see both some examples and some non-examples of NIP theories. The
-following proposition helps with this.
+Now, it would be helpful to see both some examples and non-examples of NIP theories. The
+following proposition helps with the former.
 
 \begin{prop}
   All stable theories have the NIP.

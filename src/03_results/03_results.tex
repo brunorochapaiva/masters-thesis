@@ -1,6 +1,10 @@
 \section{Axiomatisation of Interval Algebras}
 \label{sec:axiomatisation}
 
+{\color{orange} QUESTION I think I should keep this definition, but I am unsure where it would
+fit best. For now I have left it here, but maybe it would be better in the background section
+somewhere at the start?}
+
 \begin{defn}
   We define the language of strict linear orders $\lslo$ as the single binary relation $\{ < \}$.
 
@@ -18,11 +22,65 @@
     \laia = \{ \before, \meets, \overlaps, \starts, \finishes, \contained,
                \after, \metby, \overlappedby, \startedby, \finishedby, \contains \}
   \end{equation*}
+\end{defn}
 
-  {\color{orange} TODO write out the axioms of interval algebras}
+The theory of Allen interval algebras follows closely with Allen's main concerns. We must specify
+that our relation symbols are both exhaustive and mutually exclusive. It is also important that
+our dual relation symbols act as such, otherwise the reasoning possible would not match with the
+reasoning done by the interval algebra algorithm. Finally, we need to encode the various
+transitivity-like requirements, which is another crucial feature of the algorithm we saw.
+
+Let $I = \{<,m,o,s,f,d,>,M,O,S,F,D\}$, so we can express the notion of exhaustability with the sentence
+\begin{equation*}
+  \defformula{\text{exh}} = \forall I,\;\forall J,\;
+    \bigvee_{i \in I} (I \aiaarrow{i} J)
+\end{equation*}
+% \begin{align*}
+%   \defformula{\text{exh}}  & = \forall I,\;\forall J,\;
+%     (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
+%         \lor (I \finishes J) \lor (I \contained J) \\
+%       & \lor (I = J)  (I \after J) \lor (I \metby J) \lor (I \overlappedby J) \lor (I \startedby J)
+%         \lor (I \finishedby J) \lor (I \contains J)
+% \end{align*}
+And the mutual exclusivity requirement by
+\begin{equation*}
+  \defformula{\text{mutex}} = \forall I,\;\forall J,\;
+    \bigwedge_{\shortstack{$i,j \in I$\\$i \neq j$}}
+      \lnot \left( (I \aiaarrow{i} J) \land (I \aiaarrow{j} J) \right)
+\end{equation*}
+The duality is given by the following sentences
+\begin{align*}
+  \defformula{\text{dual}_>} & = \forall I,\;\forall J,\; (I \before J) \leftrightarrow (J \after I) \\
+  \defformula{\text{dual}_m} & = \forall I,\;\forall J,\; (I \meets J) \leftrightarrow (J \metby I) \\
+  \defformula{\text{dual}_o} & = \forall I,\;\forall J,\; (I \overlaps J) \leftrightarrow (J \overlappedby I) \\
+  \defformula{\text{dual}_s} & = \forall I,\;\forall J,\; (I \starts J) \leftrightarrow (J \startedby I) \\
+  \defformula{\text{dual}_f} & = \forall I,\;\forall J,\; (I \finishes J) \leftrightarrow (J \finishedby I) \\
+  \defformula{\text{dual}_d} & = \forall I,\;\forall J,\; (I \contained J) \leftrightarrow (J \contains I)
+\end{align*}
+And finally, the transitivity of the different relations is given by the following schema, where we
+range $i,j$ over $I$ and use $T(i,j)$ to denote the entry under row $i$ and column $j$ of
+\cref{tab:transitivity}.
+\begin{equation*}
+  \defformula{\text{trans}_{i,j}} = \forall I,\;\forall J,\;\forall K,\;
+    (I \aiaarrow{i} J) \land (J \aiaarrow{j} K) \rightarrow (I \aiaarrow{T(i,j)} J)
+\end{equation*}
+With this, we can now give the theory of interval algebras
+
+\begin{defn}
+  We define the theory of Allen interval algebras $\taia$ as
+  \begin{equation*}
+    \taia = \{\defformula{\text{exh}}, \defformula{\text{mutex}}, \defformula{\text{dual}_>},
+      \defformula{\text{dual}_m}, \defformula{\text{dual}_o}, \defformula{\text{dual}_s},
+      \defformula{\text{dual}_f}, \defformula{\text{dual}_d}\}
+      \cup \{ \defformula{\text{trans}_{i,j}}\ |\ i,j \in I \}
+  \end{equation*}
 \end{defn}
 
 % ------ Justifying this axiomatisation of interval algebras
+
+With a theory defined, the first thing to determine is whether or not it is satisfiable, since an
+inconsistent theory would not be very interesting. The most natural models we want should come from
+non-zero intervals over linear orders, which we now check.
 
 \begin{defn}
   Given a linear order $L$ we define its set of non-zero intervals $\inter[P]$ as the set
@@ -63,26 +121,77 @@ As a result, the structure $\inter[L]$ is interpretable in the strict linear ord
   interpretations.
 \end{thm}
 \begin{proof}
-  {\color{orange} TODO Tedious proof by cases goes here}
+  First we check that $\inter[L] \models \defformula{\text{exh}}$. We want to count the number of
+  possible arrangements of $x_1,x_2,y_1,y_2 \in L$ under the restriction that $x_1 < x_2$ and
+  $y_1 < y_2$. Since we need $x_1 < x_2$, we can start with just the following
+  \begin{center}
+    \begin{tikzpicture}
+      \draw[thick, -] (0,0) -- (5,0);
+      \node[circle,fill,inner sep=1.25pt,label=above:${x_1}$] (1) at (1.5,0) {};
+      \node[circle,fill,inner sep=1.25pt,label=above:${x_2}$] (2) at (3.5,0) {};
+    \end{tikzpicture}
+  \end{center}
+  Then there are 5 possible positions for $y_1$: we can have $y_1 = x_i$ for some $i$ or $y_1$ can
+  lie on one of the lines, distinct from both $x_1$ and $x_2$. Then, since we need $y_1 < y_2$, the
+  number of possible arrangements can be seen to be $5 + 5 + 3 + 3 + 1 = 13$. Including equality,
+  we have 13 relation symbols, each representing a different ordering between the $x_i$ and $y_i$,
+  which must mean that our relation symbols are exhaustive after all.
+
+  Next we check that the relation symbols are mutually exclusive. This comes from the fact that each
+  relation symbol encodes a separate possible ordering between the interval start and end points.
+  As it is not possible to have 2 different orderings of the same fixed elements, the relation
+  symbols must be mutually exclusive. For example, suppose that we have
+  \begin{equation*}
+    (x_1,x_2) \before (y_1,y_2) \qquad\qquad
+    (x_1,x_2) \overlaps (y_1,y_2)
+  \end{equation*}
+  This happens only if we have both
+  \begin{equation*}
+    x_1 < x_2 < y_1 < y_2 \qquad\qquad
+    x_1 < y_1 < x_2 < y_2
+  \end{equation*}
+  and so $x_2 < y_1 < x_2$. Since $<$ is irreflexive, this cannot happen.
+
+  Checking transitivity is quite routine, the main difficulty being the sheer amount of cases. We
+  will explicitly check the upper left quadrant in \cref{tab:transitivity} and leave the rest for
+  the diligent reader. Fix $(x_1,x_2), (y_1,y_2), (z_1,z_2) \in \inter[L]$:
+  \begin{itemize}
+    \item Suppose that $(x_1,x_2) \before (y_1,y_2)$, so $x_1 < x_2 < y_1 < y_2$. If
+      $(y_1,y_2) \aiaarrow{<mos} (z_1,z_2)$ then in all cases we must have
+      $y_1 \leq z_1$, hence $x_1 < x_2 < z_1 < z_2$ and $(x_1,x_2) \before (z_1,z_2)$. On the other
+      hand, if $(y_1,y_2) \aiaarrow{fd} (z_1,z_2)$ then we have $z_1 < y_1 \leq z_2$. This means
+      that $x_2 < z_2$, restricting the possible relations between $(x_1,x_2)$ and $(y_1,y_2)$ to
+      $(x_1,x_2) \aiaarrow{<mosd} (z_1,z_2)$ as expected.
+    \item Suppose that $(x_1,x_2) \meets (y_1,y_2)$ so $x_1 < x_2 = y_1 < y_2$. If
+      $(y_1,y_2) \aiaarrow{<mo} (z_1,z_2)$ then in all cases we must have $y_1 < z_1$ implying that
+      $(x_1,x_2) \before (z_1,z_2)$. If $(y_1,y_2) \starts (z_1,z_2)$ then $y_1 = z_1 < z_2$ and
+      $(x_1,x_2) \meets (z_1,z_2)$ too. Finally, if $(y_1,y_2) \aiaarrow{fd} (z_1,z_2)$ AAAA
+  \end{itemize}
+  The rest of the cases can be checked similarly.
+
+  Finally, the different duality formulas hold by definition, so
+  $\inter[L] \models \taia$.
 \end{proof}
 
 \begin{cor}
   Allen's interval algebras are satisfiable
 \end{cor}
 
-The theory is satisfiable in a reasonable way, including the expected models induced from linear
-orders. To further support this tight connection, we see interval algebras also induce a quite
-reasonable linear order
+So the theory is satisfiable and it includes the main class of models we are interested in, models
+coming from intervals over linear orders. Since the theory is relational and universal, it also
+means that we can pick out any subset of intervals over a linear order and that will also give us a
+model of $\taia$, which agrees with our intuition from the work Allen did originally. We will also
+see later that every model of $\taia$ can be seen as a substructure of $\inter[L]$ for some linear
+order $L$, which bodes well for our axiomatisation. But first, we need to develop some more
+machinery.
 
 Consider the function $\peq : \{0,1\}^2 \to \{ \laia-\text{formulas } \phi(I,J)$ defined by
-\begin{equation*}
-  \peq(n,m)(I,J) = \begin{cases}
-    I \starts J \lor I \startedby J \lor I = J \quad & \text{if } n = m = 0 \\
-    I \finishes J \lor I \finishedby J \lor I = J    & \text{if } n = m = 1 \\
-    I \metby J                                       & \text{if } n = 0,\ m = 1 \\
-    I \meets J                                       & \text{if } n = 1,\ m = 0
-  \end{cases}
-\end{equation*}
+\begin{align*}
+  \peq(0,0)(I, J) & = (I \starts J) \lor (I \startedby J) \lor (I = J) \\
+  \peq(0,1)(I, J) & = (I \metby J) \\
+  \peq(1,0)(I, J) & = (I \meets J) \\
+  \peq(1,1)(I, J) & = (I \finishes J) \lor (I \finishedby J) \lor (I = J)
+\end{align*}
 This function takes as inputs tuples $(n,m)$ with $n,m \in \{0,1\}$ and assigns them
 the $\laia$-formulas $\peq(n,m)$ with $I$ and $J$ as free variables. We want to use this function
 to quotient out the disjoint union $A + A$ in the following way:
@@ -108,21 +217,20 @@ Of course, first we need to figure out whether this gives an equivalence relatio
 
 \begin{defn}
   Given an Allen interval algebra $A$, we define the points of $A$ as
-  $\points[A] = \frac{A + A}{\psim}$.
+  \begin{equation*}
+    \points[A] = \frac{A + A}{\psim}
+  \end{equation*}
 \end{defn}
 
 Consider the function $\plt : \{0,1\}^2 \to \{ \laia-\text{formulas } \phi(I,J)$ defined by
-\begin{equation*}
-  \plt(n,m)(I,J) = \begin{cases}
-    (I \before J) \lor (I \meets J) \lor (I \overlaps J)  \lor (I \finishedby J)
-                  \lor (I \contains J)        & \text{if } n = m = 0\\
-    (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
-                \lor (I \contained J)         & \text{if } n = m = 1 \\
-    \lnot\,(I \after J) \land \lnot\,(I \metby J)
-                                              & \text{if } n = 0,\ m = 1 \\
-    I \before J                               & \text{if } n = 1,\ m = 0
-  \end{cases}
-\end{equation*}
+\begin{align*}
+  \plt(0,0)(I,J) & =(I \before J) \lor (I \meets J) \lor (I \overlaps J)
+      \lor (I \finishedby J) \lor (I \contains J) \\
+  \plt(0,1)(I,J) & = \lnot\,(I \after J) \land \lnot\,(I \metby J) \\
+  \plt(1,0)(I,J) & = (I \before J) \\
+  \plt(1,1)(I,J) & = (I \before J) \lor (I \meets J) \lor (I \overlaps J)
+      \lor (I \starts J) \lor (I \contained J)
+\end{align*}
 Using this, we may order the start and end points of intervals in $A$, turning $\points[A]$ into
 a strict linear order.
 
@@ -211,14 +319,13 @@ a strict linear order.
           Then $\peq(0,0)(I,J)$ is a disjunction of the 2 missing relations and equality. Hence by
           exhaustiveness of the interval algebra relations and equality, it must be the case that
           $A \models \plt(0,0)(I,J) \lor \peq(0,0)(I,J) \lor \plt(0,0)(J,I)$
-        \item Next, we consider $[(0,I)]$ and $[(1,J)]$. The formula $\plt(0,1)(I,J)$ is a
-          conjunction of 2 negated relational symbols, which is equivalent to the disjunction of
-          equality and the 10 absent relations. Then $\peq(0,1)(I,J) \lor \plt(1,0)(J,I)$ is the
-          disjunction of the two missing relations.
+        \item Next, we consider $[(0,I)]$ and $[(1,J)]$. Notice that the formula $\plt(0,1)(I,J)$
+          is the negation of $\peq(0,1)(I,J) \lor \plt(1,0)(J,I)$, hence by the law of the
+          excluded middle, the triple disjunction must hold.
         \item Finally we consider $[(1,I)]$ and $[(1,J)]$. The situation here is similar to the
           $n = m = 0$ case, since $\plt(1,1)(I,J)$ is a disjunction of 5 basic relations, then
           $\plt(1,1)(J,I)$ is the disjunction of its duals and $peq(1,1)(I,J)$ is the disjunction
-          of the 2 missing relations and equality.
+          of the 2 missing relations plus equality.
       \end{itemize}
       When $(n,m)=(1,0)$, since $\psim$ is symmetric, we know that
       \begin{equation*}
@@ -240,10 +347,10 @@ $(I,J) \in A^2$ where $J$ is any interval different from $I$. Modifying the abov
 use this encoding would then show that the strict linear order $\inter[A]$ can be interpreted in
 $A$.
 
-{\color{orange} TODO figure out whether or not to keep this.
+% {\color{orange} TODO figure out whether or not to keep this.
 
-Now that this axiomatisation is justified, show that we can't remove any axioms without making
-it into something we do not want.}
+% Now that this axiomatisation is justified, show that we can't remove any axioms without making
+% it into something we do not want.}
 
 \include{03_results/plt_transitivity_tables.tex}
 
@@ -667,6 +774,10 @@ $\unit{A} = \phi_{A,\points[A]}(\id{\points[A]})$. Computing this, we get the ma
 \begin{equation*}
   \unit{A} : A \to \inter[\points[A]] \text{ sending } I \mapsto (\istart{I}, \iend{I})
 \end{equation*}
+Recall that each component of the unit $\unit{A}$ is an arrow in $\aias$, so it must be an
+embedding. This means that every interval algebra $A$ can be seen as a substructure of the intervals
+$\inter[L]$ for some appropriate linear order, namely $L = \points[A]$.
+
 Dually, the counit here is a natural transformation $\counit{} : \points[\inter] \to \id{\slos}$
 where each of its components is given by $\counit{L} = \psi_{\inter[L],L}(\id{\inter[L]})$.
 Fixing some $L$ and working through this construction, we get
@@ -684,7 +795,7 @@ $|L| \neq 1$.
   intervals and so $\points[\inter[L]] = \emptyset$ too. As such, $\counit{L}$ cannot be an
   isomorphism.
 
-  For the converse, first notice that $\counit{L}$ is a map in $\slos$, hence it must be injective.
+  For the converse, notice that $\counit{L}$ is a map in $\slos$, hence it must be injective.
   Provided that $|L| \neq 1$ then it also turns out to be surjective: fix some
   $a \in L$, there must be at least one distinct $b \in L$. Now either $a < b$, so $(a,b)$ is a
   valid interval over $L$ and then $\counit{L}(\istart{(a,b)}) = a$. Alternatively, $b < a$, so
@@ -1143,8 +1254,8 @@ finite interval algebras are stable.
                                   \lor (I \finishedby J) \lor (I \contains J)
   \end{equation*}
   The above formula takes the elements of $A$ and lexicographically orders them, by first comparing
-  the start times of each interval, followed by the end times in case the start times align. As a
-  result, the formula $\lexord$ induces the structure of a strict linear order on the elements
+  the start times of each interval, and then the end times if the start times coincide. As a
+  result, the formula $\lexord$ gives the structure of a strict linear order to the elements
   of $A$:
   \begin{itemize}
     \item \textbf{irreflexivity}: Fix some interval $I \in A$, then $I = I$. Since the relational
@@ -1159,11 +1270,12 @@ finite interval algebras are stable.
       In all of these cases, we must still have $A \models \lexord(I,K)$, so
       $\lexord$ is transitive.
     \item \textbf{trichotomy}: Fix two intervals $I, J \in A$. First notice that
+      $A \models \lexord(J,I)$ if and only if we have
       \begin{equation*}
-        A \models \lexord(J,I) \iff
-        (I \after J) \lor (I \metby J) \lor (I \overlappedby J) \lor (I \startedby J)
+        A \models (I \after J) \lor (I \metby J) \lor (I \overlappedby J) \lor (I \startedby J)
                       \lor (I \finishes J) \lor (I \contained J)
       \end{equation*}
+      which is the same as taking the dual of all the relation symbols in $\lexord(I,J)$.
       Hence $A \models \lexord(I,J) \lor (I = J) \lor \lexord(J,I)$ is equivalent to saying that
       the interval algebra relations are exhaustive, which is one of our axioms. Hence the strict
       ordering given by $\lexord$ is linear.
@@ -1193,7 +1305,7 @@ finite interval algebras are stable.
   }
 
   Now for any finite interval algebra $A$, all strict linear orders interpretable in $A$ will be
-  bounded in size by $|A^k|$ for some $k \in \N$. In particular, all such linear orders must be
+  bounded in size by $|A|^k$ for some $k \in \N$. In particular, all such linear orders must be
   finite, so $A$ is stable.
 
   For the converse, suppose $A$ is stable. Using $\lexord$ we can linearly order all the elements
@@ -1245,7 +1357,8 @@ NIP, we can remove enough intervals to allow for the IP.
   In particular, the only intervals $(x,a) \in A$ with $x \in \R$ and $a \in \N$ come from the
   set comprehension $\left\{ (f(I),i) \ \big|\ I \subseteq \N, i \in I \right\}$. This would end
   up with an interval algebra looking somewhat like
-  {\color{orange} TODO add drawing}
+
+  {\color{orange} TODO add pretty drawing}
 
   Now the formula
   \begin{equation*}
