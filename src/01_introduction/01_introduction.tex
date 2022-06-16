@@ -1,0 +1,86 @@
+\section{Introduction}%
+\label{sec:introduction}
+
+\subsection{Motivation}%
+\label{sub:motivation}
+
+Model theory concerns itself with the connection between first order theories, that is
+sets of axioms with universal and existential quantifiers, and the models of these
+theories. The compactness theorem and the Löwenheim–Skolem theorems are examples of
+significant early results in model theory, both focusing on the existence of models for a
+theory: the compactness theorem saying that a model exists for a theory if models
+exist for each finite fragment of the theory; and the Löwenheim–Skolem theorems telling
+us that if a theory has an infinite model, then there exist models of any cardinality
+greater than or equal to the number of symbols in the language.
+
+As a consequence of the Löwenheim–Skolem theorems, we know that there exists no theory
+with a unique infinite model up to isomorphism. This raises the question of what can
+we say about the number of models a theory has for each cardinality.
+
+\begin{defn}
+  For a complete theory $\theory$, we write $I(\theory, \kappa)$ to mean the number of
+  models, up to isomorphism, of $\theory$ with cardinality $\kappa$. We call
+  $I(\theory, \cdot)$ the spectrum of $\theory$.
+\end{defn}
+
+One of the first answers to this question came in the form of Morley's categoricity
+theorem, which said that for a countable theory $\theory$, if $I(\theory,\kappa) = 1$ for
+some uncountable $\kappa$, then $I(\theory,\lambda) = 1$ for all uncountable $\lambda$.
+Work by Shelah in the 1970s then extended this result to uncountable theories, beginning
+the study of classification theory as a discipline of model theory.
+
+Important notions from stability theory came in the form of stable and unstable theories.
+Stable theories were well-behaved enough to limit the number, while in unstable theories
+one always has the maximum possible number of models, that is
+$I(\theory,\kappa) = 2^\kappa$ for any $\kappa > |\theory|$. Being a stable theory
+is a very strong condition, hence the study generalisations of stability are important.
+One such generalisation, which we will discuss in this report, comes from the
+non-independence property, which says that there is no formula able to pick out every
+subset of an infinite subset of a model.
+
+Classification theory is not the only active discipline of model theory however. Another
+area with a lot of interesting questions comes from the study of homogeneous structures,
+where any isomorphism between finite substructures can be extended to an automorphism of
+the homogeneous structure. In 1953, Fraïssé showed how to construct such structures
+by gluing classes of finite structures together, from which their study followed.
+
+Hence, in the spirit of these disciplines, we will consider the first-order theory of
+interval algebras, which were originally introduced by Allen in 1983 to argue about time
+qualitatively, and try to find their place in the universe of model
+theory, by considering their different models and how well-behaved they are.
+
+\subsection{Report structure}%
+\label{sub:report_structure}
+
+The rest of the report will be structured as follows. In
+\cref{sec:background} we summarise the results from Allen's original paper
+on interval algebras \cite{allen83}, focusing on the choices that lead to
+the 13 relations and the algorithm to infer missing relations from a given
+interval network. We also introduce the necessary notions from model theory
+such as homogeneous models, and stable/NIP theories. We try to keep this
+introduction grounded by working through some examples where possible.
+Readers comfortable with these areas may safely skip them in favour of
+\cref{sec:axiomatisation} and onwards.
+
+In \cref{sec:axiomatisation} we tackle the question of axiomatisation of
+interval algebras. We propose some axioms based on the understanding from 
+\cref{sec:axiomatisation} and show that these are satisfiable by
+constructing models from linear orders. To further justify this
+axiomatisation, we will then construct linear orders from interval 
+algebras.
+
+In \cref{sec:adjunction} we explore further the intervals and points
+constructions from \cref{sec:axiomatisation} and show they can be extended to two adjoint
+functors between the relevant categories of models. We also give characterisations of
+the interval algebras and linear orders for which the unit and counit are isomorphisms.
+These characterisations will be expressible as first order sentences, a fact we will use
+when studying the classification theory of interval algebras.
+
+Finally, in \cref{sec:model_theory} we study the model theory of interval algebra. This
+begins by considering the the class of finite interval algebras and computing its
+Fraïssé limit using the machinery developed in \cref{sec:adjunction}. On the topic of
+stability, we show that the stable interval algebras are exactly the finite interval
+algebras. Following this there is a study of the NIP in interval algebras, for which
+we find a big class of NIP algebras as well as an example of an interval algebra with the
+IP.
+
