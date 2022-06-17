@@ -105,6 +105,7 @@
 \newcommand{\containedf}{\defformula{\contained}}
 
 \newcommand{\allints}{\defformula{\text{full}}}
+\newcommand{\mostints}{\defformula{\text{fullish}}}
 \newcommand{\lexord}{\defformula{\text{lex}}}
 
 % Points construction
@@ -115,7 +116,7 @@
 
 % Environments
 \theoremstyle{plain}
-\newtheorem{thm}{Theorem}%[subsection]
+\newtheorem{thm}{Theorem}[section]
 \newtheorem{lemma}[thm]{Lemma}
 \newtheorem{prop}[thm]{Proposition}
 \newtheorem{cor}[thm]{Corollary}
@@ -129,12 +130,9 @@
 
 \input{table_macros.tex}
 
-\onehalfspacing
-
 \begin{document}
 
 \maketitle %TODO add proper title
-\newpage
 
 %TODO add abstract
 %TODO add introduction
@@ -143,13 +141,25 @@
 
 %TODO add references to A. Pillay's notes on model theory
 
+\newpage
+{\color{orange} TODO write abstract aaaaaa!!!}
+
+\newpage
+\tableofcontents
+
+\newpage
 \input{01_introduction/01_introduction.tex}
+
 \newpage
 \input{02_background/02_background.tex}
+
 \newpage
 \input{03_results/03_results.tex}
-\newpage
 
+\newpage
+\input{04_conclusion/04_conclusion.tex}
+
+\newpage
 \bibliographystyle{unsrt} %unsrt
 \bibliography{refs}
 
