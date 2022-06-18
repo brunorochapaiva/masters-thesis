@@ -226,8 +226,26 @@ mainly interested in the study of Fraïssé limits.
   and $V$ of $M$, there is an authomorphism $f' : M \to M$ extending $f$.
 \end{defn}
 
-The simplest example of a homogeneous structure comes from the rationals viewed as a linear
-order.
+The simplest example of a homogeneous structure comes from the theory of strict linear orders, which
+we now define.
+
+\begin{defn}
+  We define the language of strict linear orders $\lslo$ as the single binary relation $\{ < \}$.
+\end{defn}
+
+\begin{defn}
+  We define the theory of strict linear orders as
+  \begin{align*}
+    \tslo = \big\{\; & \forall a, \lnot\ (a < a), \\
+              & \forall a, \forall b, \forall c, (a < b) \land (b < c) \rightarrow (a < c) \\
+              & \forall a, \forall b, (a < b) \lor (a = b) \lor (b < a) \;\big\}
+  \end{align*}
+\end{defn}
+
+So a strict linear order consists of a binary relation on a set, which is irreflexive, transitive
+satisfies the trichotomy condition. Notice that from these we can infer that the binary relation
+must be antisymmetric, since if $(a < b) \land (b < a)$ then by transitivity $a < a$, which is
+a contradiction with the irreflexivity of $<$.
 
 \begin{prop}
   The strict linear order $(\Q,<)$ is homogeneous.

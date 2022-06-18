@@ -1,20 +1,9 @@
 \section{Axiomatisation of Interval Algebras}
 \label{sec:axiomatisation}
 
-{\color{orange} QUESTION I think I should keep this definition, but I am unsure where it would
-fit best. For now I have left it here, but maybe it would be better in the background section
-somewhere at the start?}
-
-\begin{defn}
-  We define the language of strict linear orders $\lslo$ as the single binary relation $\{ < \}$.
-
-  We define the theory of strict linear orders as
-  \begin{align*}
-    \tslo = \{ & \forall a, \lnot\ (a < a), \\
-              & \forall a, \forall b, \forall c, (a < b) \land (b < c) \rightarrow (a < c) \\
-              & \forall a, \forall b, (a < b) \lor (a = b) \lor (b < a) \}
-  \end{align*}
-\end{defn}
+The first step is to define the language of interval algebras. Since equality is always assumed
+to be available in first order logic, we only need symbols for the remaining 12 binary
+relations.
 
 \begin{defn}
   We define the language of Allen interval algebras $\laia$ as
@@ -370,11 +359,6 @@ So then we would encode $(0,I) \in A + A$ as the pair $(I,I) \in A^2$ and $(1,I)
 $(I,J) \in A^2$ where $J$ is any interval different from $I$. Modifying the above definitions to
 use this encoding would then show that the strict linear order $\inter[A]$ can be interpreted in
 $A$.
-
-% {\color{orange} TODO figure out whether or not to keep this.
-
-% Now that this axiomatisation is justified, show that we can't remove any axioms without making
-% it into something we do not want.}
 
 \include{03_results/plt_transitivity_tables.tex}
 
@@ -847,7 +831,13 @@ satisfies the following sentence
         (I \contained J) \rightarrow \exists K,\; (I \metby K)      \land (K \starts J)   \right)
 \end{align*}
 
-{\color{orange} TODO add something about the uniqueness of such intervals}
+The above formula does not specify it, but it can be shown that the $K$ being quantified over
+must actually be unique. For example, fix some $I$ and $J$ such that $I \before J$ and let there
+be two $K_1,K_2$ such that $I \meets K_i \meets J$. Then we have $K_1 \metby I \meets K_2$, implying
+that $K_1 \aiaarrow{s=S} K_2$. If $K_1 \starts K_2$ then $K_1 \starts K_2 \meets J$ and our axioms
+mean that $K_1 \before J$, which is a contradiction as the interval algebra relations are mutually
+exclusive. Similarly we can show that $K_1 \startedby K_2$ cannot happen, leaving us with
+the only option of $K_1 = K_2$. Similar arguments show the uniqueness of $K$ in the other cases.
 
 \begin{prop}
   The unit component at an interval algebra $A$, $\unit{A}$, is an isomorphism if and only if
@@ -1060,8 +1050,6 @@ satisfies the following sentence
   subcategories where the unit and counit are isomorphisms.
 \end{proof}
 
-% {\color{blue} TODO: consider what our functors do to elementary embeddings?}
-
 \newpage
 \section{The Model Theory of Interval Algebras}
 \label{sec:model_theory}
@@ -1251,20 +1239,6 @@ properties to the proof that $\finslo$ satisfies them.
   automorphism of $\inter[\Q]$.
 \end{proof}
 
-% {\color{blue} TODO Fraisse Limits can be seen as a type of colimit, check if there is anything
-% interesting/noteworthy to say here -- left adjoints only preserve limits generally, but here we
-% have a colimit being preserved by a left adjoint (Int(-))}
-% Fraisse Limits can be seen as a type of colimit, look into this?
-% It's interesting that this colimit is preserved by a right adjoint, namely Int(-)
-% WARNING: Not sure if the following makes any sense, I am quite tired -- I suspect my reasoning is
-% somewhat flawed though?
-% I guess it happens since Pts(Int(-)) is naturally isomorphic to Id(-),
-% So suppose the colimit of some diagram D(-) exists for linear orders,
-% then if the colimit of Pts(D(-)) exists, it must be isomorphic to the Pts(colimit of D(-))
-% This is because left adjoints preserve colimits, so Int(colimit of Pts(D(-))) is the colimit of
-% Int(Pts(D(-))), and since Ints(Pts(D(-))) is naturally isomorphic to D(-), the colimit of
-% Int(Pts(D(-))) must also be isomorphic to the colimit of D(-)
-
 \subsection{Stable and NIP Interval Agebras}
 
 The question of stability for interval algebras is answered similarly to linear orders, as only the
@@ -1274,7 +1248,6 @@ finite interval algebras are stable.
   An interval algebra $A$ is stable if and only if it is finite.
 \end{thm}
 \begin{proof}
-  % TODO look at exercise 5.5.6 of marker for the order property.
   Suppose that $A$ is an interval algebra and consider the formula
   \begin{equation*}
     \lexord(I, J) = (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
@@ -1382,7 +1355,7 @@ NIP, we can remove enough intervals to allow for the IP.
         & \qquad \cup \left\{ (x,y)\ \big|\ x,y \in \N \text{ such that } x < y \right\}
   \end{align*}
   In particular, the only intervals $(x,a) \in A$ with $x \in \R$ and $a \in \N$ come from the
-  set comprehension $\left\{ (f(I),i) \ \big|\ I \subseteq \N, i \in I \right\}$. Using 
+  set comprehension $\left\{ (f(I),i) \ \big|\ I \subseteq \N, i \in I \right\}$. Using
   $I_{S}$ to denote the interval $(f(S)-1,f(S)$ and $J_n$ to denote $(n,n+1)$, we would end
   up with something like
   \begin{center}

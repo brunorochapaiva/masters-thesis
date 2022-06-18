@@ -19,9 +19,9 @@
 \usepackage{amsthm}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[colorinlistoftodos]{todonotes}
 \usepackage{parskip}
 \usepackage{setspace}
+\usepackage[colorinlistoftodos]{todonotes}
 \usepackage{tikz}
 \usetikzlibrary{decorations.pathreplacing,calligraphy}
 \usepackage{quiver}
@@ -31,6 +31,7 @@
 \usepackage{algpseudocode}
 \usepackage{multirow}
 \usepackage{rotating}
+\usepackage[numbers]{natbib}
 
 %\usepackage{subfiles}
 
@@ -134,11 +135,6 @@
 
 \maketitle %TODO add proper title
 
-%TODO add abstract
-%TODO add introduction
-%TODO add evaluation (?)
-%TODO add conclusion
-
 %TODO add references to A. Pillay's notes on model theory
 
 \newpage
@@ -160,7 +156,7 @@
 \input{04_conclusion/04_conclusion.tex}
 
 \newpage
-\bibliographystyle{unsrt} %unsrt
+\bibliographystyle{unsrtnat}
 \bibliography{refs}
 
 \end{document}
