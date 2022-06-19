@@ -129,6 +129,7 @@ As a result, the structure $\inter[L]$ is interpretable in the strict linear ord
       \draw[thick, -] (0,0) -- (5,0);
       \node[circle,fill,inner sep=1.25pt,label=above:${x_1}$] (1) at (1.5,0) {};
       \node[circle,fill,inner sep=1.25pt,label=above:${x_2}$] (2) at (3.5,0) {};
+
     \end{tikzpicture}
   \end{center}
   Then there are 5 possible positions for $y_1$: we can have $y_1 = x_i$ for some $i$ or $y_1$ can
@@ -378,7 +379,7 @@ $A$.
 \include{03_results/plt_transitivity_tables.tex}
 
 \newpage
-\section{A Detour Into Category Theory}
+\section{The Points-Intervals Adjunction}
 \label{sec:adjunction}
 
 \begin{defn}
@@ -789,6 +790,9 @@ $\slos(L,\points[A])$.
   \label{fig:inter_example}
 \end{figure}
 
+\subsection{Characterising the Unit and Counit}%
+\label{sub:characterising_the_unit_and_counit}
+
 Given an adjunction, it is always helpful to compute the associated unit and counit natural
 transformations. In our case, the unit is a natural transformation
 $\unit{} : \id{\aias} \to \inter[\points]$
@@ -1062,7 +1066,7 @@ satisfies the following sentence
 \section{The Model Theory of Interval Algebras}
 \label{sec:model_theory}
 
-\subsection{Fraïssé Class of Finite Interval Algebras}
+\subsection{The Fraïssé Class of Finite Interval Algebras}
 
 We start by considering the class $\finaia$ of finite interval algebras. From our work in
 \cref{ssub:homogeneous_structures_and_fraisse_classes}, we know that $\finaia$ satisfies the HP,
@@ -1261,7 +1265,7 @@ properties to the proof that $\finslo$ satisfies them.
 % Int(Pts(D(-))), and since Ints(Pts(D(-))) is naturally isomorphic to D(-), the colimit of
 % Int(Pts(D(-))) must also be isomorphic to the colimit of D(-)
 
-\subsection{Classification Theory of Interval Agebras}
+\subsection{Stable and NIP Interval Agebras}
 
 The question of stability for interval algebras is answered similarly to linear orders, as only the
 finite interval algebras are stable.
@@ -1378,10 +1382,28 @@ NIP, we can remove enough intervals to allow for the IP.
         & \qquad \cup \left\{ (x,y)\ \big|\ x,y \in \N \text{ such that } x < y \right\}
   \end{align*}
   In particular, the only intervals $(x,a) \in A$ with $x \in \R$ and $a \in \N$ come from the
-  set comprehension $\left\{ (f(I),i) \ \big|\ I \subseteq \N, i \in I \right\}$. This would end
-  up with an interval algebra looking somewhat like
+  set comprehension $\left\{ (f(I),i) \ \big|\ I \subseteq \N, i \in I \right\}$. Using 
+  $I_{S}$ to denote the interval $(f(S)-1,f(S)$ and $J_n$ to denote $(n,n+1)$, we would end
+  up with something like
+  \begin{center}
+    \begin{tikzpicture}
+      \path (-1,0) -- node[auto=false]{$\ldots$} (0,0);
+      \draw [thin,-] (0,0) to node[above] {$\R$} (4,0);
+      \path (4,0) -- node[auto=false]{$\ldots$} (5,0);
+      \draw [thin,-] (6,0) to node[above] {$\N$} (11,0);
+      \path (11,0) -- node[auto=false]{$\ldots$} (12,0);
 
-  {\color{orange} TODO add pretty drawing}
+      \draw[thin,|-|] (2.75,-1) to node[above] {$I_{\{0\}}$} (3.75,-1);
+      \draw[thin,|-|] (3.75,-1) to node[above] {} (6,-1);
+      \draw[thin,|-|] (6,-1) to node[above] {$J_0$} (7,-1);
+
+      \draw[thin,|-|] (0.5,-1.75) to node[above] {$I_{\{1,2\}}$} (1.5,-1.75);
+      \draw[thin,|-|] (1.5,-1.75) to node[above] {} (7,-1.75);
+      \draw[thin,|-|] (7,-1.75) to node[above] {$J_1$} (8,-1.75);
+      \draw[thin,|-|] (1.5,-2.5) to node[above] {} (8,-2.5);
+      \draw[thin,|-|] (8,-2.5) to node[above] {$J_2$} (9,-2.5);
+    \end{tikzpicture}
+  \end{center}
 
   Now the formula
   \begin{equation*}
