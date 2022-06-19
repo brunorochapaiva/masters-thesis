@@ -154,19 +154,41 @@ As a result, the structure $\inter[L]$ is interpretable in the strict linear ord
 
   Checking transitivity is quite routine, the main difficulty being the sheer amount of cases. We
   will explicitly check the upper left quadrant in \cref{tab:transitivity} and leave the rest for
-  the diligent reader. Fix $(x_1,x_2), (y_1,y_2), (z_1,z_2) \in \inter[L]$:
+  the diligent reader. Fix $(x_1,x_2), (y_1,y_2), (z_1,z_2) \in \inter[L]$, which we will denote by
+  $x,y,z$ respectively, then:
   \begin{itemize}
-    \item Suppose that $(x_1,x_2) \before (y_1,y_2)$, so $x_1 < x_2 < y_1 < y_2$. If
-      $(y_1,y_2) \aiaarrow{<mos} (z_1,z_2)$ then in all cases we must have
-      $y_1 \leq z_1$, hence $x_1 < x_2 < z_1 < z_2$ and $(x_1,x_2) \before (z_1,z_2)$. On the other
-      hand, if $(y_1,y_2) \aiaarrow{fd} (z_1,z_2)$ then we have $z_1 < y_1 \leq z_2$. This means
-      that $x_2 < z_2$, restricting the possible relations between $(x_1,x_2)$ and $(y_1,y_2)$ to
-      $(x_1,x_2) \aiaarrow{<mosd} (z_1,z_2)$ as expected.
-    \item Suppose that $(x_1,x_2) \meets (y_1,y_2)$ so $x_1 < x_2 = y_1 < y_2$. If
-      $(y_1,y_2) \aiaarrow{<mo} (z_1,z_2)$ then in all cases we must have $y_1 < z_1$ implying that
-      $(x_1,x_2) \before (z_1,z_2)$. If $(y_1,y_2) \starts (z_1,z_2)$ then $y_1 = z_1 < z_2$ and
-      $(x_1,x_2) \meets (z_1,z_2)$ too. Finally, if $(y_1,y_2) \aiaarrow{fd} (z_1,z_2)$
-      {\color{orange}AAAA}
+    \item Suppose that $x \before y$, so $x_1 < x_2 < y_1 < y_2$. If
+      $y \aiaarrow{<mos} z$ then in all cases we must have
+      $y_1 \leq z_1$, hence $x_1 < x_2 < z_1 < z_2$ and $x \before z$. On the other
+      hand, if $y \aiaarrow{fd} z$ then we have $z_1 < y_1 \leq z_2$. This means
+      that $x_2 < z_2$, restricting the possible relations between $x$ and $z$ to
+      $x \aiaarrow{<mosd} z$ as expected.
+    \item Suppose that $x \meets y$ so $x_1 < x_2 = y_1 < y_2$. If
+      $y \aiaarrow{<mo} z$ then in all cases we must have $y_1 < z_1$ implying that
+      $x \before z$. If $y \starts z$ then $y_1 = z_1 < z_2$ and
+      $x \meets z$ too. Finally, if $y \aiaarrow{fd} z$ then we have
+      $z_1 < y_1 < y_2 \leq z_2$, but $x_2 = y_1$ implying that $x \aiaarrow{osd} z$.
+    \item Suppose that $x \overlaps y$, in which case we have $x_1 < y_1 < x_2 < y_2$. Then if
+      $y \aiaarrow{<m} z$ we see that $x_1 < x_2 < z_1 < z_2$ so $x \before z$. If $y \overlaps z$
+      then $x_1 < z_1$ and $x_2 < z_2$, leaving $x \aiaarrow{<mo} z$ as the only options. If
+      $y \starts z$ then $x_1 < y_1 = z_1 < x_2 < y_2 < z_2$ so $x \overlaps z$ too. On the other
+      hand if $y \aiaarrow{fd} z$ then $z_1 < x_2 < z_2$ and hence $x \aiaarrow{osd} z$.
+    \item Suppose that $x \starts y$ so $x_1 = y_1 < x_2 < y_2$. In the case that $y \aiaarrow{<m} z$
+      then $x_1 < x_2 < z_1 < z_2$, ie. $x \before z$. Similarly to before, if $y \overlaps z$ then
+      $x_1<z_2$ and $x_2 < z_2$, so $x \aiaarrow{<mo} z$. If $y \starts z$ then we get
+      $x_1 = y_1 = z_1 < x_2 < y_2 < z_2$ so $x \starts z$ too. For the last case, if
+      $y \aiaarrow{fd} z$ then $z_1 < y_1 = x_1 < x_1 < y_2 \leq z_2$ so $x \contained z$.
+    \item Suppose that $x \finishes y$, then $y_1 < x_1 < x_2 = y_2$. If $y \before z$ then we get
+      $x_1 < x_2 = y_2 < z_1 < z_2$ and so $x \before z$. If $y \meets z$ then similarly we have
+      $x_1 < x_2 = y_2 = z_1 < z_2$ so $x \meets z$.  In the case that $y \overlaps z$ we can see
+      that $z_1 < y_2 = x_2 < z_2$ so $x \aiaarrow{osd} z$. If $x \aiaarrow{sd} z$ then
+      $z_1 < y_1 = x_1 < x_2 < y_2 \leq z_2$, implying $x \contained z$. Finally, if $y \finishes z$
+      then $z_1 < y_1 < x_1 < x_2 = y_2 = z_2$ and $x \finishes z$.
+    \item Suppose that $x \contained y$ so $y_1 < x_1 < x_2 < y_2$. If $y \aiaarrow{<m} z$ then
+      we have $x_1 < x_1 < y_2 \leq z_1 < z_2$ so $x \before z$. If $y \overlaps z$ then all we can
+      say is that $x_2 < z_2$, leaving us with $x \aiaarrow{<mosd} z$. For the final case, if
+      $y \aiaarrow{sfd} z$ then we end up with $z_1 \leq y_1 < x_1 < x_2 < y_2 \leq z_2$, so
+      $x \contained z$.
   \end{itemize}
   The rest of the cases can be checked similarly.
 
