@@ -225,7 +225,12 @@ Of course, first we need to figure out whether this gives an equivalence relatio
   taking the dual of the relation symbols in $\peq(n,m)$. Hence $(n,I) \psim (m,J)$ if and only if
   $(m,J) \psim (n,I)$.
 
-  {\color{orange} TODO prove transitivity}
+  Showing the relation is transitive requires going through the 8 cases based on the possible
+  values of the triple $(n,m,l) \in \{0,1\}^3$ and  showing that in each case, if
+  $A \models \peq(n,m)(I,J)$ and $A \models \peq(m,l)(J,K)$ then $A \models \peq(n,l)(I,K)$. This
+  can be done by using the transitivity axioms of interval algebras and considering every case. We
+  go through a more complicated case in the proof of \ref{thm:interval_construction}, where the
+  process is completely analogous, hence we skip the proof here for brevity.
 \end{proof}
 
 \begin{defn}
@@ -247,7 +252,7 @@ Consider the function $\plt : \{0,1\}^2 \to \{ \laia-\text{formulas } \phi(I,J)\
 Using this, we may order the start and end points of intervals in $A$, turning $\points[A]$ into
 a strict linear order.
 
-\begin{thm}
+\begin{thm}\label{thm:interval_construction}
   Given an Allen interval algebra $A$, the interpretation of the symbol $<$ in $\points[A]$ given by
   $[(n,I)] < [(m,J)] \iff A \models \plt(n,m)(I,J)$ is well-defined and turns $A$ into a model of
   $\tslo$.

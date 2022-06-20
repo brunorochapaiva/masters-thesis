@@ -14,6 +14,7 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 
+\usepackage{fancyhdr}
 \usepackage{array}
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -132,20 +133,39 @@
 \input{table_macros.tex}
 
 \begin{document}
+\pagestyle{empty}
 \input{title/title.tex}
 
 %TODO add references to A. Pillay's notes on model theory
 
 \newpage
+\topskip0pt
+\vspace*{\fill}
+\begin{center}
+    \textbf{Abstract}
+\end{center}
 {\color{orange} TODO write abstract}
+\vspace*{\fill}
 
 \newpage
+\topskip0pt
+\vspace*{\fill}
+\begin{center}
+    \textbf{Acknowledgements}
+\end{center}
 {\color{orange} TODO write acknowledgements}
+\vspace*{\fill}
 
 \newpage
 \tableofcontents
 
+
 \newpage
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\nouppercase{\leftmark}}
+\fancyfoot[C]{\thepage}
+
 \input{01_introduction/01_introduction.tex}
 
 \newpage

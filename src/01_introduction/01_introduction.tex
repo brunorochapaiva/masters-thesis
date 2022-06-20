@@ -5,17 +5,17 @@
 \label{sub:motivation}
 
 Model theory concerns itself with the connection between first order theories, that is
-sets of axioms with universal and existential quantifiers, and the models of these
-theories. The compactness theorem and the Löwenheim–Skolem theorems are examples of
-significant early results in model theory, both focusing on the existence of models for a
+sets of axioms possibly using universal and existential quantifiers, and the models of these
+theories. Some early examples of significant results in model theory can be found in the
+compactness and Löwenheim–Skolem theorems, all of which focused on the existence of models for a
 theory: the compactness theorem saying that a model exists for a theory if models
-exist for each finite fragment of the theory; and the Löwenheim–Skolem theorems telling
-us that if a theory has an infinite model, then there exist models of any cardinality
+exist for each finite fragment of the theory; and the Löwenheim–Skolem theorems saying
+that if a theory has an infinite model, then there exist models of any cardinality
 greater than or equal to the number of symbols in the language.
 
 As a consequence of the Löwenheim–Skolem theorems, we know that there exists no theory
 with a unique infinite model up to isomorphism. This raises the question of what can
-we say about the number of models a theory has for each cardinality.
+be said about the number of models a theory has for each cardinality.
 
 \begin{defn}
   For a complete theory $\theory$, we write $I(\theory, \kappa)$ to mean the number of
@@ -24,25 +24,29 @@ we say about the number of models a theory has for each cardinality.
 \end{defn}
 
 One of the first answers to this question came in the form of Morley's categoricity
-theorem, which said that for a countable theory $\theory$, if $I(\theory,\kappa) = 1$ for
-some uncountable $\kappa$, then $I(\theory,\lambda) = 1$ for all uncountable $\lambda$
-\cite{10.2307/1994188}.Work by Shelah in the 1970s then extended this result to uncountable theories
+theorem, which said that for a complete countable theory $\theory$, if $I(\theory,\kappa) = 1$ for
+some uncountable $\kappa$, then $I(\theory,\lambda) = 1$ for all uncountable $\lambda$. \cite{10.2307/1994188}
+Work by Shelah in the 1970s then extended this result to uncountable theories
 \cite{Sh:31}, beginning the study of classification theory as a discipline of model theory.
 
 Important notions from stability theory came in the form of stable and unstable theories.
-Stable theories were well-behaved enough to limit the number, while in unstable theories
-one always has the maximum possible number of models, that is
-$I(\theory,\kappa) = 2^\kappa$ for any $\kappa > |\theory|$ \cite{Sh:a}. Being a stable theory
-is a very strong condition, hence the study generalisations of stability are important.
-One such generalisation, which we will discuss in this report, comes from the
-non-independence property, which says that there is no formula able to pick out every
-subset of an infinite subset of a model.
+Stable theories are well-behaved enough to limit their number of models, while unstable theories
+always have the maximum number of models, that is if $\theory$ is unstable then
+for any $\kappa > |\theory|$ we have $I(\theory,\kappa) = 2^\kappa$. \cite{Sh:a}
+Most naturally occuring
+theories in mathematics tend not to be stable though, for example the full theory of any linear
+order or the theory of real closed fields. Hence it is only natural to study generalisations of
+stable theories, which will not be as well-behaved but will hopefully allow us to learn about
+wider classes of theories. One such generalisation comes in the form of the non-independence
+property, which informally says that there is no formula which can pick out every subset of
+an infinite subset of a model.
 
 Classification theory is not the only active discipline of model theory however. Another
 area with a lot of interesting questions comes from the study of homogeneous structures,
 where any isomorphism between finite substructures can be extended to an automorphism of
 the homogeneous structure. In 1953, Fraïssé showed how to construct such structures
-by gluing classes of finite structures together, from which their study followed.
+by gluing classes of finite structures together \cite{fraisse1953certaines},
+from which their study followed.
 
 Hence, in the spirit of these disciplines, we will consider the first-order theory of
 interval algebras, which were originally introduced by Allen in 1983 to argue about time
