@@ -14,6 +14,8 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 
+\usepackage[hidelinks]{hyperref}
+
 \usepackage{fancyhdr}
 \usepackage{array}
 \usepackage{amsmath}
@@ -33,6 +35,7 @@
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage[numbers]{natbib}
+
 
 %\usepackage{subfiles}
 
@@ -139,22 +142,37 @@
 %TODO add references to A. Pillay's notes on model theory
 
 \newpage
-\topskip0pt
-\vspace*{\fill}
+\hspace{0pt}
+\vfill
 \begin{center}
     \textbf{Abstract}
 \end{center}
-{\color{orange} TODO write abstract}
-\vspace*{\fill}
+Interval algebras were first introduced by Allen to reason about time intervals qualitatively. As
+a result they have been mainly of interest in computer science, where their applications and
+questions about decidability have been answered. However they have not been studied in a
+model theoretic capacity, pinning down their axioms and finding their place in the universe of model
+theory.
+
+In this report we provide a first order axiomatisation of Allen's interval algebra and we show
+two constructions: the interval construction $\inter$ sending a linear order to its set of non-zero
+intervals; and the points $\points$ construction sending an interval algebra to the set of start and end
+points of its intervals. We show these constructions give rise to a pair of adjoint functors,
+which we leverage to show the Fraïssé limit of the finite interval algebras is $\inter[\Q]$. From a
+stability theory perspective, we show that the stable interval algebras are exactly the finite
+interval algebras and we show that $\inter[L]$ has the non-independence property for any linear
+order $L$.
+\vfill
+\hspace{0pt}
 
 \newpage
-\topskip0pt
-\vspace*{\fill}
+\hspace{0pt}
+\vfill
 \begin{center}
     \textbf{Acknowledgements}
 \end{center}
 {\color{orange} TODO write acknowledgements}
-\vspace*{\fill}
+\vfill
+\hspace{0pt}
 
 \newpage
 \tableofcontents
@@ -163,6 +181,7 @@
 \newpage
 \pagestyle{fancy}
 \fancyhf{}
+% \renewcommand{\sectionmark}[1]{\markboth{\thesection.\ #1}{}}
 \lhead{\nouppercase{\leftmark}}
 \fancyfoot[C]{\thepage}
 
