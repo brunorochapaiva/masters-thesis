@@ -9,7 +9,7 @@
 \author{Bruno da Rocha Paiva}
 \date{} % Date of writing: empty, today or 25.12.00
 
-%% Language and font encodings
+% Language and font encodings
 \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
@@ -145,18 +145,18 @@
 \end{center}
 Interval algebras were first introduced by Allen to reason about time intervals qualitatively. As
 a result they have been mainly of interest in computer science, where their applications and
-questions about decidability have been answered. However they have not been studied in a
-model theoretic capacity, pinning down their axioms and finding their place in the universe of model
-theory.
+questions about decidability have been considered. However, so far they have not been studied in a
+model theoretic capacity: for example pinning down their axioms and finding their out what
+properties their models have.
 
 In this report we provide a first order axiomatisation of Allen's interval algebra and we show
-two constructions: the interval construction $\inter$ sending a linear order to its set of non-zero
-intervals; and the points $\points$ construction sending an interval algebra to the set of start and end
-points of its intervals. We show these constructions give rise to a pair of adjoint functors,
-which we leverage to show the Fraïssé limit of the finite interval algebras is $\inter[\Q]$. From a
-stability theory perspective, we show that the stable interval algebras are exactly the finite
-interval algebras and we show that $\inter[L]$ has the non-independence property for any linear
-order $L$.
+two constructions: the interval construction $\inter$ sending a linear order to the interval algebra
+of its non-zero intervals ; and the points $\points$ construction sending an interval algebra to
+the linear order of start and end points of its intervals. We show these constructions give rise to
+a pair of adjoint functors, and we leverage this to show the Fraïssé limit of the finite interval
+algebras is $\inter[\Q]$. From a stability theory perspective, we show that the stable interval
+algebras are exactly the finite interval algebras and that for any linear order $L$, $\inter[L]$
+has the non-independence property.
 \vfill
 \hspace{0pt}
 
@@ -210,7 +210,33 @@ to act as my rubber duckies whenever I got stuck.
 \newpage
 \section{Evaluation}
 
-{\color{orange} TODO write evaluation}
+At the start of this project we had one objective, that is to come up with some axioms for the
+theory of interval algebras and study their model theoretic consequences. As such, it is important
+to consider the models allowed by our axioms and whether these were too strong or too weak.
+
+Firstly, the given axiomatisation is finite, so reasoning about interval algebras with them is
+quite simple since the axioms are all explicitly listed. If we had given the theory of interval
+algebras as the full theory of some structure or as the set of all sentences such that some property
+holds, then this would have complicated the reasoning a lot, since it would not always be obvious
+what sentences are in the theory. On the other hand, despite being finite, there were a lot of
+axioms in total, making a lot of proofs quite labourious and mechanical. It is unlikely this could
+be changed, due to the nature of interval algebras having 13 very different binary relations, but
+it is possible that our work could have benefitted from the use of proof automation in a theorem
+prover.
+
+Secondly, we saw that the models of $\taia$ were exactly the substructures of $\inter[L]$ for any
+strict linear order $L$. The inference algorithm given by Allen took as inputs networks of
+intervals, which contained only the time intervals we were interested. Hence the fact that our
+axiomatisation allows for arbitrary substructures of $\inter[L]$ seems to agree with Allen's
+idea for interval algebras. However, we did also see that the class of interval algebras of the form
+$\inter[L]$ is elementary, axiomatisable by adding the sentence $\allints$ to $\taia$. Hence we
+found a reasonable extension of the axioms if one thought them to be too weak.
+
+Finally, we managed to compute the Fraïssé limit of $\finaia$ in quite an elegant manner, by
+reducing it to the case of strict linear orders. We also saw that the stable interval algebras
+are $\finaia$; that any interval algebra of the form $\inter[L]$ has the NIP and an explicit
+example of an interval algebra with the IP. So our axiomatisation allowed for a number of
+interesting results.
 
 \newpage
 \input{04_conclusion/04_conclusion.tex}
