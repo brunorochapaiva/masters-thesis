@@ -1,9 +1,9 @@
 \section{Axiomatisation of Interval Algebras}
 \label{sec:axiomatisation}
 
-The first step is to define the language of interval algebras. Since equality is always assumed
-to be available in first order logic, we only need symbols for the remaining 12 binary
-relations.
+The first step we must take is to define the language of interval algebras. Since equality is
+always assumed to be available in first order logic, we only need symbols for the 12 remaining
+binary relations.
 
 \begin{defn}
   We define the language of Allen interval algebras $\laia$ as
@@ -13,25 +13,20 @@ relations.
   \end{equation*}
 \end{defn}
 
-The theory of Allen interval algebras follows closely with Allen's main concerns. We must specify
-that our relation symbols are both exhaustive and mutually exclusive. It is also important that
-our dual relation symbols act as such, otherwise the reasoning possible would not match with the
-reasoning done by the interval algebra algorithm. Finally, we need to encode the various
-transitivity-like requirements, which is another crucial feature of the algorithm we saw.
+The theory of Allen interval algebras follows closely with Allen's main concerns in his original
+paper. We must specify that our relation symbols are both exhaustive and mutually exclusive.
+It is also important that our dual relation symbols act as such, otherwise the reasoning possible
+would not match with the reasoning done by the interval algebra algorithm. Finally, we need to
+encode the many transitivity-like requirements, which is another crucial feature of the algorithm
+we saw.
 
-Let $I = \{<,m,o,s,f,d,>,M,O,S,F,D\}$, so we can express the notion of exhaustability with the sentence
+Letting $I = \{<,m,o,s,f,d,=,>,M,O,S,F,D\}$ and using $\aiaarrow{=}$ to mean $=$, we can express
+notion of exhaustability with the sentence
 \begin{equation*}
   \defformula{\text{exh}} = \forall I,\;\forall J,\;
     \bigvee_{i \in I} (I \aiaarrow{i} J)
 \end{equation*}
-% \begin{align*}
-%   \defformula{\text{exh}}  & = \forall I,\;\forall J,\;
-%     (I \before J) \lor (I \meets J) \lor (I \overlaps J) \lor (I \starts J)
-%         \lor (I \finishes J) \lor (I \contained J) \\
-%       & \lor (I = J)  (I \after J) \lor (I \metby J) \lor (I \overlappedby J) \lor (I \startedby J)
-%         \lor (I \finishedby J) \lor (I \contains J)
-% \end{align*}
-And the mutual exclusivity requirement by
+The mutual exclusivity requirement is expressed by
 \begin{equation*}
   \defformula{\text{mutex}} = \forall I,\;\forall J,\;
     \bigwedge_{\shortstack{$i,j \in I$\\$i \neq j$}}
@@ -53,8 +48,7 @@ range $i,j$ over $I$ and use $T(i,j)$ to denote the entry under row $i$ and colu
   \defformula{\text{trans}_{i,j}} = \forall I,\;\forall J,\;\forall K,\;
     (I \aiaarrow{i} J) \land (J \aiaarrow{j} K) \rightarrow (I \aiaarrow{T(i,j)} J)
 \end{equation*}
-With this, we can now give the theory of interval algebras
-
+With this, we can now give the theory of interval algebras as the union of all these sentences.
 \begin{defn}
   We define the theory of Allen interval algebras $\taia$ as
   \begin{equation*}
@@ -68,8 +62,8 @@ With this, we can now give the theory of interval algebras
 % ------ Justifying this axiomatisation of interval algebras
 
 With a theory defined, the first thing to determine is whether or not it is satisfiable, since an
-inconsistent theory would not be very interesting. The most natural models we want should come from
-non-zero intervals over linear orders, which we now check.
+inconsistent theory would not be very interesting. We should have as models at least the models
+considered in Allen's original paper, which we now check.
 
 \begin{defn}
   Given a linear order $L$ we define its set of non-zero intervals $\inter[P]$ as the set
@@ -190,13 +184,14 @@ As a result, the structure $\inter[L]$ is interpretable in the strict linear ord
   Allen's interval algebras are satisfiable
 \end{cor}
 
-So the theory is satisfiable and it includes the main class of models we are interested in, models
-coming from intervals over linear orders. Since the theory is relational and universal, it also
-means that we can pick out any subset of intervals over a linear order and that will also give us a
-model of $\taia$, which agrees with our intuition from the work Allen did originally. We will also
+So the theory is satisfiable and it includes the main class of models we are interested in. 
+Since the theory is relational and universal, it also
+means that we can pick out any subset of intervals over a linear order and that will give us 
+another
+model of $\taia$, which agrees with our intuition for interval algebras. We will also
 see later that every model of $\taia$ can be seen as a substructure of $\inter[L]$ for some linear
-order $L$, which bodes well for our axiomatisation. But first, we need to develop some more
-machinery.
+order $L$, which bodes very well for our axiomatisation. But before we can see this,
+we need to develop some more machinery about interval algebras.
 
 Consider the function $\peq : \{0,1\}^2 \to \{ \laia-\text{formulas } \phi(I,J)\}$ defined by
 \begin{align*}
@@ -218,10 +213,10 @@ Of course, first we need to figure out whether this gives an equivalence relatio
 \end{prop}
 \begin{proof}
   The relation is reflexive, since $\peq(n,n)$ always contains $I = J$ as a disjunct, hence
-  $A \models \peq(n,n)(I,I)$ and so $(n,I) \psim (n,I)$.
+  $A \models \peq(n,n)(I,I)$ and $(n,I) \psim (n,I)$.
 
   The relation is also symmetric, since $A \models \peq(n,m)(I,J)$ if and only if
-  $A \models \peq(m,n)(J,I)$. To see this, notice that the formula $\peq(m,n)$ is always given by
+  $A \models \peq(m,n)(J,I)$. To see this, notice that the formula $\peq(m,n)$ is given by
   taking the dual of the relation symbols in $\peq(n,m)$. Hence $(n,I) \psim (m,J)$ if and only if
   $(m,J) \psim (n,I)$.
 
@@ -229,7 +224,7 @@ Of course, first we need to figure out whether this gives an equivalence relatio
   values of the triple $(n,m,l) \in \{0,1\}^3$ and  showing that in each case, if
   $A \models \peq(n,m)(I,J)$ and $A \models \peq(m,l)(J,K)$ then $A \models \peq(n,l)(I,K)$. This
   can be done by using the transitivity axioms of interval algebras and considering every case. We
-  go through a more complicated case in the proof of \ref{thm:interval_construction}, where the
+  go through a more complicated case in the proof of \cref{thm:interval_construction}, where the
   process is completely analogous, hence we skip the proof here for brevity.
 \end{proof}
 
@@ -264,9 +259,9 @@ a strict linear order.
     [(n_1,I_1)] = [(n_2,I_2)] < [(m_2,J_2)] = [(m_1,J_1)]
   \end{equation*}
   Then we must show that indeed, $[(n_1,I_1)] < [(m_1,J_1)]$. There are 16 distinct cases which
-  we cover in \cref{tab:plt_well_defined}. Since, in each of the cases, with the possible relations
-  $I_1 \longrightarrow J_1$ found in the last column, it is definitely the case that
-  $A \models \plt(n_1,m_1)(I_1,J_1)$.
+  we cover in \cref{tab:plt_well_defined}. In each of the cases, the possible relations
+  $I_1 \longrightarrow J_1$ given in the last column imply that 
+  $A \models \plt(n_1,m_1)(I_1,J_1)$, so $<$ is well-defined.
 
   \begin{table}[ht]
     \centering
@@ -314,19 +309,19 @@ a strict linear order.
     \label{tab:plt_well_defined}
   \end{table}
 
-  Now we know that our definition of $<$ does not depend on a choice of representative, we need
-  to check whether it satisfies $\tslo$:
+  Now that we know that our definition of $<$ does not depend on a choice of representative, we
+  need to check whether it satisfies $\tslo$:
   \begin{itemize}
     \item \textbf{irreflexivity}: Fix some element $[(n,I)] \in \points[A]$. Since the interval
       algebra relations (along with equality) are mutually exclusive and $I = I$, no other relation
       can hold for the pair $(I,I)$. Regardless of the value of $n$, $\plt(n,n)(I,I)$ does not
       include $I = I$ as a disjunct, so $A \not\models \plt(n,n)(I,I)$ and $<$ is irreflexive.
-    \item \textbf{transitivity}: To show transitivity we start by fixing intervals $I,J,K \in A$ and
-      assuming that $[(n,I)] < [(m,J)]$ and $[(m,J)] < [(l,K)]$. Then there are 8 cases
+    \item \textbf{transitivity}: To show transitivity we start by fixing intervals $I,J,K \in A$
+      and assuming that $[(n,I)] < [(m,J)]$ and $[(m,J)] < [(l,K)]$. Then there are 8 cases
       based on the values of $n,m,k \in \{0,1\}$, all of which are considered in
       \cref{tab:plt_trans_000} up to \cref{tab:plt_trans_111}.
-    \item \textbf{trichotomy}: Fix two $I,J \in A$. To check the trichotomy condition holds, we need
-      to show that for all $n,m \in \{0,1\}$ we have
+    \item \textbf{trichotomy}: Fix two $I,J \in A$. To check the trichotomy condition holds, we
+      need to show that for all $n,m \in \{0,1\}$ we have
       \begin{equation*}
         A \models \plt(n,m)(I,J) \lor \peq(n,m)(I,J) \lor \plt(m,n)(J,I)
       \end{equation*}
@@ -382,6 +377,10 @@ $A$.
     \slos := \mods{\lslo}{\tslo} \text{ and } \aias := \mods{\laia}{\taia}
   \end{equation*}
 \end{rem}
+
+The Yoneda point of view from category theory tells us that the action of a functor
+on maps is equally as important, if not more, than its action on objects. The next two theorems
+will tell us how to extend the interval and points constructions to acting on maps.
 
 \begin{thm}
   We can turn $\inter$ into a functor
@@ -477,12 +476,15 @@ $A$.
   $\points[A]$.
 \end{rem}
 
+As we will see now, these two functors are adjoints, which indicates a very special and close
+connection between strict linear orders and interval algebras.
+
 \begin{thm}
   $\points$ is left adjoint to $\inter$.
 \end{thm}
 \begin{proof}
-  We prove this through the Hom-Set definition of an adjunction, so we wish to find an isomorphism
-  $\slos(\points[A],L) \cong \aias(A,\inter[L])$ which is natural in both $A$ and $L$.
+  We will prove this through the Hom-Set definition of an adjunction, so we wish to find an
+  isomorphism $\slos(\points[A],L) \cong \aias(A,\inter[L])$ which is natural in both $A$ and $L$.
 
   We start by defining the forward map
   \begin{equation*}
@@ -493,7 +495,7 @@ $A$.
     \phi_{A,L}(f) : A \to \inter[L] \quad\text{sending}\quad
       I \mapsto (f(\istart{I}), f(\iend{I}))
   \end{equation*}
-  To see this is a $\laia$-embedding, recall that it suffices to consider the $\aiaarrow{i}$
+  To see this is a $\laia$-embedding, by duality, it suffices to consider the $\aiaarrow{i}$
   relations for $i \in \aiaindex$, so we fix two intervals $I,J \in A$ and then:
   \begin{equation*}
     \begin{split}
@@ -537,7 +539,7 @@ $A$.
   \end{equation*}
   Now, we need to ensure these maps are well defined and that they are indeed $\lslo$-embeddings. To
   check that $\psi_{A,L}(f)$ is well defined, we fix intervals $I,J \in A$ and get three cases to
-  consider. In all of these cases we suppose $f(I) = (a,b)$ and $f(J) = (c,d)$:
+  consider. In all of these cases we let $f(I) = (a,b)$ and $f(J) = (c,d)$:
   \begin{itemize}
     \item If $(0,I) \psim (0,J)$ then we must have
       \begin{equation*}
@@ -585,7 +587,7 @@ $A$.
         \inter[L] \models\, & (f(I) \before f(J)) \lor (f(I) \meets f(J)) \lor (f(I) \overlaps f(J)) \\
                             & \qquad \lor (f(I) \finishedby f(J)) \lor (f(I) \contains f(J))
       \end{align*}
-      This means the ordering of the elements $a,b,c,d$ must be one of:
+      So the ordering of the elements $a,b,c,d$ must be one of:
       \begin{gather*}
         a < b < c < d \qquad a < b = c = d  \qquad a < c < b < d \\
         a < c < d = b \qquad a < c < d < b
@@ -703,8 +705,7 @@ $A$.
 \end{proof}
 
 In order to get a bit more familiar with these constructions, it can be beneficial to see why
-$\points$ is not right  adjoint to $\inter$, that is, in general
-we do not have that
+$\points$ is not right  adjoint to $\inter$, that is, in general it is not true
 \begin{equation*}
   \aias(\inter[L],A) \cong \slos(L,\points[A])
 \end{equation*}
@@ -717,8 +718,9 @@ has 3 intervals, as seen in \cref{fig:inter_example}. Now, an order preserving e
 $f : L \to \points[A]$ simply needs to pick 3 distinct points in $\points[A]$. There are
 $\binom{5}{3} = 10$ possible ways of picking 3 distinct points out of $\points[A]$, so we see
 that $|\slos(L,\points[A])| = 10$. On the other hand, an embedding of interval algebras
-$f : \inter[L] \to A$ must pick out two intervals in $A$ which meet (the images of $(1,2)$ and
-$(2,3)$) with the constraint that the "union" of these two intervals exists in $A$. In this specific
+$f : \inter[L] \to A$ must pick out two intervals in $A$ which meet
+(these will be the images of $(1,2)$ and $(2,3)$) with the constraint that the ``union'' of these
+two intervals exists in $A$. In this specific
 case, our only option is that $f((1,2)) = J$ and $f((2,3)) = K$, but there is no interval which
 is started by $J$ and finished by $K$, so there is nowhere to map $(1,3)$ to. This means that
 $\aias(\inter[L],A) = \emptyset$, so there can be no isomorphism between this and
@@ -792,7 +794,7 @@ $\unit{A} = \phi_{A,\points[A]}(\id{\points[A]})$. Computing this, we get the ma
 \end{equation*}
 Recall that each component of the unit $\unit{A}$ is an arrow in $\aias$, so it must be an
 embedding. This means that every interval algebra $A$ can be seen as a substructure of the intervals
-$\inter[L]$ for some appropriate linear order, namely $L = \points[A]$.
+$\inter[L]$ for some linear order $L$, namely for $L = \points[A]$.
 
 Dually, the counit here is a natural transformation $\counit{} : \points[\inter] \to \id{\slos}$
 where each of its components is given by $\counit{L} = \psi_{\inter[L],L}(\id{\inter[L]})$.
@@ -819,7 +821,7 @@ $|L| \neq 1$.
 \end{proof}
 
 As for the unit, it will give us an isomorphism when our interval algebra already has all possible
-intervals. More precisely, we will say that an interval algebra has all possible intervals if it
+intervals. More precisely, we say that an interval algebra has all possible intervals if it
 satisfies the following sentence
 \begin{align*}
   \allints = & \left(\forall I,\; \forall J,\;
@@ -1040,7 +1042,7 @@ the only option of $K_1 = K_2$. Similar arguments show the uniqueness of $K$ in 
   \begin{equation*}
     ([(n,I)], [(m,J)]) = (\istart{I}, \iend{I}) = \unit{A}(I)
   \end{equation*}
-  If $I \neq J$, then after possibly swapping $I,J$ we may assume $I \aiaarrow{<mosfd}$, which
+  If $I \neq J$, then after possibly swapping $I,J$ we may assume $I \aiaarrow{<mosfd} J$, which
   brings us to one of the cases handled above, where all intervals involing $\istart{I}, \iend{I},
   \istart{J}$ and $\iend{J}$ were in the image of the unit.
 \end{proof}
@@ -1052,7 +1054,7 @@ the only option of $K_1 = K_2$. Similar arguments show the uniqueness of $K$ in 
 \end{cor}
 \begin{proof}
   An adjunction can always be restricted to an equivalence of categories by considering the full
-  subcategories where the unit and counit are isomorphisms.
+  subcategories where the unit and counit are isomorphisms. \cite{alma993485064401591}
 \end{proof}
 
 \newpage
@@ -1229,25 +1231,24 @@ properties to the proof that $\finslo$ satisfies them.
   "irreducible components" individually:
   \begin{itemize}
     \item The middle rectangle in red commutes since it already commuted for linear orders.
-    \item The top triangles commute by triangle identities of our adjunction.
+    \item The top triangles commute by the triangle identities of our adjunction.
     \item The squares to the left, right and bottom of the red rectangle commute by naturality
       of the unit.
-    \item The bottom triangles commute due to the use of the identity.
+    \item The bottom triangles commute since the identity is the unit of composition.
   \end{itemize}
   Chasing around the outside of the diagram, we see that
   \begin{equation*}
     \inter[g] \circ \id{\inter[\Q]} \circ i \circ \id{A} =
       \id{\inter[\Q]} \circ j \circ \id{B} \circ f
   \end{equation*}
-  Simplifying by removing identities shows that $\inter[g] \circ i = j \circ f$. Now, since $g$
+  Simplifying shows that $\inter[g] \circ i = j \circ f$. Now, since $g$
   was an isomorphism, so is $\inter[g]$, so we have successfully extended $f$ to an
   automorphism of $\inter[\Q]$.
 \end{proof}
 
 \subsection{Stable and NIP Interval Agebras}
 
-The question of stability for interval algebras is answered similarly to linear orders, as only the
-finite interval algebras are stable.
+The question of stability for interval algebras is answered similarly to linear orders:
 
 \begin{thm}
   An interval algebra $A$ is stable if and only if it is finite.
@@ -1317,11 +1318,11 @@ finite interval algebras are stable.
   of $A$, but as $A$ is stable this linear order must be finite, hence $A$ must be finite.
 \end{proof}
 
-Restricting our attention to interval algebras with all possible intervals, the question of which
-interval algebras are NIP has an answer similar to the linear order case.
+Restricting our attention to interval algebras with all possible intervals, we see they all
+have the NIP, much like their underlying linear orders.
 
 \begin{thm}
-  For any linear order $L$, the interval algebra $\inter[L]$ is NIP.
+  For any linear order $L$, the interval algebra $\inter[L]$ has the NIP.
 \end{thm}
 \begin{proof}
   Suppose that $\inter[L]$ has the IP, so there is some formula $\phi(x;y)$ which has the IP. Let
@@ -1336,15 +1337,15 @@ interval algebras are NIP has an answer similar to the linear order case.
   $\unit{\inter[L]}$ too is an isomorphism. In particular, this implies that
   $\inter[L] \models \allints$. As a result, $A \models \allints$ too and $A \cong \inter[L']$ for
   some strict linear order $L'$. Recall that $\inter[L']$ is interpretable in $L'$, hence we can
-  translate the formula $\phi(x;y)$ to some formula $\phi'(x;y)$ in the language of strict linear
+  translate the formula $\phi(x;y)$ to some formula $\phi'(x';y')$ in the language of strict linear
   orders. In addition, we can also translate the sequences of tuples $(a_i)_{i < \omega}$ and
   $(b_I)_{I \subseteq \omega}$ to sequences of tuples in $L'$. This means that the formula
-  $\phi'(x;y)$ has the IP, making the linear order $L'$ also have the IP. This is a contradiction as
-  all linear orders have the NIP, so $\inter[L]$ must also have the NIP.
+  $\phi'(x';y')$ has the IP, making it so the linear order $L'$ also has the IP. This is a
+  contradiction as all linear orders have the NIP.
 \end{proof}
 
 However, as we saw before with the exponential fields case, by modifying models even slightly we can
-add enough expressive power to get the IP. Likewise, by starting with an interval algebra with the
+add enough expressive power to get the IP. In our case, by starting with an interval algebra with the
 NIP, we can remove enough intervals to allow for the IP.
 
 \begin{exmp}
