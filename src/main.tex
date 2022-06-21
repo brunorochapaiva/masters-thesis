@@ -15,7 +15,6 @@
 \usepackage[T1]{fontenc}
 
 \usepackage[hidelinks]{hyperref}
-
 \usepackage{fancyhdr}
 \usepackage{array}
 \usepackage{amsmath}
@@ -35,9 +34,6 @@
 \usepackage{multirow}
 \usepackage{rotating}
 \usepackage[numbers]{natbib}
-
-
-%\usepackage{subfiles}
 
 % Used to scale tikz-cd diagrams properly
 \tikzcdset{scale cd/.style={every label/.append style={scale=#1},
@@ -170,13 +166,28 @@ order $L$.
 \begin{center}
     \textbf{Acknowledgements}
 \end{center}
-{\color{orange} TODO write acknowledgements}
+No man is an island and this project would not have been possible without the help of many people,
+for whom I wish to express my deepest gratitude.
+
+Above all I would like to thank my supervisor Dr. Robert Barham for suggesting this topic and
+guiding me through the different areas of model theory covered in this work, giving me the much
+needed intuition and historical context to fully appreciate it. It is impossible
+to overstate the importance of Robert's support and encouragement, both for this work and other
+academic endeavours.
+
+I would also like to thank my second marker Dr. Charlotte Kestner for her feedback on my interim
+report, which helped me flesh out the introduction and background sections of this work into their
+current version.
+
+Finally I want to thank my personal tutor Prof. Paul Kelly for the very interesting conversations
+over the past four years and for hearing me ramble about my project during tutor meetings. I will
+also thank my parents and friends for their support throughout the project and for being willing
+to act as my rubber duckies whenever I got stuck.
 \vfill
 \hspace{0pt}
 
 \newpage
 \tableofcontents
-
 
 \newpage
 \pagestyle{fancy}
@@ -184,6 +195,9 @@ order $L$.
 % \renewcommand{\sectionmark}[1]{\markboth{\thesection.\ #1}{}}
 \lhead{\nouppercase{\leftmark}}
 \fancyfoot[C]{\thepage}
+\setlength{\headheight}{13.59999pt}
+\addtolength{\topmargin}{-1.59999pt}
+
 
 \input{01_introduction/01_introduction.tex}
 
@@ -192,6 +206,11 @@ order $L$.
 
 \newpage
 \input{03_results/03_results.tex}
+
+\newpage
+\section{Evaluation}
+
+{\color{orange} TODO write evaluation}
 
 \newpage
 \input{04_conclusion/04_conclusion.tex}
