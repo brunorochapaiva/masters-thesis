@@ -151,8 +151,8 @@ where where we place edges whose constraints need to be updated. Furthermore, fo
 intervals $i$ and $j$, we let $N(i,j)$ denote the label on the edge from $i$ to $j$ in the interval
 graph and use $R(i,j)$ to denote the new label for the edge from $i$ to $j$.
 Lastly, in simpler cases the \textit{Comparable} function can be taken to always return true, but
-as the number of intervals grows, it is helpful to reduce the amount of updates needed through some
-optimisations explained in chapter 5 of \cite{allen83}.
+as the number of intervals grows it can be used for some optimisations discussed in
+\cite[Chapter 5]{allen83}.
 
 \begin{algorithm}
   \caption{Updating temporal network. \cite{allen83}}\label{alg:main_algo}
