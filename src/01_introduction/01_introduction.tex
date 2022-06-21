@@ -7,7 +7,7 @@
 Model theory concerns itself with the connection between first order theories, that is
 sets of axioms possibly using universal and existential quantifiers, and the models of these
 theories. Some early examples of significant results in model theory can be found in the
-compactness and Löwenheim–Skolem theorems, all of which focused on the existence of models for a
+compactness and Löwenheim–Skolem theorems, all of which focus on the existence of models for a
 theory: the compactness theorem saying that a model exists for a theory if models
 exist for each finite fragment of the theory; and the Löwenheim–Skolem theorems saying
 that if a theory has an infinite model, then there exist models of any cardinality
@@ -29,16 +29,16 @@ some uncountable $\kappa$, then $I(\theory,\lambda) = 1$ for all uncountable $\l
 Work by Shelah in the 1970s then extended this result to uncountable theories
 \cite{Sh:31}, beginning the study of classification theory as a discipline of model theory.
 
-Important notions from stability theory came in the form of stable and unstable theories.
+Some important notions from stability theory came in the form of stable and unstable theories.
 Stable theories are well-behaved enough to limit their number of models, while unstable theories
 always have the maximum number of models, that is if $\theory$ is unstable then
 for any $\kappa > |\theory|$ we have $I(\theory,\kappa) = 2^\kappa$. \cite{Sh:a}
 Most naturally occuring
 theories in mathematics tend not to be stable though, for example the full theory of any linear
 order or the theory of real closed fields. Hence it is only natural to study generalisations of
-stable theories, which will not be as well-behaved but will hopefully allow us to learn about
-wider classes of theories. One such generalisation comes in the form of the non-independence
-property, which informally says that there is no formula which can pick out every subset of
+stable theories, which will not be as well-behaved but allow us to learn about
+wider classes of theories. One such generalisation comes from the non-independence
+property, which, informally, says that there is no formula which can pick out every subset of
 an infinite subset of a model.
 
 Classification theory is not the only active discipline of model theory however. Another
@@ -49,9 +49,9 @@ by gluing classes of finite structures together \cite{fraisse1953certaines},
 from which their study followed.
 
 Hence, in the spirit of these disciplines, we will consider the first-order theory of
-interval algebras, which were originally introduced by Allen in 1983 to argue about time
-qualitatively, and try to find their place in the universe of model
-theory, by considering their different models and how well-behaved they are.
+interval algebras: a concept first introduced by Allen in 1983 to argue about time
+qualitatively. We will consider the models of this theory and how well-behaved they are, with the
+ultimate goal of finding their place in the universe of model-theory.
 
 \subsection{Report Structure}%
 \label{sub:report_structure}
@@ -68,24 +68,24 @@ Readers comfortable with these areas may safely skip them in favour of
 
 In \cref{sec:axiomatisation} we tackle the question of axiomatisation of
 interval algebras. We propose some axioms based on the understanding from
-\cref{sec:axiomatisation} and show that these are satisfiable by
+\cref{sec:introduction} and show that these are satisfiable by
 constructing models from linear orders. To further justify this
-axiomatisation, we will then construct linear orders from interval
-algebras.
+axiomatisation, we will also show how to extract an underlying linear order from an interval
+algebra.
 
 In \cref{sec:adjunction} we explore further the intervals and points
 constructions from \cref{sec:axiomatisation} and show they can be extended to two adjoint
-functors between the relevant categories of models. We also give characterisations of
+functors between the relevant categories of models. We give characterisations of
 the interval algebras and linear orders for which the unit and counit are isomorphisms.
 These characterisations will be expressible as first order sentences, a fact we will use
 when studying the classification theory of interval algebras.
 
-Finally, in \cref{sec:model_theory} we study the model theory of interval algebra. This
+Finally, in \cref{sec:model_theory} we study the model theory of interval algebras. This
 begins by considering the the class of finite interval algebras and computing its
 Fraïssé limit using the machinery developed in \cref{sec:adjunction}. On the topic of
 stability, we show that the stable interval algebras are exactly the finite interval
-algebras. Following this there is a study of the NIP in interval algebras, for which
-we find a big class of NIP algebras as well as an example of an interval algebra with the
+algebras. Following this there is a study of the NIP in interval algebras: 
+we find a big class of algebras with the NIP as well as an example of an interval algebra with the
 IP.
 
 \subsection{Ethical Considerations}
