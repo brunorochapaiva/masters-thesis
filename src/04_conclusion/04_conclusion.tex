@@ -3,16 +3,22 @@
 
 We started this report by establishing a list of axioms for the theory of interval algebras, which
 we showed to be satisfiable, containing at least the main class of models we expected. Then,
-through further study of the interval construction, we saw it to be a right adjoint. The unit of
-this adjunction then meant that every model was a substructure of the intervals over an appropriate
-linear order, cementing the relevancy of our axiomatisation.
+through further study of the interval construction, we saw it to be the right adjoint of
+the points construction. The unit of this adjunction let us see that all models were
+a substructure of the intervals over an appropriate linear order, cementing our axiomatisation as
+worth considering.
 
-In attempting to characterise the interval algebras for which the unit was an isomorphism, we found
-a formula $\allints$ axiomatising the interval algebras of the form $\inter[L]$. Since the interval
-algebra $\inter[L]$ can always be interpretable in $L$, this meant that $\inter[L]$ always has the
-NIP.
+Through this adjunction, we managed to reduce the most of the work on the Fraïssé limit of
+$\finaia$ to the proofs for $\finslo$, giving a very elegant and conceptual proof that the limit
+of $\finaia$ was $\inter[\Q]$.
 
-This is where our work finishes, but there are some possibilities for future work.
+By ordering the intervals in a linear order lexicographically, we saw that the stable and finite
+interval algebras coincided and in attempting to characterise the interval algebras for which the
+adjunction unit was an isomorphism, we found a formula $\allints$ axiomatising the interval
+algebras of the form $\inter[L]$. Since the interval algebra $\inter[L]$ is always interpretable in
+$L$, this let us conclude that also had the NIP.
+
+This is where our work finished, leaving some possibilities for future work.
 
 First, suppose that we removed the $I \before J$ conjunct from $\allints$ to get
 \begin{align*}
@@ -31,8 +37,9 @@ Then it would be interesting to see the type of interval algebras satisfying $\m
 such an interval algebra $A$ to look like a gluing of $\{ \inter[L_i] \}_{i \in I}$ where the
 indexing set $I$ is linearly ordered. If this were true, then letting $L$ be the linear order
 cosntructed by gluing $\{L_i\}_{i \in I}$, we would expect $A$ to be interpretable in the linear
-order $L$ plus some colouring predicates. Since a linear order always has the NIP, regardless of the
-number of colouring predicates, this would extend our result about NIP interval algebras.
+order $L$ plus some colouring predicates. A linear order always has the NIP, regardless of the
+number of colouring predicates added, so this would let us extend our result about NIP interval
+algebras.
 
 Another question possibly worth considering further comes from our work done with the interval
 construction, which we saw to be a right adjoint functor. From category theory we know that

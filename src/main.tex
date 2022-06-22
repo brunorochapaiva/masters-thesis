@@ -210,33 +210,28 @@ to act as my rubber duckies whenever I got stuck.
 \newpage
 \section{Evaluation}
 
-At the start of this project we had one objective, that is to come up with some axioms for the
-theory of interval algebras and study their model theoretic consequences. As such, it is important
-to consider the models allowed by our axioms and whether these were too strong or too weak.
+At the start of this project we had one overarching objective, that was to come up with some axioms
+for the theory of interval algebras and study their model theoretic consequences.
+As such the main topic of concern for our evaluation will be deciding how appropriate our
+axiomatisation was.
 
-Firstly, the given axiomatisation is finite, so reasoning about interval algebras with them is
-quite simple since the axioms are all explicitly listed. If we had given the theory of interval
-algebras as the full theory of some structure or as the set of all sentences such that some property
-holds, then this would have complicated the reasoning a lot, since it would not always be obvious
-what sentences are in the theory. On the other hand, despite being finite, there were a lot of
-axioms in total, making a lot of proofs quite labourious and mechanical. It is unlikely this could
-be changed, due to the nature of interval algebras having 13 very different binary relations, but
-it is possible that our work could have benefitted from the use of proof automation in a theorem
-prover.
+Firstly, we should consider the models allowed by our axiomatisation. We saw that the models of
+$\taia$ coincide with the class of substructures of the interval algebras $\inter[L]$.
+These are exactly the type of models that underlie the work in \cite{allen83}, on this front
+we should be very happy with our axiomatisation. In addition, we also saw that
+$\taia \cup \{\allints\}$ axiomatised the class of models of the form $\inter[L]$, letting us
+distinguish an important class of models through a single sentence.
 
-Secondly, we saw that the models of $\taia$ were exactly the substructures of $\inter[L]$ for any
-strict linear order $L$. The inference algorithm given by Allen took as inputs networks of
-intervals, which contained only the time intervals we were interested. Hence the fact that our
-axiomatisation allows for arbitrary substructures of $\inter[L]$ seems to agree with Allen's
-idea for interval algebras. However, we did also see that the class of interval algebras of the form
-$\inter[L]$ is elementary, axiomatisable by adding the sentence $\allints$ to $\taia$. Hence we
-found a reasonable extension of the axioms if one thought them to be too weak.
+In addition, $\taia$ is also finite, meaning there is very little ambiguity when checking
+whether a structure is a model or not. On the other hand, despite being finite, there are quite
+a lot of axioms in $\taia$ due to its many relations. This means proving things about
+interval algebras can be quite labourious, with a lot of quite distinct cases to check. If we could
+find some symmetry in the transitivity relations this would help a lot, but there does not seem
+to be anything too tangible to simplify reasoning.
 
-Finally, we managed to compute the Fraïssé limit of $\finaia$ in quite an elegant manner, by
-reducing it to the case of strict linear orders. We also saw that the stable interval algebras
-are $\finaia$; that any interval algebra of the form $\inter[L]$ has the NIP and an explicit
-example of an interval algebra with the IP. So our axiomatisation allowed for a number of
-interesting results.
+Finally, with our given axioms, we managed to prove all of the results we were originally
+interested at the start of this project, so our axiomatisation was definitely something we could
+work with.
 
 \newpage
 \input{04_conclusion/04_conclusion.tex}
